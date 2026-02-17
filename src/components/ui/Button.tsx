@@ -468,3 +468,88 @@ function Tokens() {
 function Examples() {
   return null;
 }
+
+// Reusable Button component instance
+export function ButtonInstance({ 
+  label, 
+  variant = 'primary', 
+  size = 'md',
+  onClick
+}: { 
+  label: string; 
+  variant?: 'primary' | 'secondary' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  onClick?: () => void;
+}) {
+  const sizeStyles = {
+    sm: {
+      height: '36px',
+      paddingLeft: '12px',
+      paddingRight: '12px',
+      borderRadius: '10px',
+      gap: '8px',
+      fontSize: '14px',
+      lineHeight: '20px'
+    },
+    md: {
+      height: '44px',
+      paddingLeft: '16px',
+      paddingRight: '16px',
+      borderRadius: '12px',
+      gap: '10px',
+      fontSize: '14px',
+      lineHeight: '20px'
+    },
+    lg: {
+      height: '52px',
+      paddingLeft: '20px',
+      paddingRight: '20px',
+      borderRadius: '14px',
+      gap: '12px',
+      fontSize: '18px',
+      lineHeight: '28px'
+    }
+  }[size];
+
+  const variantStyles = {
+    primary: {
+      backgroundColor: '#4338CA',
+      color: '#FFFFFF',
+      border: 'none'
+    },
+    secondary: {
+      backgroundColor: '#FFFFFF',
+      color: '#101828',
+      border: '1px solid #D0D5DD'
+    },
+    ghost: {
+      backgroundColor: 'transparent',
+      color: '#101828',
+      border: 'none'
+    }
+  }[variant];
+
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        height: sizeStyles.height,
+        paddingLeft: sizeStyles.paddingLeft,
+        paddingRight: sizeStyles.paddingRight,
+        borderRadius: sizeStyles.borderRadius,
+        backgroundColor: variantStyles.backgroundColor,
+        color: variantStyles.color,
+        fontSize: sizeStyles.fontSize,
+        lineHeight: sizeStyles.lineHeight,
+        fontWeight: '600',
+        border: variantStyles.border,
+        display: 'inline-flex',
+        alignItems: 'center',
+        cursor: 'pointer',
+        fontFamily: 'Inter, system-ui, sans-serif'
+      }}
+    >
+      {label}
+    </button>
+  );
+}

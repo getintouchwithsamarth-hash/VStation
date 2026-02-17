@@ -12,16 +12,8 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      // Core aliases
+      // Alias @ to the src directory
       '@': path.resolve(__dirname, './src'),
-      '@app': path.resolve(__dirname, './src/app'),
-      '@ui': path.resolve(__dirname, './src/ui/ds'),
-      '@shadcn': path.resolve(__dirname, './src/ui/shadcn'),
-      '@layout': path.resolve(__dirname, './src/ui/layout'),
-      '@seo': path.resolve(__dirname, './src/ui/seo'),
-      '@features': path.resolve(__dirname, './src/features'),
-      '@shared': path.resolve(__dirname, './src/features/shared'),
-      '@foundations': path.resolve(__dirname, './src/foundations'),
     },
   },
 

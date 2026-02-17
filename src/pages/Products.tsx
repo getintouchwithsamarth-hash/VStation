@@ -1,6 +1,6 @@
-import { ProductSearch } from "@features/products/components/ProductSearch";
-import { ProductFilters } from "@features/products/components/ProductFilters";
-import { ProductList } from "@features/products/components/ProductList";
+import { ProductSearch } from "../features/products/components/ProductSearch";
+import { ProductFilters } from "../features/products/components/ProductFilters";
+import { ProductList } from "../features/products/components/ProductList";
 
 export function Products() {
   return (

@@ -28,61 +28,71 @@ The project follows a **scaffolding-first approach** with a feature-based organi
 │   │   ├── providers.tsx                # React providers
 │   │   ├── router.tsx                   # React Router configuration
 │   │   └── components/
-│   │       └── figma/
-│   │           └── ImageWithFallback.tsx    # Protected: Image component with fallback
+│   │       ├── figma/
+│   │       │   └── ImageWithFallback.tsx    # Protected: Image component with fallback
+│   │       └── ui/                      # Shadcn UI component library (50+ components)
+│   │           ├── accordion.tsx
+│   │           ├── alert-dialog.tsx
+│   │           ├── alert.tsx
+│   │           ├── aspect-ratio.tsx
+│   │           ├── avatar.tsx
+│   │           ├── badge.tsx
+│   │           ├── breadcrumb.tsx
+│   │           ├── button.tsx
+│   │           ├── calendar.tsx
+│   │           ├── card.tsx
+│   │           ├── carousel.tsx
+│   │           ├── chart.tsx
+│   │           ├── checkbox.tsx
+│   │           ├── collapsible.tsx
+│   │           ├── command.tsx
+│   │           ├── context-menu.tsx
+│   │           ├── dialog.tsx
+│   │           ├── drawer.tsx
+│   │           ├── dropdown-menu.tsx
+│   │           ├── form.tsx
+│   │           ├── hover-card.tsx
+│   │           ├── input-otp.tsx
+│   │           ├── input.tsx
+│   │           ├── label.tsx
+│   │           ├── menubar.tsx
+│   │           ├── navigation-menu.tsx
+│   │           ├── pagination.tsx
+│   │           ├── popover.tsx
+│   │           ├── progress.tsx
+│   │           ├── radio-group.tsx
+│   │           ├── resizable.tsx
+│   │           ├── scroll-area.tsx
+│   │           ├── select.tsx
+│   │           ├── separator.tsx
+│   │           ├── sheet.tsx
+│   │           ├── sidebar.tsx
+│   │           ├── skeleton.tsx
+│   │           ├── slider.tsx
+│   │           ├── sonner.tsx
+│   │           ├── switch.tsx
+│   │           ├── table.tsx
+│   │           ├── tabs.tsx
+│   │           ├── textarea.tsx
+│   │           ├── toggle-group.tsx
+│   │           ├── toggle.tsx
+│   │           ├── tooltip.tsx
+│   │           ├── use-mobile.ts
+│   │           └── utils.ts
 │   │
-│   ├── ui/                              # Unified component library surface
-│   │   ├── shadcn/                      # Shadcn UI component library (50+ components)
-│   │   │   ├── accordion.tsx
-│   │   │   ├── alert-dialog.tsx
-│   │   │   ├── alert.tsx
-│   │   │   ├── aspect-ratio.tsx
-│   │   │   ├── avatar.tsx
-│   │   │   ├── badge.tsx
-│   │   │   ├── breadcrumb.tsx
-│   │   │   ├── button.tsx
-│   │   │   ├── calendar.tsx
-│   │   │   ├── card.tsx
-│   │   │   ├── carousel.tsx
-│   │   │   ├── chart.tsx
-│   │   │   ├── checkbox.tsx
-│   │   │   ├── collapsible.tsx
-│   │   │   ├── command.tsx
-│   │   │   ├── context-menu.tsx
-│   │   │   ├── dialog.tsx
-│   │   │   ├── drawer.tsx
-│   │   │   ├── dropdown-menu.tsx
-│   │   │   ├── form.tsx
-│   │   │   ├── hover-card.tsx
-│   │   │   ├── input-otp.tsx
-│   │   │   ├── input.tsx
-│   │   │   ├── label.tsx
-│   │   │   ├── menubar.tsx
-│   │   │   ├── navigation-menu.tsx
-│   │   │   ├── pagination.tsx
-│   │   │   ├── popover.tsx
-│   │   │   ├── progress.tsx
-│   │   │   ├── radio-group.tsx
-│   │   │   ├── resizable.tsx
-│   │   │   ├── scroll-area.tsx
-│   │   │   ├── select.tsx
-│   │   │   ├── separator.tsx
-│   │   │   ├── sheet.tsx
-│   │   │   ├── sidebar.tsx
-│   │   │   ├── skeleton.tsx
-│   │   │   ├── slider.tsx
-│   │   │   ├── sonner.tsx
-│   │   │   ├── switch.tsx
-│   │   │   ├── table.tsx
-│   │   │   ├── tabs.tsx
-│   │   │   ├── textarea.tsx
-│   │   │   ├── toggle-group.tsx
-│   │   │   ├── toggle.tsx
-│   │   │   ├── tooltip.tsx
-│   │   │   ├── use-mobile.ts
-│   │   │   └── utils.ts
+│   ├── components/                      # Custom application components
+│   │   ├── layout/                      # Layout components with slot-based composition
+│   │   │   ├── Shell.tsx                # Global shell (Header/Main/Footer slots)
+│   │   │   ├── Header.tsx               # ✅ Implemented with brand, nav, actions
+│   │   │   ├── Footer.tsx               # ✅ Implemented with nav, trust, legal, social
+│   │   │   ├── Container.tsx
+│   │   │   ├── Section.tsx
+│   │   │   ├── Stack.tsx
+│   │   │   ├── Cluster.tsx
+│   │   │   ├── Divider.tsx
+│   │   │   └── Breadcrumbs.tsx
 │   │   │
-│   │   ├── ds/                          # Premium custom UI components
+│   │   ├── ui/                          # Premium custom UI components
 │   │   │   ├── Button.tsx               # ✅ Implemented with full variant system
 │   │   │   ├── Card.tsx                 # ✅ Implemented with quiet luxury surfaces
 │   │   │   ├── Input.tsx
@@ -104,22 +114,11 @@ The project follows a **scaffolding-first approach** with a feature-based organi
 │   │   │   ├── Link.tsx
 │   │   │   └── IconButton.tsx
 │   │   │
-│   │   ├── layout/                      # Layout components with slot-based composition
-│   │   │   ├── Shell.tsx                # Global shell (Header/Main/Footer slots)
-│   │   │   ├── Header.tsx               # ✅ Implemented with brand, nav, actions
-│   │   │   ├── Footer.tsx               # ✅ Implemented with nav, trust, legal, social
-│   │   │   ├── Container.tsx
-│   │   │   ├── Section.tsx
-│   │   │   ├── Stack.tsx
-│   │   │   ├── Cluster.tsx
-│   │   │   ├── Divider.tsx
-│   │   │   └── Breadcrumbs.tsx
-│   │   │
 │   │   └── seo/                         # SEO components
 │   │       ├── SeoHead.tsx
 │   │       ├── OpenGraph.tsx
 │   │       └── JsonLd.tsx
-│
+│   │
 │   ├── features/                        # Feature modules
 │   │   ├── products/
 │   │   │   ├── components/
@@ -133,8 +132,6 @@ The project follows a **scaffolding-first approach** with a feature-based organi
 │   │       │   └── ShoppingCart.tsx
 │   │       └── CartContext.tsx
 │   │
-│   │   └── shared/                      # Cross-feature utilities/types/hooks
-│
 │   ├── pages/                           # Page compositions (use PageHeader/PageBody pattern)
 │   │   ├── Home.tsx
 │   │   ├── Products.tsx
@@ -142,7 +139,7 @@ The project follows a **scaffolding-first approach** with a feature-based organi
 │   │   ├── Philosophy.tsx
 │   │   ├── Community.tsx
 │   │   └── NotFound.tsx
-│
+│   │
 │   ├── foundations/                     # Design token system
 │   │   ├── ColorTokens.tsx              # ✅ Complete color palette & semantic tokens
 │   │   ├── TypeScale.tsx                # ✅ Typography scale (H1-H4, Body, Caption, Button)
@@ -153,17 +150,17 @@ The project follows a **scaffolding-first approach** with a feature-based organi
 │   │   ├── Iconography.tsx              # Icon system
 │   │   ├── Brand.tsx                    # Brand guidelines & trust system
 │   │   └── Grid.tsx                     # Grid system & layout foundations
-│
+│   │
 │   ├── lib/                             # External integrations
 │   │   └── shopify.ts                   # Shopify API integration
-│
+│   │
 │   ├── styles/                          # Global styles
 │   │   ├── index.css                    # Main style entry point
 │   │   ├── globals.css                  # Global CSS
 │   │   ├── tailwind.css                 # Tailwind imports
 │   │   ├── theme.css                    # Theme tokens
 │   │   └── fonts.css                    # Font imports (protected)
-│
+│   │
 │   ├── main.tsx                         # Application entry
 │   └── env.d.ts                         # Environment types
 │
@@ -186,7 +183,7 @@ The project follows a **scaffolding-first approach** with a feature-based organi
 - **TypeScale** - Typography scale (H1: 48px, H2: 36px, H3: 28px, H4: 22px, BodyLg: 18px, Body: 16px, BodySm: 14px, Caption: 12px, Button: 14px)
 - **Shadows** - Three-level shadow system (subtle, medium, strong)
 
-#### Layout (src/ui/layout)
+#### Layout
 - **Header** - Premium header with:
   - BrandMarkSlot: "VIBE STATION" in H4
   - NavSlot: Products, Philosophy, Community links
@@ -200,7 +197,7 @@ The project follows a **scaffolding-first approach** with a feature-based organi
   - FooterSocialSlot: Instagram, YouTube, Email buttons
   - surface-subtle background, proper spacing
 
-#### UI Components (src/ui/ds)
+#### UI Components
 - **Button** - Full implementation with anatomy documentation:
   - Variants: Primary, Secondary, Ghost
   - Sizes: Lg (44px), Default (40px), Sm (36px)
@@ -213,7 +210,7 @@ The project follows a **scaffolding-first approach** with a feature-based organi
   - Premium visual polish
 
 ### 🚧 Placeholder Components
-All other components in `/src/ui/ds/`, `/src/ui/layout/`, `/src/ui/seo/`, and `/src/features/` are scaffolded with slots but return `null` (awaiting implementation).
+All other components in `/src/components/` and `/src/features/` are scaffolded with slots but return `null` (awaiting implementation).
 
 ---
 
