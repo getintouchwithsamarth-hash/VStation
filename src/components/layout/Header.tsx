@@ -39,17 +39,19 @@ function HeaderRightSlot() {
 
 function BrandMarkSlot() {
   return (
-    <div 
+    <a
+      href="/"
       style={{
         color: '#101828',
         fontSize: '20px',
         lineHeight: '28px',
         fontWeight: '600',
-        letterSpacing: '-0.02em'
+        letterSpacing: '-0.02em',
+        textDecoration: 'none'
       }}
     >
       VIBE STATION
-    </div>
+    </a>
   );
 }
 
@@ -64,7 +66,7 @@ function PrimaryNavSlot() {
       }}
     >
       <a 
-        href="#products"
+        href="/products"
         style={{
           color: '#475467',
           fontSize: '14px',
@@ -77,7 +79,7 @@ function PrimaryNavSlot() {
         Products
       </a>
       <a 
-        href="#philosophy"
+        href="/philosophy"
         style={{
           color: '#475467',
           fontSize: '14px',
@@ -90,7 +92,7 @@ function PrimaryNavSlot() {
         Philosophy
       </a>
       <a 
-        href="#community"
+        href="/community"
         style={{
           color: '#475467',
           fontSize: '14px',

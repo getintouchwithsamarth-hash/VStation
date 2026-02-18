@@ -1,24 +1,29 @@
+import { Container } from '../components/layout/Container';
+import { Section } from '../components/layout/Section';
+
 export function Philosophy() {
   return (
-    <>
-      <PageHeader />
-      <PageBody />
-    </>
+    <Section paddingTop="48px" paddingBottom="64px" background="#FFFFFF">
+      <Container>
+        <PageHeader />
+        <PageBody />
+      </Container>
+    </Section>
   );
 }
 
 function PageHeader() {
   return (
-    <>
+    <div style={{ marginBottom: '24px' }}>
       <ManifestoHero />
       <PrinciplesIntro />
-    </>
+    </div>
   );
 }
 
 function PageBody() {
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
       <ResearchMethod />
       <QualityBar />
       <MaterialStandards />
@@ -27,7 +32,7 @@ function PageBody() {
       <SustainabilityNote />
       <Faq />
       <ClosingCta />
-    </>
+    </div>
   );
 }
 

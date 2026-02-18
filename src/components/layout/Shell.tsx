@@ -1,11 +1,16 @@
+import type { ReactNode } from 'react';
 import { Header } from './Header';
 import { Footer } from './Footer';
 
-export function Shell() {
+type ShellProps = {
+  children?: ReactNode;
+};
+
+export function Shell({ children }: ShellProps) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <ShellHeaderSlot />
-      <ShellMainSlot />
+      <ShellMainSlot>{children}</ShellMainSlot>
       <ShellFooterSlot />
     </div>
   );
@@ -15,18 +20,18 @@ function ShellHeaderSlot() {
   return <Header />;
 }
 
-function ShellMainSlot() {
-  return <Main />;
+function ShellMainSlot({ children }: ShellProps) {
+  return <Main>{children}</Main>;
 }
 
 function ShellFooterSlot() {
   return <Footer />;
 }
 
-function Main() {
+function Main({ children }: ShellProps) {
   return (
     <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-      {/* Main content area */}
+      {children}
     </main>
   );
 }

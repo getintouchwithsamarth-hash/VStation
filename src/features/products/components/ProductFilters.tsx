@@ -1,7 +1,10 @@
 import { BadgeInstance } from '../../../components/ui/Badge';
 import { ButtonInstance } from '../../../components/ui/Button';
+import { useProductFilters } from '../hooks';
 
 export function ProductFilters() {
+  const { filters, resetLabel } = useProductFilters();
+
   return (
     <div
       style={{
@@ -13,15 +16,12 @@ export function ProductFilters() {
       }}
     >
       {/* Filter chip badges */}
-      <BadgeInstance label="All" variant="neutral" size="md" />
-      <BadgeInstance label="Practice" variant="neutral" size="md" />
-      <BadgeInstance label="Stage" variant="neutral" size="md" />
-      <BadgeInstance label="Studio" variant="neutral" size="md" />
-      <BadgeInstance label="Power" variant="neutral" size="md" />
-      <BadgeInstance label="Bundles" variant="neutral" size="md" />
+      {filters.map((filter) => (
+        <BadgeInstance key={filter.id} label={filter.label} variant="neutral" size="md" />
+      ))}
       
       {/* Reset button */}
-      <ButtonInstance variant="secondary" size="sm" label="Reset" />
+      <ButtonInstance variant="secondary" size="sm" label={resetLabel} />
     </div>
   );
 }

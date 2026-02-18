@@ -1,6 +1,11 @@
+import { useState } from 'react';
 import { ButtonInstance } from '../../../components/ui/Button';
+import { useProductSearch } from '../hooks';
 
 export function ProductSearch() {
+  const searchConfig = useProductSearch();
+  const [query, setQuery] = useState('');
+
   return (
     <div
       style={{
@@ -11,7 +16,7 @@ export function ProductSearch() {
         height: '44px'
       }}
     >
-      {/* Search field placeholder */}
+      {/* Search field */}
       <div
         style={{
           flex: 1,
@@ -36,24 +41,30 @@ export function ProductSearch() {
             color: '#667085'
           }}
         >
-          ⌕
+          {searchConfig.iconLabel}
         </span>
-        {/* Placeholder text */}
-        <span
+        <input
+          type="text"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder={searchConfig.placeholder}
+          aria-label="Search products"
           style={{
+            flex: 1,
             fontFamily: 'Inter, system-ui, sans-serif',
             fontSize: '14px',
             lineHeight: '20px',
             fontWeight: '400',
-            color: '#667085'
+            color: '#101828',
+            border: 'none',
+            outline: 'none',
+            backgroundColor: 'transparent'
           }}
-        >
-          Search curated gear…
-        </span>
+        />
       </div>
       
       {/* Search button */}
-      <ButtonInstance variant="secondary" size="md" label="Search" />
+      <ButtonInstance variant="secondary" size="md" label={searchConfig.buttonLabel} />
     </div>
   );
 }

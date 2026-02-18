@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 export function Card() {
   return (
     <div className="space-y-12 p-8">
@@ -414,6 +416,78 @@ function ExampleProductCardSkeleton() {
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+type CardVariant = 'elevated' | 'subtle' | 'outline';
+type CardPadding = 'sm' | 'md' | 'lg';
+
+const CARD_PADDING_MAP: Record<CardPadding, string> = {
+  sm: '12px',
+  md: '16px',
+  lg: '20px'
+};
+
+function getCardStyles(variant: CardVariant) {
+  switch (variant) {
+    case 'subtle':
+      return {
+        backgroundColor: '#F9FAFB',
+        border: '1px solid #E5E7EB',
+        boxShadow: 'none'
+      };
+    case 'outline':
+      return {
+        backgroundColor: 'transparent',
+        border: '1px solid #D0D5DD',
+        boxShadow: 'none'
+      };
+    case 'elevated':
+    default:
+      return {
+        backgroundColor: '#FFFFFF',
+        border: '1px solid #E5E7EB',
+        boxShadow: '0 1px 2px 0 #1018280A, 0 1px 3px 0 #1018280F'
+      };
+  }
+}
+
+export function CardInstance({
+  children,
+  mediaSlot,
+  footerSlot,
+  variant = 'elevated',
+  padding = 'md',
+  width = '100%',
+  height
+}: {
+  children?: ReactNode;
+  mediaSlot?: ReactNode;
+  footerSlot?: ReactNode;
+  variant?: CardVariant;
+  padding?: CardPadding;
+  width?: string;
+  height?: string;
+}) {
+  const variantStyles = getCardStyles(variant);
+  const contentPadding = CARD_PADDING_MAP[padding];
+
+  return (
+    <div
+      style={{
+        ...variantStyles,
+        borderRadius: '16px',
+        width,
+        height,
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column'
+      }}
+    >
+      {mediaSlot}
+      {children ? <div style={{ padding: contentPadding }}>{children}</div> : null}
+      {footerSlot ? <div style={{ padding: contentPadding, paddingTop: '0' }}>{footerSlot}</div> : null}
     </div>
   );
 }
