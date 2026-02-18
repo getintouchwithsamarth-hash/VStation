@@ -1,3 +1,8 @@
+import { BadgeInstance } from '../ui/Badge';
+import { ButtonInstance } from '../ui/Button';
+import { Container } from './Container';
+import { useCart } from '../../features/cart/CartContext';
+
 export function Header() {
   return (
     <header 
@@ -5,16 +10,22 @@ export function Header() {
         height: '72px',
         backgroundColor: '#FFFFFF',
         borderBottom: '1px solid #E5E7EB',
-        display: 'flex',
-        alignItems: 'center',
-        paddingLeft: '16px',
-        paddingRight: '16px',
-        gap: '16px'
       }}
     >
-      <HeaderLeftSlot />
-      <HeaderCenterSlot />
-      <HeaderRightSlot />
+      <Container>
+        <div
+          style={{
+            height: '72px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '16px'
+          }}
+        >
+          <HeaderLeftSlot />
+          <HeaderCenterSlot />
+          <HeaderRightSlot />
+        </div>
+      </Container>
     </header>
   );
 }
@@ -157,25 +168,21 @@ function AccountSlot() {
 }
 
 function CartSlot() {
+  const { cartCount, openCartDrawer } = useCart();
+
   return (
-    <button
-      style={{
-        height: '36px',
-        paddingLeft: '12px',
-        paddingRight: '12px',
-        borderRadius: '10px',
-        backgroundColor: 'transparent',
-        color: '#101828',
-        fontSize: '14px',
-        lineHeight: '20px',
-        fontWeight: '600',
-        border: 'none',
-        display: 'inline-flex',
-        alignItems: 'center',
-        cursor: 'pointer'
-      }}
-    >
-      Cart
-    </button>
+    <div style={{ position: 'relative', display: 'inline-flex' }}>
+      <ButtonInstance label="Cart" variant="ghost" size="sm" onClick={openCartDrawer} />
+      <div
+        style={{
+          position: 'absolute',
+          top: '-6px',
+          right: '-8px',
+          pointerEvents: 'none'
+        }}
+      >
+        <BadgeInstance label={String(cartCount)} variant="accent" size="sm" />
+      </div>
+    </div>
   );
 }

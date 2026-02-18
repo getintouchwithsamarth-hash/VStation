@@ -1,71 +1,121 @@
+import { useEffect, useState } from 'react';
+import { getProducts, type Product as ShopifyProduct } from '../../../lib/shopify';
 import type { Product } from '../types';
 
-const MOCK_PRODUCTS: Product[] = [
-  {
-    id: 'clip-on-tuner-pro',
-    name: 'Clip-on Tuner Pro',
-    descriptor: 'Fast response · Strong clamp · Clear display',
-    featureLine: 'USB-C · ±0.1 cent · 360° swivel',
-    priceLabel: '₹—',
-    shippingLabel: 'Ships in 24–48h',
-    badgeLabel: 'Curated',
-    badgeVariant: 'accent'
-  },
-  {
-    id: 'in-ear-monitor-kit',
-    name: 'In-Ear Monitor Kit',
-    descriptor: 'Clean stage mix · Lightweight fit',
-    featureLine: 'Dual driver · Noise isolation · Detachable cable',
-    priceLabel: '₹—',
-    shippingLabel: 'Ships in 24–48h',
-    badgeLabel: 'Curated',
-    badgeVariant: 'accent'
-  },
-  {
-    id: 'pedalboard-power-mini',
-    name: 'Pedalboard Power Mini',
-    descriptor: 'Quiet rails · Compact footprint',
-    featureLine: 'Isolated outputs · 9V/12V · Short-circuit safe',
-    priceLabel: '₹—',
-    shippingLabel: 'Ships in 24–48h',
-    badgeLabel: 'Curated',
-    badgeVariant: 'accent'
-  },
-  {
-    id: 'practice-headphone-amp',
-    name: 'Practice Headphone Amp',
-    descriptor: 'Silent practice · Pocket sized',
-    featureLine: 'Bluetooth audio · Rechargeable · Low latency',
-    priceLabel: '₹—',
-    shippingLabel: 'Ships in 24–48h',
-    badgeLabel: 'Curated',
-    badgeVariant: 'accent'
-  },
-  {
-    id: 'studio-vocal-mic',
-    name: 'Studio Vocal Mic',
-    descriptor: 'Natural tone · Low self-noise',
-    featureLine: 'Cardioid pattern · Shock mount · Pop filter',
-    priceLabel: '₹—',
-    shippingLabel: 'Ships in 24–48h',
-    badgeLabel: 'Curated',
-    badgeVariant: 'accent'
-  },
-  {
-    id: 'gig-bag-deluxe',
-    name: 'Gig Bag Deluxe',
-    descriptor: 'Weather ready · Reinforced seams',
-    featureLine: 'Padded straps · Accessory pockets · Water resistant',
-    priceLabel: '₹—',
-    shippingLabel: 'Ships in 24–48h',
-    badgeLabel: 'Curated',
-    badgeVariant: 'accent'
+const formatPriceLabel = (amount: string, currencyCode: string): string => {
+  const numericAmount = Number.parseFloat(amount);
+  if (!Number.isFinite(numericAmount)) {
+    return `${currencyCode} ${amount}`;
   }
-];
+  return new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: currencyCode,
+    maximumFractionDigits: 0
+  }).format(numericAmount);
+};
+
+const isProductInStock = (product: ShopifyProduct): boolean => {
+  if (product.availableForSale === false) {
+    return false;
+  }
+
+  if (typeof product.totalInventory === 'number') {
+    return product.totalInventory > 0;
+  }
+
+  return (
+    product.variants?.edges.some((edge) => {
+      const variant = edge.node;
+      if (variant.availableForSale === false) {
+        return false;
+      }
+      if (typeof variant.quantityAvailable === 'number') {
+        return variant.quantityAvailable > 0;
+      }
+      return true;
+    }) ?? true
+  );
+};
+
+const mapShopifyProduct = (product: ShopifyProduct): Product => {
+  const descriptor = product.shortDescription?.value || product.description || 'Curated by Vibe Station';
+  const featureLine = product.featureLine?.value || product.tags.slice(0, 3).join(' · ') || 'Durable build';
+  const shippingLabel = product.shippingInfo?.value || 'Shipping calculated at checkout';
+  const badgeLabel = product.badge?.value || product.tags[0] || 'Curated';
+
+  return {
+    id: product.handle,
+    name: product.title,
+    descriptor,
+    featureLine,
+    priceLabel: formatPriceLabel(
+      product.priceRange.minVariantPrice.amount,
+      product.priceRange.minVariantPrice.currencyCode
+    ),
+    shippingLabel,
+    isInStock: isProductInStock(product),
+    badgeLabel,
+    badgeVariant: 'accent',
+    imageUrl: product.featuredImage?.url || product.images.edges[0]?.node.url,
+    imageAlt: product.featuredImage?.altText || product.images.edges[0]?.node.altText || product.title
+  };
+};
+
+let productListCache: Product[] = [];
+let productListResolved = false;
+let productListPromise: Promise<void> | null = null;
+
+const loadProductListFromShopify = async () => {
+  if (productListPromise) {
+    return productListPromise;
+  }
+
+  productListPromise = (async () => {
+    try {
+      const result = await getProducts({ first: 24 });
+      productListCache = result.edges.map((edge) => mapShopifyProduct(edge.node));
+    } catch (error) {
+      console.error('Failed to load products from Shopify', error);
+      productListCache = [];
+    } finally {
+      productListResolved = true;
+      productListPromise = null;
+    }
+  })();
+
+  return productListPromise;
+};
 
 export function useProductList() {
+  const [products, setProducts] = useState<Product[]>(productListCache);
+  const [isLoading, setIsLoading] = useState(!productListResolved);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (productListResolved) {
+      setProducts(productListCache);
+      setIsLoading(false);
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    void loadProductListFromShopify().then(() => {
+      if (cancelled) {
+        return;
+      }
+      setProducts(productListCache);
+      setIsLoading(false);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return {
-    products: MOCK_PRODUCTS,
-    hoverPreviewProduct: MOCK_PRODUCTS[0]
+    products,
+    hoverPreviewProduct: products[0],
+    isLoading
   };
 }

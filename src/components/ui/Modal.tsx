@@ -164,114 +164,10 @@ function Variants() {
         {/* Variant: Center */}
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           <h3 style={{ margin: 0 }}>Variant / Center</h3>
-          <div
-            style={{
-              position: "relative",
-              width: "100%",
-              height: "400px",
-              backgroundColor: "rgba(0, 0, 0, 0.5)",
-              borderRadius: "8px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {/* Centered Panel */}
-            <div
-              style={{
-                width: "480px",
-                backgroundColor: "#FFFFFF",
-                borderRadius: "12px",
-                border: "1px solid #E5E7EB",
-                boxShadow:
-                  "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-                overflow: "hidden",
-              }}
-            >
-              {/* Header */}
-              <div
-                style={{
-                  padding: "24px",
-                  borderBottom: "1px solid #E5E7EB",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "18px",
-                    fontWeight: 600,
-                    color: "#111827",
-                  }}
-                >
-                  Modal Title
-                </div>
-                <div
-                  style={{
-                    width: "32px",
-                    height: "32px",
-                    borderRadius: "6px",
-                    backgroundColor: "#F9FAFB",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    cursor: "pointer",
-                  }}
-                >
-                  ×
-                </div>
-              </div>
-
-              {/* Body */}
-              <div style={{ padding: "24px", minHeight: "120px" }}>
-                <div style={{ fontSize: "14px", color: "#667085" }}>
-                  Modal body content
-                </div>
-              </div>
-
-              {/* Footer */}
-              <div
-                style={{
-                  padding: "24px",
-                  borderTop: "1px solid #E5E7EB",
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  gap: "12px",
-                }}
-              >
-                <button
-                  style={{
-                    padding: "8px 16px",
-                    borderRadius: "8px",
-                    border: "1px solid #E5E7EB",
-                    backgroundColor: "#FFFFFF",
-                    fontSize: "14px",
-                    fontWeight: 500,
-                    cursor: "pointer",
-                  }}
-                >
-                  Cancel
-                </button>
-                <button
-                  style={{
-                    padding: "8px 16px",
-                    borderRadius: "8px",
-                    border: "none",
-                    backgroundColor: "#4F46E5",
-                    color: "#FFFFFF",
-                    fontSize: "14px",
-                    fontWeight: 500,
-                    cursor: "pointer",
-                  }}
-                >
-                  Confirm
-                </button>
-              </div>
-            </div>
-          </div>
+          <VariantCenter />
           <div style={{ fontSize: "13px", color: "#667085" }}>
-            Max width: 480px · Centered · Rounded: 12px · Shadow / 4
+            Width: 520px (max 92% mobile) · Centered · Radius: 20px · Shadow / 3
+            · Padding: 20px · Gap: 16px
           </div>
         </div>
 
@@ -375,6 +271,218 @@ function Variants() {
             Width: 420px · Height: 100vh · Border left: 1px · Shadow / 3 ·
             Radius: 0
           </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// =====================
+// VARIANT CENTER COMPONENT
+// =====================
+
+function VariantCenter() {
+  return (
+    <div
+      style={{
+        position: "relative",
+        width: "100%",
+        height: "500px",
+        backgroundColor: "rgba(0, 0, 0, 0.4)", // overlay-scrim
+        borderRadius: "8px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      {/* Centered Panel */}
+      <div
+        style={{
+          width: "520px",
+          maxWidth: "92%",
+          backgroundColor: "#FFFFFF", // surface-canvas
+          borderRadius: "20px",
+          border: "1px solid #EAECF0", // border-subtle
+          boxShadow: "0 12px 24px -4px #1018280F, 0 6px 12px -4px #10182814", // Shadow / 3
+          padding: "20px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "16px",
+          position: "relative",
+        }}
+      >
+        {/* HeaderSlot */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            position: "relative",
+          }}
+        >
+          <div>
+            <div
+              style={{
+                fontSize: "18px",
+                fontWeight: 600,
+                color: "#101828",
+                lineHeight: "28px",
+              }}
+            >
+              Checkout Confirmation
+            </div>
+            <div
+              style={{
+                fontSize: "14px",
+                color: "#667085",
+                lineHeight: "20px",
+                marginTop: "4px",
+              }}
+            >
+              Please review your order details
+            </div>
+          </div>
+
+          {/* CloseSlot - aligned top-right */}
+          <div style={{ position: "absolute", top: 0, right: 0 }}>
+            <button
+              style={{
+                height: "36px",
+                paddingLeft: "12px",
+                paddingRight: "12px",
+                borderRadius: "10px",
+                backgroundColor: "transparent",
+                color: "#101828",
+                fontSize: "14px",
+                lineHeight: "20px",
+                fontWeight: "600",
+                border: "none",
+                display: "inline-flex",
+                alignItems: "center",
+                cursor: "pointer",
+              }}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+
+        {/* BodySlot */}
+        <div
+          style={{
+            flex: 1,
+            minHeight: "200px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "12px",
+          }}
+        >
+          <div
+            style={{ fontSize: "14px", color: "#344054", lineHeight: "20px" }}
+          >
+            Your order will be processed and shipped within 2-3 business days.
+            You'll receive a confirmation email with tracking details.
+          </div>
+
+          <div
+            style={{
+              padding: "16px",
+              backgroundColor: "#F9FAFB",
+              borderRadius: "12px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "8px",
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <span style={{ fontSize: "14px", color: "#667085" }}>
+                Subtotal
+              </span>
+              <span
+                style={{ fontSize: "14px", color: "#101828", fontWeight: 500 }}
+              >
+                ₹5,997
+              </span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <span style={{ fontSize: "14px", color: "#667085" }}>
+                Shipping
+              </span>
+              <span
+                style={{ fontSize: "14px", color: "#101828", fontWeight: 500 }}
+              >
+                ₹150
+              </span>
+            </div>
+            <div
+              style={{
+                height: "1px",
+                backgroundColor: "#EAECF0",
+                margin: "4px 0",
+              }}
+            />
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <span
+                style={{ fontSize: "16px", color: "#101828", fontWeight: 600 }}
+              >
+                Total
+              </span>
+              <span
+                style={{ fontSize: "16px", color: "#101828", fontWeight: 600 }}
+              >
+                ₹6,147
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* FooterSlot */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            gap: "12px",
+          }}
+        >
+          <button
+            style={{
+              height: "44px",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+              borderRadius: "12px",
+              backgroundColor: "transparent",
+              color: "#101828",
+              fontSize: "14px",
+              lineHeight: "20px",
+              fontWeight: "600",
+              border: "1px solid #D0D5DD",
+              display: "inline-flex",
+              alignItems: "center",
+              cursor: "pointer",
+            }}
+          >
+            Go back
+          </button>
+          <button
+            style={{
+              height: "44px",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+              borderRadius: "12px",
+              gap: "10px",
+              backgroundColor: "#4338CA",
+              color: "#FFFFFF",
+              fontSize: "14px",
+              lineHeight: "20px",
+              fontWeight: "600",
+              border: "none",
+              display: "inline-flex",
+              alignItems: "center",
+              cursor: "pointer",
+            }}
+          >
+            Confirm Order
+          </button>
         </div>
       </div>
     </div>
@@ -586,6 +694,151 @@ function Examples() {
             perfect for cart, filters, or detail views
           </li>
         </ul>
+      </div>
+    </div>
+  );
+}
+
+// =====================
+// REUSABLE INSTANCE COMPONENT
+// =====================
+
+export function ModalCenterInstance({
+  title,
+  subtitle,
+  children,
+  onClose,
+  footer,
+}: {
+  title?: string;
+  subtitle?: string;
+  children: React.ReactNode;
+  onClose?: () => void;
+  footer?: React.ReactNode;
+}) {
+  return (
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: "rgba(0, 0, 0, 0.4)", // overlay-scrim
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 50,
+      }}
+      onClick={onClose}
+    >
+      {/* Centered Panel */}
+      <div
+        style={{
+          width: "520px",
+          maxWidth: "92%",
+          backgroundColor: "#FFFFFF", // surface-canvas
+          borderRadius: "20px",
+          border: "1px solid #EAECF0", // border-subtle
+          boxShadow: "0 12px 24px -4px #1018280F, 0 6px 12px -4px #10182814", // Shadow / 3
+          padding: "20px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "16px",
+          position: "relative",
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* HeaderSlot */}
+        {(title || subtitle) && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+              position: "relative",
+            }}
+          >
+            <div>
+              {title && (
+                <div
+                  style={{
+                    fontSize: "18px",
+                    fontWeight: 600,
+                    color: "#101828",
+                    lineHeight: "28px",
+                  }}
+                >
+                  {title}
+                </div>
+              )}
+              {subtitle && (
+                <div
+                  style={{
+                    fontSize: "14px",
+                    color: "#667085",
+                    lineHeight: "20px",
+                    marginTop: "4px",
+                  }}
+                >
+                  {subtitle}
+                </div>
+              )}
+            </div>
+
+            {/* CloseSlot - aligned top-right */}
+            {onClose && (
+              <div style={{ position: "absolute", top: 0, right: 0 }}>
+                <button
+                  onClick={onClose}
+                  style={{
+                    height: "36px",
+                    paddingLeft: "12px",
+                    paddingRight: "12px",
+                    borderRadius: "10px",
+                    backgroundColor: "transparent",
+                    color: "#101828",
+                    fontSize: "14px",
+                    lineHeight: "20px",
+                    fontWeight: "600",
+                    border: "none",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    cursor: "pointer",
+                  }}
+                >
+                  Close
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* BodySlot */}
+        <div
+          style={{
+            flex: 1,
+            minHeight: "100px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "12px",
+          }}
+        >
+          {children}
+        </div>
+
+        {/* FooterSlot */}
+        {footer && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              gap: "12px",
+            }}
+          >
+            {footer}
+          </div>
+        )}
       </div>
     </div>
   );

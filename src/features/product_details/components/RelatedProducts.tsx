@@ -1,8 +1,11 @@
 import { CardInstance } from '../../../components/ui/Card';
 import { BadgeInstance } from '../../../components/ui/Badge';
 import { ButtonInstance } from '../../../components/ui/Button';
+import { useProductDetailMockData } from '../hooks/useProductDetailMockData';
 
 export function RelatedProducts() {
+  const { relatedProducts } = useProductDetailMockData();
+
   return (
     <div
       style={{
@@ -11,7 +14,6 @@ export function RelatedProducts() {
         gap: '32px'
       }}
     >
-      {/* Header row */}
       <div
         style={{
           display: 'flex',
@@ -26,12 +28,11 @@ export function RelatedProducts() {
             margin: 0
           }}
         >
-          Related products
+          {relatedProducts.title}
         </h3>
-        <ButtonInstance variant="secondary" size="sm" label="View all" />
+        <ButtonInstance variant="secondary" size="sm" label={relatedProducts.viewAllLabel} />
       </div>
 
-      {/* Product grid */}
       <div
         style={{
           display: 'grid',
@@ -39,242 +40,94 @@ export function RelatedProducts() {
           gap: '24px'
         }}
       >
-        {/* Product card 1 - Metronome Pro */}
-        <CardInstance
-          variant="elevated"
-          mediaSlot={
-            <div style={{ position: 'relative', width: '100%', height: '220px' }}>
+        {relatedProducts.items.map((item) => (
+          <CardInstance
+            key={item.id}
+            variant="elevated"
+            mediaSlot={
+              <div style={{ position: 'relative', width: '100%', height: '220px' }}>
+                {item.imageUrl ? (
+                  <img
+                    src={item.imageUrl}
+                    alt={item.imageAlt || item.name}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      display: 'block'
+                    }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      backgroundColor: '#F9FAFB'
+                    }}
+                  />
+                )}
+                <div style={{ position: 'absolute', top: '12px', left: '12px' }}>
+                  <BadgeInstance label={item.badge} variant="neutral" size="sm" />
+                </div>
+              </div>
+            }
+            footerSlot={
+              <ButtonInstance variant="primary" size="md" label={relatedProducts.addToCartLabel} />
+            }
+          >
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px'
+              }}
+            >
+              <h4
+                style={{
+                  fontFamily: 'Inter, system-ui, sans-serif',
+                  color: '#101828',
+                  margin: 0
+                }}
+              >
+                {item.name}
+              </h4>
+
               <div
                 style={{
-                  width: '100%',
-                  height: '100%',
-                  backgroundColor: '#F9FAFB'
+                  fontFamily: 'Inter, system-ui, sans-serif',
+                  fontSize: '14px',
+                  lineHeight: '20px',
+                  fontWeight: '400',
+                  color: '#667085'
                 }}
-              />
-              {/* Badge - top left */}
-              <div style={{ position: 'absolute', top: '12px', left: '12px' }}>
-                <BadgeInstance label="Curated" variant="neutral" size="sm" />
+              >
+                {item.descriptor}
               </div>
-            </div>
-          }
-          footerSlot={
-            <ButtonInstance variant="primary" size="md" label="Add to cart" />
-          }
-        >
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '10px'
-            }}
-          >
-            {/* Product name */}
-            <h4
-              style={{
-                fontFamily: 'Inter, system-ui, sans-serif',
-                color: '#101828',
-                margin: 0
-              }}
-            >
-              Metronome Pro
-            </h4>
 
-            {/* Descriptor */}
-            <div
-              style={{
-                fontFamily: 'Inter, system-ui, sans-serif',
-                fontSize: '14px',
-                lineHeight: '20px',
-                fontWeight: '400',
-                color: '#667085'
-              }}
-            >
-              Precise timing for practice and performance
-            </div>
-
-            {/* Feature line */}
-            <div
-              style={{
-                fontFamily: 'Inter, system-ui, sans-serif',
-                fontSize: '12px',
-                lineHeight: '18px',
-                fontWeight: '400',
-                color: '#98A2B3'
-              }}
-            >
-              Multiple time signatures · Tap tempo
-            </div>
-
-            {/* Price */}
-            <h4
-              style={{
-                fontFamily: 'Inter, system-ui, sans-serif',
-                color: '#101828',
-                margin: 0
-              }}
-            >
-              ₹—
-            </h4>
-          </div>
-        </CardInstance>
-
-        {/* Product card 2 - Cable Kit */}
-        <CardInstance
-          variant="elevated"
-          mediaSlot={
-            <div style={{ position: 'relative', width: '100%', height: '220px' }}>
               <div
                 style={{
-                  width: '100%',
-                  height: '100%',
-                  backgroundColor: '#F9FAFB'
+                  fontFamily: 'Inter, system-ui, sans-serif',
+                  fontSize: '12px',
+                  lineHeight: '18px',
+                  fontWeight: '400',
+                  color: '#98A2B3'
                 }}
-              />
-              {/* Badge - top left */}
-              <div style={{ position: 'absolute', top: '12px', left: '12px' }}>
-                <BadgeInstance label="Curated" variant="neutral" size="sm" />
+              >
+                {item.featureLine}
               </div>
-            </div>
-          }
-          footerSlot={
-            <ButtonInstance variant="primary" size="md" label="Add to cart" />
-          }
-        >
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '10px'
-            }}
-          >
-            {/* Product name */}
-            <h4
-              style={{
-                fontFamily: 'Inter, system-ui, sans-serif',
-                color: '#101828',
-                margin: 0
-              }}
-            >
-              Cable Kit
-            </h4>
 
-            {/* Descriptor */}
-            <div
-              style={{
-                fontFamily: 'Inter, system-ui, sans-serif',
-                fontSize: '14px',
-                lineHeight: '20px',
-                fontWeight: '400',
-                color: '#667085'
-              }}
-            >
-              Professional-grade cables for clean signal
-            </div>
-
-            {/* Feature line */}
-            <div
-              style={{
-                fontFamily: 'Inter, system-ui, sans-serif',
-                fontSize: '12px',
-                lineHeight: '18px',
-                fontWeight: '400',
-                color: '#98A2B3'
-              }}
-            >
-              Gold-plated connectors · Low noise
-            </div>
-
-            {/* Price */}
-            <h4
-              style={{
-                fontFamily: 'Inter, system-ui, sans-serif',
-                color: '#101828',
-                margin: 0
-              }}
-            >
-              ₹—
-            </h4>
-          </div>
-        </CardInstance>
-
-        {/* Product card 3 - Stand Light */}
-        <CardInstance
-          variant="elevated"
-          mediaSlot={
-            <div style={{ position: 'relative', width: '100%', height: '220px' }}>
-              <div
+              <h4
                 style={{
-                  width: '100%',
-                  height: '100%',
-                  backgroundColor: '#F9FAFB'
+                  fontFamily: 'Inter, system-ui, sans-serif',
+                  color: '#101828',
+                  margin: 0
                 }}
-              />
-              {/* Badge - top left */}
-              <div style={{ position: 'absolute', top: '12px', left: '12px' }}>
-                <BadgeInstance label="Curated" variant="neutral" size="sm" />
-              </div>
+              >
+                {item.price}
+              </h4>
             </div>
-          }
-          footerSlot={
-            <ButtonInstance variant="primary" size="md" label="Add to cart" />
-          }
-        >
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '10px'
-            }}
-          >
-            {/* Product name */}
-            <h4
-              style={{
-                fontFamily: 'Inter, system-ui, sans-serif',
-                color: '#101828',
-                margin: 0
-              }}
-            >
-              Stand Light
-            </h4>
-
-            {/* Descriptor */}
-            <div
-              style={{
-                fontFamily: 'Inter, system-ui, sans-serif',
-                fontSize: '14px',
-                lineHeight: '20px',
-                fontWeight: '400',
-                color: '#667085'
-              }}
-            >
-              Adjustable LED light for sheet music
-            </div>
-
-            {/* Feature line */}
-            <div
-              style={{
-                fontFamily: 'Inter, system-ui, sans-serif',
-                fontSize: '12px',
-                lineHeight: '18px',
-                fontWeight: '400',
-                color: '#98A2B3'
-              }}
-            >
-              Dimmable · Clip-on design
-            </div>
-
-            {/* Price */}
-            <h4
-              style={{
-                fontFamily: 'Inter, system-ui, sans-serif',
-                color: '#101828',
-                margin: 0
-              }}
-            >
-              ₹—
-            </h4>
-          </div>
-        </CardInstance>
+          </CardInstance>
+        ))}
       </div>
     </div>
   );

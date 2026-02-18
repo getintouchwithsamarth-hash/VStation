@@ -10,8 +10,16 @@ import { RelatedProducts } from '../features/product_details/components/RelatedP
 import { StickyCtaRail } from '../features/product_details/components/StickyCtaRail';
 import { Container } from '../components/layout/Container';
 import { Section } from '../components/layout/Section';
+import { Stack } from '../components/layout/Stack';
+import { useProductDetailMockData } from '../features/product_details/hooks/useProductDetailMockData';
+import { ProductDetailPageSkeleton } from '../components/ui/PageSkeleton';
 
 export function ProductDetail() {
+  const { isLoading } = useProductDetailMockData();
+  if (isLoading) {
+    return <ProductDetailPageSkeleton />;
+  }
+
   return (
     <>
       <PageHeader />
@@ -22,7 +30,7 @@ export function ProductDetail() {
 
 function PageHeader() {
   return (
-    <>
+    <Stack gap="0px">
       <Section paddingTop="24px" paddingBottom="16px" background="#FCFCFD">
         <Container>
           <BreadcrumbRow />
@@ -33,13 +41,13 @@ function PageHeader() {
           <ProductTitleBlock />
         </Container>
       </Section>
-    </>
+    </Stack>
   );
 }
 
 function PageBody() {
   return (
-    <>
+    <Stack gap="0px">
       <Section paddingTop="24px" paddingBottom="48px" background="#FFFFFF">
         <Container>
           <ProductMain />
@@ -80,6 +88,6 @@ function PageBody() {
           <StickyCtaRail />
         </Container>
       </Section>
-    </>
+    </Stack>
   );
 }

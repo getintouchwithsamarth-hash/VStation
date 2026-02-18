@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import { CardInstance } from '../../../components/ui/Card';
 import { BadgeInstance } from '../../../components/ui/Badge';
 import { ButtonInstance } from '../../../components/ui/Button';
+import { PincodeEstimator } from '../../../components/ui/PincodeEstimator';
+import { useProductDetailMockData } from '../hooks/useProductDetailMockData';
 
 export function ProductMain() {
   return (
@@ -12,39 +15,64 @@ export function ProductMain() {
         alignItems: 'flex-start'
       }}
     >
-      {/* Left column - Gallery */}
       <Gallery />
-      
-      {/* Right column - Buy box */}
       <BuyBox />
     </div>
   );
 }
 
 function Gallery() {
+  const { productMain } = useProductDetailMockData();
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const images = productMain.gallery.images;
+  const activeImage = images[activeImageIndex];
+
+  const showPrev = () => {
+    if (images.length === 0) {
+      return;
+    }
+    setActiveImageIndex((current) => (current === 0 ? images.length - 1 : current - 1));
+  };
+
+  const showNext = () => {
+    if (images.length === 0) {
+      return;
+    }
+    setActiveImageIndex((current) => (current + 1) % images.length);
+  };
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%' }}>
-      {/* Main gallery card */}
       <CardInstance
         variant="elevated"
         height="560px"
         mediaSlot={
           <div style={{ position: 'relative', width: '100%', height: '560px' }}>
-            {/* Image placeholder */}
-            <div
-              style={{
-                width: '100%',
-                height: '100%',
-                backgroundColor: '#F9FAFB'
-              }}
-            />
-            
-            {/* Zoom badge - top left */}
+            {activeImage ? (
+              <img
+                src={activeImage.url}
+                alt={activeImage.altText}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  display: 'block'
+                }}
+              />
+            ) : (
+              <div
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  backgroundColor: '#F9FAFB'
+                }}
+              />
+            )}
+
             <div style={{ position: 'absolute', top: '16px', left: '16px' }}>
-              <BadgeInstance label="Zoom" variant="neutral" size="sm" />
+              <BadgeInstance label={productMain.gallery.zoomLabel} variant="neutral" size="sm" />
             </div>
-            
-            {/* Navigation buttons - top right */}
+
             <div
               style={{
                 position: 'absolute',
@@ -54,14 +82,23 @@ function Gallery() {
                 gap: '8px'
               }}
             >
-              <ButtonInstance variant="ghost" size="sm" label="Prev" />
-              <ButtonInstance variant="ghost" size="sm" label="Next" />
+              <ButtonInstance
+                variant="ghost"
+                size="sm"
+                label={productMain.gallery.prevLabel}
+                onClick={showPrev}
+              />
+              <ButtonInstance
+                variant="ghost"
+                size="sm"
+                label={productMain.gallery.nextLabel}
+                onClick={showNext}
+              />
             </div>
           </div>
         }
       />
-      
-      {/* Thumbnail row */}
+
       <div
         style={{
           display: 'flex',
@@ -69,53 +106,65 @@ function Gallery() {
           gap: '12px'
         }}
       >
-        {/* First thumbnail - selected */}
-        <div
-          style={{
-            width: '88px',
-            height: '88px',
-            borderRadius: '12px',
-            backgroundColor: '#F9FAFB',
-            border: '2px solid #4F46E5',
-            flexShrink: 0,
-            cursor: 'pointer'
-          }}
-        />
-        {/* Other thumbnails */}
-        {[1, 2, 3].map((i) => (
-          <div
-            key={i}
-            style={{
-              width: '88px',
-              height: '88px',
-              borderRadius: '12px',
-              backgroundColor: '#F9FAFB',
-              border: '1px solid #E5E7EB',
-              flexShrink: 0,
-              cursor: 'pointer'
-            }}
-          />
-        ))}
+        {images.length > 0
+          ? images.map((image, index) => (
+              <button
+                key={image.id}
+                onClick={() => setActiveImageIndex(index)}
+                style={{
+                  width: '88px',
+                  height: '88px',
+                  borderRadius: '12px',
+                  border: index === activeImageIndex ? '2px solid #4F46E5' : '1px solid #E5E7EB',
+                  flexShrink: 0,
+                  cursor: 'pointer',
+                  padding: 0,
+                  overflow: 'hidden',
+                  backgroundColor: '#F9FAFB'
+                }}
+              >
+                <img
+                  src={image.url}
+                  alt={image.altText}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block'
+                  }}
+                />
+              </button>
+            ))
+          : [1, 2, 3, 4].map((i) => (
+              <div
+                key={i}
+                style={{
+                  width: '88px',
+                  height: '88px',
+                  borderRadius: '12px',
+                  backgroundColor: '#F9FAFB',
+                  border: i === 1 ? '2px solid #4F46E5' : '1px solid #E5E7EB',
+                  flexShrink: 0
+                }}
+              />
+            ))}
       </div>
     </div>
   );
 }
 
 function BuyBox() {
+  const { productMain } = useProductDetailMockData();
+  const isInStock = productMain.buyBox.isInStock;
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%' }}>
-      {/* Main buy box card */}
-      <CardInstance
-        variant="elevated"
-        padding="lg"
-      >
+      <CardInstance variant="elevated" padding="lg">
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          {/* Badge */}
           <div>
-            <BadgeInstance label="Curated pick" variant="accent" size="sm" />
+            <BadgeInstance label={productMain.buyBox.badge} variant="accent" size="sm" />
           </div>
-          
-          {/* Product name */}
+
           <h2
             style={{
               fontFamily: 'Inter, system-ui, sans-serif',
@@ -123,10 +172,9 @@ function BuyBox() {
               margin: 0
             }}
           >
-            Clip-on Tuner Pro
+            {productMain.buyBox.name}
           </h2>
-          
-          {/* Descriptor */}
+
           <div
             style={{
               fontFamily: 'Inter, system-ui, sans-serif',
@@ -136,10 +184,9 @@ function BuyBox() {
               color: '#667085'
             }}
           >
-            Accurate · Fast · Durable
+            {productMain.buyBox.descriptor}
           </div>
-          
-          {/* Price row */}
+
           <div
             style={{
               display: 'flex',
@@ -158,7 +205,7 @@ function BuyBox() {
                 margin: 0
               }}
             >
-              ₹—
+              {productMain.buyBox.price}
             </h3>
             <span
               style={{
@@ -166,14 +213,13 @@ function BuyBox() {
                 fontSize: '14px',
                 lineHeight: '20px',
                 fontWeight: '500',
-                color: '#10B981'
+                color: isInStock ? '#10B981' : '#EF4444'
               }}
             >
-              In stock
+              {productMain.buyBox.stock}
             </span>
           </div>
-          
-          {/* Feature bullets */}
+
           <div
             style={{
               display: 'flex',
@@ -181,48 +227,34 @@ function BuyBox() {
               gap: '8px'
             }}
           >
-            <div
-              style={{
-                fontFamily: 'Inter, system-ui, sans-serif',
-                fontSize: '14px',
-                lineHeight: '20px',
-                fontWeight: '400',
-                color: '#667085'
-              }}
-            >
-              • ±0.1 cent accuracy
-            </div>
-            <div
-              style={{
-                fontFamily: 'Inter, system-ui, sans-serif',
-                fontSize: '14px',
-                lineHeight: '20px',
-                fontWeight: '400',
-                color: '#667085'
-              }}
-            >
-              • High-contrast display
-            </div>
-            <div
-              style={{
-                fontFamily: 'Inter, system-ui, sans-serif',
-                fontSize: '14px',
-                lineHeight: '20px',
-                fontWeight: '400',
-                color: '#667085'
-              }}
-            >
-              • Strong clamp, stable grip
-            </div>
+            {productMain.buyBox.features.map((feature) => (
+              <div
+                key={feature}
+                style={{
+                  fontFamily: 'Inter, system-ui, sans-serif',
+                  fontSize: '14px',
+                  lineHeight: '20px',
+                  fontWeight: '400',
+                  color: '#667085'
+                }}
+              >
+                • {feature}
+              </div>
+            ))}
           </div>
-          
-          {/* CTA buttons */}
+
+          <PincodeEstimator />
+
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', paddingTop: '8px' }}>
-            <ButtonInstance variant="primary" size="lg" label="Add to cart" />
-            <ButtonInstance variant="secondary" size="lg" label="Buy now" />
+            <ButtonInstance
+              variant="primary"
+              size="lg"
+              label={productMain.buyBox.primaryCta}
+              disabled={!isInStock}
+            />
+            <ButtonInstance variant="secondary" size="lg" label={productMain.buyBox.secondaryCta} />
           </div>
-          
-          {/* Micro line */}
+
           <div
             style={{
               fontFamily: 'Inter, system-ui, sans-serif',
@@ -234,16 +266,12 @@ function BuyBox() {
               borderTop: '1px solid #F3F4F6'
             }}
           >
-            Ships in 24–48h · Clear returns · Responsive support
+            {productMain.buyBox.microLine}
           </div>
         </div>
       </CardInstance>
-      
-      {/* What's in the box card */}
-      <CardInstance
-        variant="subtle"
-        padding="md"
-      >
+
+      <CardInstance variant="subtle" padding="md">
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           <div
             style={{
@@ -254,7 +282,7 @@ function BuyBox() {
               color: '#101828'
             }}
           >
-            What's in the box
+            {productMain.buyBox.inBoxTitle}
           </div>
           <div
             style={{
@@ -265,7 +293,7 @@ function BuyBox() {
               color: '#667085'
             }}
           >
-            Tuner · USB-C cable · Quick guide
+            {productMain.buyBox.inBoxLine}
           </div>
         </div>
       </CardInstance>

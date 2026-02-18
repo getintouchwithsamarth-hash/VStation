@@ -9,8 +9,16 @@ import { SocialProof } from '../features/home/components/SocialProof';
 import { CommunityTeaser } from '../features/home/components/CommunityTeaser';
 import { FaqPreview } from '../features/home/components/FaqPreview';
 import { ClosingCta } from '../features/home/components/ClosingCta';
+import { Stack } from '../components/layout/Stack';
+import { useHomeMockData } from '../features/home/hooks/useHomeMockData';
+import { HomePageSkeleton } from '../components/ui/PageSkeleton';
 
 export function Home() {
+  const { isLoading } = useHomeMockData();
+  if (isLoading) {
+    return <HomePageSkeleton />;
+  }
+
   return (
     <>
       <PageHeader />
@@ -21,16 +29,16 @@ export function Home() {
 
 function PageHeader() {
   return (
-    <>
+    <Stack gap="0px">
       <Hero />
       <HeroMetaSlot />
-    </>
+    </Stack>
   );
 }
 
 function PageBody() {
   return (
-    <>
+    <Stack gap="0px">
       <FeaturedDrop />
       <WhyItMatters />
       <CraftAndDurability />
@@ -40,6 +48,6 @@ function PageBody() {
       <CommunityTeaser />
       <FaqPreview />
       <ClosingCta />
-    </>
+    </Stack>
   );
 }

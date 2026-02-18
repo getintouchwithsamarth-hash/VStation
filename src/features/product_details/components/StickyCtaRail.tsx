@@ -1,13 +1,13 @@
 import { CardInstance } from '../../../components/ui/Card';
 import { BadgeInstance } from '../../../components/ui/Badge';
 import { ButtonInstance } from '../../../components/ui/Button';
+import { useProductDetailMockData } from '../hooks/useProductDetailMockData';
 
 export function StickyCtaRail() {
+  const { stickyCtaRail } = useProductDetailMockData();
+
   return (
-    <CardInstance
-      variant="elevated"
-      padding="md"
-    >
+    <CardInstance variant="elevated" padding="md">
       <div
         style={{
           display: 'flex',
@@ -16,7 +16,6 @@ export function StickyCtaRail() {
           minWidth: '340px'
         }}
       >
-        {/* Top row: product name + price */}
         <div
           style={{
             display: 'flex',
@@ -33,7 +32,7 @@ export function StickyCtaRail() {
               color: '#101828'
             }}
           >
-            Clip-on Tuner Pro
+            {stickyCtaRail.name}
           </div>
           <div
             style={{
@@ -44,11 +43,10 @@ export function StickyCtaRail() {
               color: '#101828'
             }}
           >
-            ₹—
+            {stickyCtaRail.price}
           </div>
         </div>
 
-        {/* Middle row: stock badge + shipping text */}
         <div
           style={{
             display: 'flex',
@@ -56,7 +54,7 @@ export function StickyCtaRail() {
             gap: '8px'
           }}
         >
-          <BadgeInstance label="In stock" variant="neutral" size="sm" />
+          <BadgeInstance label={stickyCtaRail.stockLabel} variant="neutral" size="sm" />
           <div
             style={{
               fontFamily: 'Inter, system-ui, sans-serif',
@@ -66,16 +64,19 @@ export function StickyCtaRail() {
               color: '#667085'
             }}
           >
-            Ships 24–48h
+            {stickyCtaRail.shippingLabel}
           </div>
         </div>
 
-        {/* CTA row */}
         <div style={{ paddingTop: '4px' }}>
-          <ButtonInstance variant="primary" size="md" label="Add to cart" />
+          <ButtonInstance
+            variant="primary"
+            size="md"
+            label={stickyCtaRail.addToCartLabel}
+            disabled={!stickyCtaRail.isInStock}
+          />
         </div>
 
-        {/* Secondary actions row */}
         <div
           style={{
             display: 'flex',
@@ -84,8 +85,8 @@ export function StickyCtaRail() {
             borderTop: '1px solid #F3F4F6'
           }}
         >
-          <ButtonInstance variant="ghost" size="sm" label="Share" />
-          <ButtonInstance variant="ghost" size="sm" label="Need help?" />
+          <ButtonInstance variant="ghost" size="sm" label={stickyCtaRail.shareLabel} />
+          <ButtonInstance variant="ghost" size="sm" label={stickyCtaRail.helpLabel} />
         </div>
       </div>
     </CardInstance>

@@ -1,6 +1,9 @@
 import { BadgeInstance } from '../../../components/ui/Badge';
+import { useHomeMockData } from '../hooks/useHomeMockData';
 
 export function HeroMetaSlot() {
+  const { heroMetaBadges } = useHomeMockData();
+
   return (
     <div
       style={{
@@ -26,9 +29,9 @@ export function HeroMetaSlot() {
             alignItems: 'center'
           }}
         >
-          <BadgeInstance label="Curated for durability" variant="neutral" size="md" />
-          <BadgeInstance label="Modern features" variant="neutral" size="md" />
-          <BadgeInstance label="Clear policies" variant="neutral" size="md" />
+          {heroMetaBadges.map((badge) => (
+            <BadgeInstance key={badge} label={badge} variant="neutral" size="md" />
+          ))}
         </div>
       </div>
     </div>

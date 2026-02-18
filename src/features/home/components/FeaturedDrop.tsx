@@ -1,12 +1,14 @@
 import { BadgeInstance } from '../../../components/ui/Badge';
 import { Section } from '../../../components/layout/Section';
 import { Container } from '../../../components/layout/Container';
+import { useHomeMockData } from '../hooks/useHomeMockData';
 
 export function FeaturedDrop() {
+  const { featuredDrop } = useHomeMockData();
+
   return (
     <Section paddingTop="56px" paddingBottom="56px" background="#FFFFFF">
       <Container>
-        {/* Two-column layout */}
         <div
           style={{
             display: 'flex',
@@ -15,10 +17,8 @@ export function FeaturedDrop() {
             alignItems: 'flex-start'
           }}
         >
-          {/* Left column - Editorial */}
           <div style={{ flex: '0 0 45%' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              {/* Eyebrow */}
               <div
                 style={{
                   fontFamily: 'Inter, system-ui, sans-serif',
@@ -28,10 +28,9 @@ export function FeaturedDrop() {
                   color: '#667085'
                 }}
               >
-                Featured drop
+                {featuredDrop.eyebrow}
               </div>
 
-              {/* Title */}
               <h2
                 style={{
                   fontFamily: 'Inter, system-ui, sans-serif',
@@ -42,10 +41,9 @@ export function FeaturedDrop() {
                   margin: 0
                 }}
               >
-                Best-in-class essentials, chosen to last.
+                {featuredDrop.title}
               </h2>
 
-              {/* Supporting copy */}
               <p
                 style={{
                   fontFamily: 'Inter, system-ui, sans-serif',
@@ -57,25 +55,22 @@ export function FeaturedDrop() {
                   margin: 0
                 }}
               >
-                One product at a time. Thorough research. Durable materials. Modern features that matter in real practice and gig conditions.
+                {featuredDrop.supporting}
               </p>
 
-              {/* Badge row */}
               <div style={{ display: 'flex', gap: '10px', marginTop: '6px' }}>
-                <BadgeInstance label="Durable build" variant="neutral" size="md" />
-                <BadgeInstance label="Fast + accurate" variant="neutral" size="md" />
-                <BadgeInstance label="Stage-ready" variant="neutral" size="md" />
+                {featuredDrop.badges.map((badge) => (
+                  <BadgeInstance key={badge} label={badge} variant="neutral" size="md" />
+                ))}
               </div>
 
-              {/* CTA row */}
               <div style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>
-                <ButtonPrimary label="View featured" />
-                <ButtonSecondary label="See all products" />
+                <ButtonPrimary label={featuredDrop.primaryCta} />
+                <ButtonSecondary label={featuredDrop.secondaryCta} />
               </div>
             </div>
           </div>
 
-          {/* Right column - Featured product card */}
           <div style={{ flex: '0 0 55%' }}>
             <div
               style={{
@@ -88,19 +83,29 @@ export function FeaturedDrop() {
                 overflow: 'hidden'
               }}
             >
-              {/* MediaSlot - product image placeholder */}
               <div
                 style={{
                   backgroundColor: '#F2F4F7',
                   height: '200px',
                   width: '100%'
                 }}
-              />
+              >
+                {featuredDrop.productImageUrl ? (
+                  <img
+                    src={featuredDrop.productImageUrl}
+                    alt={featuredDrop.productImageAlt || featuredDrop.productName}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      display: 'block'
+                    }}
+                  />
+                ) : null}
+              </div>
 
-              {/* BodySlot - content */}
               <div style={{ padding: '16px' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  {/* Top row: Product name + price */}
                   <div
                     style={{
                       display: 'flex',
@@ -117,7 +122,7 @@ export function FeaturedDrop() {
                         color: '#101828'
                       }}
                     >
-                      Clip-on Tuner (Pro Grade)
+                      {featuredDrop.productName}
                     </div>
                     <div
                       style={{
@@ -128,11 +133,10 @@ export function FeaturedDrop() {
                         color: '#101828'
                       }}
                     >
-                      ₹—
+                      {featuredDrop.productPrice}
                     </div>
                   </div>
 
-                  {/* Subcopy */}
                   <p
                     style={{
                       fontFamily: 'Inter, system-ui, sans-serif',
@@ -143,10 +147,9 @@ export function FeaturedDrop() {
                       margin: 0
                     }}
                   >
-                    Accurate, bright display, strong clamp — built for daily use.
+                    {featuredDrop.productCopy}
                   </p>
 
-                  {/* Feature row */}
                   <div
                     style={{
                       fontFamily: 'Inter, system-ui, sans-serif',
@@ -156,12 +159,11 @@ export function FeaturedDrop() {
                       color: '#667085'
                     }}
                   >
-                    ±0.1 cent accuracy · USB-C rechargeable · High-contrast display
+                    {featuredDrop.featureLine}
                   </div>
 
-                  {/* Badge */}
                   <div style={{ marginTop: '2px' }}>
-                    <BadgeInstance label="Curated pick" variant="accent" size="sm" />
+                    <BadgeInstance label={featuredDrop.productBadge} variant="accent" size="sm" />
                   </div>
                 </div>
               </div>
@@ -173,7 +175,6 @@ export function FeaturedDrop() {
   );
 }
 
-// Button components
 function ButtonPrimary({ label }: { label: string }) {
   return (
     <button

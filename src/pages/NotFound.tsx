@@ -1,5 +1,6 @@
 import { Container } from '../components/layout/Container';
 import { Section } from '../components/layout/Section';
+import { Stack } from '../components/layout/Stack';
 
 export function NotFound() {
   return (
@@ -14,19 +15,19 @@ export function NotFound() {
 
 function PageHeader() {
   return (
-    <div style={{ marginBottom: '24px' }}>
+    <Stack gap="0px" style={{ marginBottom: '24px' }}>
       <ErrorTitleBlock />
-    </div>
+    </Stack>
   );
 }
 
 function PageBody() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <Stack gap="16px">
       <HelpfulLinks />
       <SearchCta />
       <BackToHomeCta />
-    </div>
+    </Stack>
   );
 }
 

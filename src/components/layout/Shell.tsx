@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { Header } from './Header';
 import { Footer } from './Footer';
+import { Stack } from './Stack';
 
 type ShellProps = {
   children?: ReactNode;
@@ -8,11 +9,11 @@ type ShellProps = {
 
 export function Shell({ children }: ShellProps) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <Stack gap="0px" style={{ minHeight: '100vh' }}>
       <ShellHeaderSlot />
       <ShellMainSlot>{children}</ShellMainSlot>
       <ShellFooterSlot />
-    </div>
+    </Stack>
   );
 }
 
@@ -30,8 +31,8 @@ function ShellFooterSlot() {
 
 function Main({ children }: ShellProps) {
   return (
-    <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-      {children}
+    <main style={{ flex: 1 }}>
+      <Stack gap="0px" style={{ height: '100%' }}>{children}</Stack>
     </main>
   );
 }

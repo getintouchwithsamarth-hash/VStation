@@ -1,10 +1,4 @@
-export type ProductCategory =
-  | 'all'
-  | 'practice'
-  | 'stage'
-  | 'studio'
-  | 'power'
-  | 'bundles';
+export type ProductCategory = string;
 
 export type ProductBadgeVariant = 'neutral' | 'accent';
 
@@ -15,8 +9,11 @@ export interface Product {
   featureLine: string;
   priceLabel: string;
   shippingLabel: string;
+  isInStock: boolean;
   badgeLabel: string;
   badgeVariant: ProductBadgeVariant;
+  imageUrl?: string;
+  imageAlt?: string;
 }
 
 export interface ProductFilterOption {

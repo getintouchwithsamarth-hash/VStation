@@ -474,12 +474,16 @@ export function ButtonInstance({
   label, 
   variant = 'primary', 
   size = 'md',
-  onClick
+  onClick,
+  disabled = false,
+  fullWidth = false
 }: { 
   label: string; 
   variant?: 'primary' | 'secondary' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
   onClick?: () => void;
+  disabled?: boolean;
+  fullWidth?: boolean;
 }) {
   const sizeStyles = {
     sm: {
@@ -532,21 +536,27 @@ export function ButtonInstance({
   return (
     <button
       onClick={onClick}
+      disabled={disabled}
       style={{
         height: sizeStyles.height,
         paddingLeft: sizeStyles.paddingLeft,
         paddingRight: sizeStyles.paddingRight,
         borderRadius: sizeStyles.borderRadius,
-        backgroundColor: variantStyles.backgroundColor,
+        backgroundColor: disabled
+          ? '#E5E7EB'
+          : variantStyles.backgroundColor,
         color: variantStyles.color,
         fontSize: sizeStyles.fontSize,
         lineHeight: sizeStyles.lineHeight,
         fontWeight: '600',
-        border: variantStyles.border,
+        border: disabled ? '1px solid #D0D5DD' : variantStyles.border,
         display: 'inline-flex',
         alignItems: 'center',
-        cursor: 'pointer',
-        fontFamily: 'Inter, system-ui, sans-serif'
+        justifyContent: 'center',
+        width: fullWidth ? '100%' : 'auto',
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        fontFamily: 'Inter, system-ui, sans-serif',
+        opacity: disabled ? 0.65 : 1
       }}
     >
       {label}

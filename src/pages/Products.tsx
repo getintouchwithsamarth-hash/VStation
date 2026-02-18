@@ -1,13 +1,21 @@
 import { Container } from "../components/layout/Container";
 import { Section } from "../components/layout/Section";
+import { Stack } from "../components/layout/Stack";
 import { ProductSearch } from "../features/products/components/ProductSearch";
 import { ProductFilters } from "../features/products/components/ProductFilters";
 import { ProductList } from "../features/products/components/ProductList";
 import { CardInstance } from "../components/ui/Card";
 import { BadgeInstance } from "../components/ui/Badge";
 import { ButtonInstance } from "../components/ui/Button";
+import { useProductList } from "../features/products/hooks";
+import { ProductsPageSkeleton } from "../components/ui/PageSkeleton";
 
 export function Products() {
+  const { isLoading } = useProductList();
+  if (isLoading) {
+    return <ProductsPageSkeleton />;
+  }
+
   return (
     <Section paddingTop="48px" paddingBottom="64px" background="#FFFFFF">
       <Container>
@@ -29,13 +37,13 @@ function PageHeader() {
 
 function PageBody() {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+    <Stack gap="16px">
       <SearchRow />
       <FiltersRow />
       <ResultsHeader />
       <ProductGrid />
       <PaginationRow />
-    </div>
+    </Stack>
   );
 }
 

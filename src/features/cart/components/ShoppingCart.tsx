@@ -1,3 +1,11 @@
+import { PresentationDrawer } from './PresentationDrawer';
+import { PresentationPage } from './PresentationPage';
+
 export function ShoppingCart() {
-  return null;
+  return (
+    <>
+      <PresentationDrawer />
+      <PresentationPage />
+    </>
+  );
 }

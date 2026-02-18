@@ -1,4 +1,5 @@
 import { BadgeInstance } from '../../../components/ui/Badge';
+import { ButtonInstance } from '../../../components/ui/Button';
 import type { Product } from '../types';
 import { useProductList } from '../hooks';
 
@@ -25,7 +26,8 @@ export function ProductList() {
         ))}
       </div>
 
-      <div style={{ marginTop: '32px' }}>
+      {hoverPreviewProduct ? (
+        <div style={{ marginTop: '32px' }}>
         <div
           style={{
             fontFamily: 'Inter, system-ui, sans-serif',
@@ -42,6 +44,7 @@ export function ProductList() {
           <ProductCard product={hoverPreviewProduct} isHoverPreview />
         </div>
       </div>
+      ) : null}
     </div>
   );
 }
@@ -103,6 +106,19 @@ function ProductCard({
           backgroundColor: '#F2F4F7'
         }}
       >
+        {product.imageUrl ? (
+          <img
+            src={product.imageUrl}
+            alt={product.imageAlt || product.name}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              display: 'block'
+            }}
+          />
+        ) : null}
+
         {isHoverPreview ? (
           <div
             style={{
@@ -241,28 +257,13 @@ function ProductCard({
       </div>
 
       <div style={{ padding: '16px', paddingTop: '0' }}>
-        <button
-          style={{
-            width: '100%',
-            height: '44px',
-            paddingLeft: '16px',
-            paddingRight: '16px',
-            borderRadius: '12px',
-            backgroundColor: '#4338CA',
-            color: '#FFFFFF',
-            fontSize: '14px',
-            lineHeight: '20px',
-            fontWeight: '600',
-            border: 'none',
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            fontFamily: 'Inter, system-ui, sans-serif'
-          }}
-        >
-          Add to cart
-        </button>
+        <ButtonInstance
+          variant="primary"
+          size="md"
+          label={product.isInStock ? 'Add to cart' : 'Out of stock'}
+          disabled={!product.isInStock}
+          fullWidth
+        />
       </div>
     </div>
   );

@@ -1,20 +1,22 @@
+import { Container } from './Container';
+import { Stack } from './Stack';
+
 export function Footer() {
   return (
     <footer 
       style={{
         backgroundColor: '#FCFCFD',
         borderTop: '1px solid #EAECF0',
-        paddingLeft: '24px',
-        paddingRight: '24px',
         paddingTop: '32px',
-        paddingBottom: '24px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '24px'
+        paddingBottom: '24px'
       }}
     >
-      <FooterTopSlot />
-      <FooterBottomSlot />
+      <Container>
+        <Stack gap="24px">
+          <FooterTopSlot />
+          <FooterBottomSlot />
+        </Stack>
+      </Container>
     </footer>
   );
 }
@@ -52,7 +54,7 @@ function FooterBottomSlot() {
 
 function FooterNavSlot() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+    <Stack gap="10px">
       <div 
         style={{
           fontSize: '12px',
@@ -63,7 +65,7 @@ function FooterNavSlot() {
       >
         Explore
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      <Stack gap="10px">
         <a 
           href="#products"
           style={{
@@ -100,14 +102,14 @@ function FooterNavSlot() {
         >
           Community
         </a>
-      </div>
-    </div>
+      </Stack>
+    </Stack>
   );
 }
 
 function FooterTrustSlot() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+    <Stack gap="10px">
       <div 
         style={{
           fontSize: '12px',
@@ -118,7 +120,7 @@ function FooterTrustSlot() {
       >
         Standards
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      <Stack gap="10px">
         <div 
           style={{
             fontSize: '14px',
@@ -149,8 +151,8 @@ function FooterTrustSlot() {
         >
           Clear policies
         </div>
-      </div>
-    </div>
+      </Stack>
+    </Stack>
   );
 }
 
