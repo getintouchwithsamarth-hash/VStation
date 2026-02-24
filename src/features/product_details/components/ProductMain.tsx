@@ -3,7 +3,9 @@ import { CardInstance } from '../../../components/ui/Card';
 import { BadgeInstance } from '../../../components/ui/Badge';
 import { ButtonInstance } from '../../../components/ui/Button';
 import { PincodeEstimator } from '../../../components/ui/PincodeEstimator';
+import { ToastInstance } from '../../../components/ui/Toast';
 import { useProductDetailMockData } from '../hooks/useProductDetailMockData';
+import { useCart } from '../../cart/CartContext';
 
 export function ProductMain() {
   return (
@@ -154,6 +156,7 @@ function Gallery() {
 }
 
 function BuyBox() {
+  const { addItem } = useCart();
   const { productMain } = useProductDetailMockData();
   const isInStock = productMain.buyBox.isInStock;
 
@@ -250,9 +253,25 @@ function BuyBox() {
               variant="primary"
               size="lg"
               label={productMain.buyBox.primaryCta}
-              disabled={!isInStock}
+              disabled={!isInStock || !productMain.buyBox.variantId}
+              onClick={() => {
+                if (!productMain.buyBox.variantId) {
+                  return;
+                }
+                void addItem(productMain.buyBox.variantId);
+              }}
             />
             <ButtonInstance variant="secondary" size="lg" label={productMain.buyBox.secondaryCta} />
+          </div>
+
+          <div style={{ paddingTop: '6px' }}>
+            <ToastInstance
+              variant="success"
+              title="Added to cart"
+              message="Clip-on Tuner Pro is in your cart."
+              actionSlot={<ButtonInstance variant="ghost" size="sm" label="View cart" />}
+              closeSlot={<ButtonInstance variant="ghost" size="sm" label="Close" />}
+            />
           </div>
 
           <div

@@ -8,6 +8,7 @@ import {
   type ReactNode
 } from 'react';
 import {
+  addCartLines,
   createCart,
   getCart,
   getCartId,
@@ -33,6 +34,7 @@ type CartContextValue = {
   subtotal: number;
   total: number;
   checkoutUrl: string | null;
+  addItem: (variantId: string) => Promise<boolean>;
   openCartDrawer: () => void;
   closeCartDrawer: () => void;
   toggleCartDrawer: () => void;
@@ -120,6 +122,28 @@ export function CartProvider({ children }: { children: ReactNode }) {
     subtotal,
     total: subtotal,
     checkoutUrl,
+    addItem: async (variantId) => {
+      try {
+        let cartId = activeCartId;
+        if (!cartId) {
+          const newCart = await createCart();
+          syncCart(newCart);
+          cartId = newCart.id;
+        }
+
+        const existingLine = items.find((entry) => entry.variantId === variantId);
+        const updatedCart = existingLine
+          ? await updateCartLines(cartId, [{ id: existingLine.id, quantity: existingLine.quantity + 1 }])
+          : await addCartLines(cartId, [{ merchandiseId: variantId, quantity: 1 }]);
+
+        syncCart(updatedCart);
+        setIsDrawerOpen(true);
+        return true;
+      } catch (error) {
+        console.error('Failed to add item to cart', error);
+        return false;
+      }
+    },
     openCartDrawer: () => setIsDrawerOpen(true),
     closeCartDrawer: () => setIsDrawerOpen(false),
     toggleCartDrawer: () => setIsDrawerOpen((open) => !open),

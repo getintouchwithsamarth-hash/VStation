@@ -1,5 +1,6 @@
 import { Container } from './Container';
 import { Stack } from './Stack';
+import { Logo } from '../ui/Logo';
 
 export function Footer() {
   return (
@@ -158,14 +159,17 @@ function FooterTrustSlot() {
 
 function FooterLegalSlot() {
   return (
-    <div 
-      style={{
-        fontSize: '14px',
-        lineHeight: '20px',
-        color: '#667085'
-      }}
-    >
-      © VIBE STATION
+    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <Logo size={24} variant="dark" showText={false} href="/" />
+      <div
+        style={{
+          fontSize: '14px',
+          lineHeight: '20px',
+          color: '#667085'
+        }}
+      >
+        © VIBE STATION
+      </div>
     </div>
   );
 }

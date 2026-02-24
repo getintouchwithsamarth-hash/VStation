@@ -2,8 +2,10 @@ import { CardInstance } from '../../../components/ui/Card';
 import { BadgeInstance } from '../../../components/ui/Badge';
 import { ButtonInstance } from '../../../components/ui/Button';
 import { useProductDetailMockData } from '../hooks/useProductDetailMockData';
+import { useCart } from '../../cart/CartContext';
 
 export function RelatedProducts() {
+  const { addItem } = useCart();
   const { relatedProducts } = useProductDetailMockData();
 
   return (
@@ -72,7 +74,18 @@ export function RelatedProducts() {
               </div>
             }
             footerSlot={
-              <ButtonInstance variant="primary" size="md" label={relatedProducts.addToCartLabel} />
+              <ButtonInstance
+                variant="primary"
+                size="md"
+                label={relatedProducts.addToCartLabel}
+                disabled={!item.variantId}
+                onClick={() => {
+                  if (!item.variantId) {
+                    return;
+                  }
+                  void addItem(item.variantId);
+                }}
+              />
             }
           >
             <div

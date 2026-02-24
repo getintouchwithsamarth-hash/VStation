@@ -1,8 +1,6 @@
-import { useState } from 'react';
 import { ButtonInstance } from '../../../components/ui/Button';
 import { BadgeInstance } from '../../../components/ui/Badge';
 import { CartItemCard } from './CartItemCard';
-import { CheckoutHandoff } from './CheckoutHandoff';
 import { OrderSummaryCard } from './OrderSummaryCard';
 import { useCart } from '../CartContext';
 import { useCartMockData } from '../hooks/useCartMockData';
@@ -13,14 +11,12 @@ export function PresentationDrawer() {
     cartCount,
     subtotal,
     total,
-    checkoutUrl,
     closeCartDrawer,
     incrementItem,
     decrementItem,
     removeItem
   } = useCart();
   const { copy } = useCartMockData();
-  const [showCheckoutHandoff, setShowCheckoutHandoff] = useState(false);
 
   return (
     <div
@@ -161,7 +157,10 @@ export function PresentationDrawer() {
             variant="primary"
             size="lg"
             label={copy.drawerCheckoutLabel}
-            onClick={() => setShowCheckoutHandoff(true)}
+            onClick={() => {
+              closeCartDrawer();
+              window.location.href = '/cart';
+            }}
           />
           
           {/* Secondary Button */}
@@ -188,18 +187,6 @@ export function PresentationDrawer() {
         </div>
       </div>
 
-      {showCheckoutHandoff ? (
-        <CheckoutHandoff
-          itemCount={cartCount}
-          subtotal={subtotal}
-          onBack={() => setShowCheckoutHandoff(false)}
-          onClose={() => setShowCheckoutHandoff(false)}
-          onContinue={() => {
-            closeCartDrawer();
-            window.location.href = checkoutUrl || '/cart';
-          }}
-        />
-      ) : null}
     </div>
   );
 }

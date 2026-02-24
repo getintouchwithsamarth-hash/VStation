@@ -1,24 +1,25 @@
-import { BadgeInstance } from '../ui/Badge';
-import { ButtonInstance } from '../ui/Button';
-import { Container } from './Container';
-import { useCart } from '../../features/cart/CartContext';
+import { BadgeInstance } from "../ui/Badge";
+import { ButtonInstance } from "../ui/Button";
+import { Logo } from "../ui/Logo";
+import { Container } from "./Container";
+import { useCart } from "../../features/cart/CartContext";
 
 export function Header() {
   return (
-    <header 
+    <header
       style={{
-        height: '72px',
-        backgroundColor: '#FFFFFF',
-        borderBottom: '1px solid #E5E7EB',
+        height: "72px",
+        backgroundColor: "#FFFFFF",
+        borderBottom: "1px solid #E5E7EB",
       }}
     >
       <Container>
         <div
           style={{
-            height: '72px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '16px'
+            height: "72px",
+            display: "flex",
+            alignItems: "center",
+            gap: "16px",
           }}
         >
           <HeaderLeftSlot />
@@ -40,7 +41,7 @@ function HeaderCenterSlot() {
 
 function HeaderRightSlot() {
   return (
-    <div style={{ display: 'flex', gap: '16px' }}>
+    <div style={{ display: "flex", gap: "16px" }}>
       <SearchSlot />
       <AccountSlot />
       <CartSlot />
@@ -49,68 +50,54 @@ function HeaderRightSlot() {
 }
 
 function BrandMarkSlot() {
-  return (
-    <a
-      href="/"
-      style={{
-        color: '#101828',
-        fontSize: '20px',
-        lineHeight: '28px',
-        fontWeight: '600',
-        letterSpacing: '-0.02em',
-        textDecoration: 'none'
-      }}
-    >
-      VIBE STATION
-    </a>
-  );
+  return <Logo size={32} variant="dark" showText href="/" />;
 }
 
 function PrimaryNavSlot() {
   return (
-    <nav 
+    <nav
       style={{
-        display: 'flex',
-        gap: '20px',
+        display: "flex",
+        gap: "20px",
         flex: 1,
-        justifyContent: 'center'
+        justifyContent: "center",
       }}
     >
-      <a 
+      <a
         href="/products"
         style={{
-          color: '#475467',
-          fontSize: '14px',
-          lineHeight: '20px',
-          fontWeight: '600',
-          textDecoration: 'none',
-          cursor: 'pointer'
+          color: "#475467",
+          fontSize: "14px",
+          lineHeight: "20px",
+          fontWeight: "600",
+          textDecoration: "none",
+          cursor: "pointer",
         }}
       >
         Products
       </a>
-      <a 
+      <a
         href="/philosophy"
         style={{
-          color: '#475467',
-          fontSize: '14px',
-          lineHeight: '20px',
-          fontWeight: '600',
-          textDecoration: 'none',
-          cursor: 'pointer'
+          color: "#475467",
+          fontSize: "14px",
+          lineHeight: "20px",
+          fontWeight: "600",
+          textDecoration: "none",
+          cursor: "pointer",
         }}
       >
         Philosophy
       </a>
-      <a 
+      <a
         href="/community"
         style={{
-          color: '#475467',
-          fontSize: '14px',
-          lineHeight: '20px',
-          fontWeight: '600',
-          textDecoration: 'none',
-          cursor: 'pointer'
+          color: "#475467",
+          fontSize: "14px",
+          lineHeight: "20px",
+          fontWeight: "600",
+          textDecoration: "none",
+          cursor: "pointer",
         }}
       >
         Community
@@ -123,19 +110,19 @@ function SearchSlot() {
   return (
     <button
       style={{
-        height: '36px',
-        paddingLeft: '12px',
-        paddingRight: '12px',
-        borderRadius: '10px',
-        backgroundColor: 'transparent',
-        color: '#101828',
-        fontSize: '14px',
-        lineHeight: '20px',
-        fontWeight: '600',
-        border: 'none',
-        display: 'inline-flex',
-        alignItems: 'center',
-        cursor: 'pointer'
+        height: "36px",
+        paddingLeft: "12px",
+        paddingRight: "12px",
+        borderRadius: "10px",
+        backgroundColor: "transparent",
+        color: "#101828",
+        fontSize: "14px",
+        lineHeight: "20px",
+        fontWeight: "600",
+        border: "none",
+        display: "inline-flex",
+        alignItems: "center",
+        cursor: "pointer",
       }}
     >
       Search
@@ -147,19 +134,19 @@ function AccountSlot() {
   return (
     <button
       style={{
-        height: '36px',
-        paddingLeft: '12px',
-        paddingRight: '12px',
-        borderRadius: '10px',
-        backgroundColor: 'transparent',
-        color: '#101828',
-        fontSize: '14px',
-        lineHeight: '20px',
-        fontWeight: '600',
-        border: 'none',
-        display: 'inline-flex',
-        alignItems: 'center',
-        cursor: 'pointer'
+        height: "36px",
+        paddingLeft: "12px",
+        paddingRight: "12px",
+        borderRadius: "10px",
+        backgroundColor: "transparent",
+        color: "#101828",
+        fontSize: "14px",
+        lineHeight: "20px",
+        fontWeight: "600",
+        border: "none",
+        display: "inline-flex",
+        alignItems: "center",
+        cursor: "pointer",
       }}
     >
       Account
@@ -169,16 +156,29 @@ function AccountSlot() {
 
 function CartSlot() {
   const { cartCount, openCartDrawer } = useCart();
+  const handleCartClick = () => {
+    const path = window.location.pathname.replace(/\/+$/, '') || '/';
+    if (path === '/cart') {
+      return;
+    }
+
+    openCartDrawer();
+  };
 
   return (
-    <div style={{ position: 'relative', display: 'inline-flex' }}>
-      <ButtonInstance label="Cart" variant="ghost" size="sm" onClick={openCartDrawer} />
+    <div style={{ position: "relative", display: "inline-flex" }}>
+      <ButtonInstance
+        label="Cart"
+        variant="ghost"
+        size="sm"
+        onClick={handleCartClick}
+      />
       <div
         style={{
-          position: 'absolute',
-          top: '-6px',
-          right: '-8px',
-          pointerEvents: 'none'
+          position: "absolute",
+          top: "-6px",
+          right: "-8px",
+          pointerEvents: "none",
         }}
       >
         <BadgeInstance label={String(cartCount)} variant="accent" size="sm" />

@@ -4,6 +4,7 @@ export type ProductBadgeVariant = 'neutral' | 'accent';
 
 export interface Product {
   id: string;
+  variantId: string | null;
   name: string;
   descriptor: string;
   featureLine: string;

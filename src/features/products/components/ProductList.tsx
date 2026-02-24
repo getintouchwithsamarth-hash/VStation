@@ -1,7 +1,9 @@
 import { BadgeInstance } from '../../../components/ui/Badge';
 import { ButtonInstance } from '../../../components/ui/Button';
+import { toast } from 'sonner';
 import type { Product } from '../types';
 import { useProductList } from '../hooks';
+import { useCart } from '../../cart/CartContext';
 
 export function ProductList() {
   const { products, hoverPreviewProduct } = useProductList();
@@ -56,6 +58,7 @@ function ProductCard({
   product: Product;
   isHoverPreview?: boolean;
 }) {
+  const { addItem, openCartDrawer } = useCart();
   const productHref = `/products/${product.id}`;
 
   return (
@@ -261,7 +264,34 @@ function ProductCard({
           variant="primary"
           size="md"
           label={product.isInStock ? 'Add to cart' : 'Out of stock'}
-          disabled={!product.isInStock}
+          disabled={!product.isInStock || !product.variantId}
+          onClick={async () => {
+            if (!product.variantId) {
+              return;
+            }
+
+            const added = await addItem(product.variantId);
+            if (!added) {
+              toast.error('Unable to add item', {
+                description: 'Please try again.',
+                duration: 5000
+              });
+              return;
+            }
+
+            toast.success('Added to cart', {
+              description: `${product.name} is in your cart.`,
+              duration: Infinity,
+              action: {
+                label: 'View cart',
+                onClick: () => openCartDrawer()
+              },
+              cancel: {
+                label: 'Close',
+                onClick: () => {}
+              }
+            });
+          }}
           fullWidth
         />
       </div>

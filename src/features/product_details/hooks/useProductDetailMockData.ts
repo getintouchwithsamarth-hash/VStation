@@ -31,6 +31,7 @@ const DEFAULT_PRODUCT_DETAIL_DATA = {
       nextLabel: 'Next'
     },
     buyBox: {
+      variantId: null as string | null,
       badge: 'Curated pick',
       name: 'Product',
       descriptor: 'Curated by Vibe Station',
@@ -66,6 +67,7 @@ const DEFAULT_PRODUCT_DETAIL_DATA = {
     addToCartLabel: 'Add to cart',
     items: [] as Array<{
       id: string;
+      variantId: string | null;
       badge: string;
       name: string;
       descriptor: string;
@@ -83,6 +85,7 @@ const DEFAULT_PRODUCT_DETAIL_DATA = {
     inBoxBadge: 'No extras required'
   },
   stickyCtaRail: {
+    variantId: null as string | null,
     name: 'Product',
     price: '₹—',
     stockLabel: 'Checking availability',
@@ -92,6 +95,11 @@ const DEFAULT_PRODUCT_DETAIL_DATA = {
     shareLabel: 'Share',
     helpLabel: 'Need help?'
   }
+};
+
+const getDefaultVariantId = (product: Product): string | null => {
+  const availableVariant = product.variants?.edges.find((edge) => edge.node.availableForSale)?.node;
+  return availableVariant?.id || product.variants?.edges[0]?.node.id || null;
 };
 
 let productDetailCache = DEFAULT_PRODUCT_DETAIL_DATA;
@@ -219,6 +227,7 @@ const loadProductDetailFromShopify = async () => {
       const keyBenefitCards = mapProductCards(product);
       const stockLabel = getStockLabel(product);
       const isInStock = stockLabel === 'In stock';
+      const defaultVariantId = getDefaultVariantId(product);
 
       productDetailCache = {
         productMain: {
@@ -234,6 +243,7 @@ const loadProductDetailFromShopify = async () => {
             nextLabel: 'Next'
           },
           buyBox: {
+            variantId: defaultVariantId,
             badge: product.badge?.value || 'Curated pick',
             name: product.title,
             descriptor: product.subtitle?.value || product.shortDescription?.value || product.description,
@@ -289,6 +299,7 @@ const loadProductDetailFromShopify = async () => {
           ...DEFAULT_PRODUCT_DETAIL_DATA.relatedProducts,
           items: relatedProducts.slice(0, 3).map((item) => ({
             id: item.handle,
+            variantId: getDefaultVariantId(item),
             badge: item.badge?.value || item.tags[0] || 'Curated',
             name: item.title,
             descriptor: item.shortDescription?.value || item.description || 'Curated recommendation',
@@ -306,6 +317,7 @@ const loadProductDetailFromShopify = async () => {
           inBoxBadge: 'No extras required'
         },
         stickyCtaRail: {
+          variantId: defaultVariantId,
           name: product.title,
           price: formatPrice(
             product.priceRange.minVariantPrice.amount,

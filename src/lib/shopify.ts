@@ -396,6 +396,15 @@ const PRODUCT_CARD_FIELDS = `
   }
   availableForSale
   totalInventory
+  variants(first: 1) {
+    edges {
+      node {
+        id
+        availableForSale
+        quantityAvailable
+      }
+    }
+  }
   featureLine: metafield(namespace: "custom", key: "feature_line") {
     value
   }
@@ -638,6 +647,8 @@ export const PRODUCT_RECOMMENDATIONS_QUERY = `
       id
       handle
       title
+      availableForSale
+      totalInventory
       featuredImage {
         url
         altText
@@ -647,6 +658,36 @@ export const PRODUCT_RECOMMENDATIONS_QUERY = `
           amount
           currencyCode
         }
+      }
+      variants(first: 1) {
+        edges {
+          node {
+            id
+            availableForSale
+            quantityAvailable
+          }
+        }
+      }
+      images(first: 1) {
+        edges {
+          node {
+            url
+            altText
+          }
+        }
+      }
+      tags
+      featureLine: metafield(namespace: "custom", key: "feature_line") {
+        value
+      }
+      badge: metafield(namespace: "custom", key: "badge_label") {
+        value
+      }
+      shortDescription: metafield(namespace: "custom", key: "short_description") {
+        value
+      }
+      shippingInfo: metafield(namespace: "custom", key: "shipping_snippet") {
+        value
       }
     }
   }

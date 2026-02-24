@@ -37,6 +37,11 @@ const isProductInStock = (product: ShopifyProduct): boolean => {
   );
 };
 
+const getDefaultVariantId = (product: ShopifyProduct): string | null => {
+  const availableVariant = product.variants?.edges.find((edge) => edge.node.availableForSale)?.node;
+  return availableVariant?.id || product.variants?.edges[0]?.node.id || null;
+};
+
 const mapShopifyProduct = (product: ShopifyProduct): Product => {
   const descriptor = product.shortDescription?.value || product.description || 'Curated by Vibe Station';
   const featureLine = product.featureLine?.value || product.tags.slice(0, 3).join(' · ') || 'Durable build';
@@ -45,6 +50,7 @@ const mapShopifyProduct = (product: ShopifyProduct): Product => {
 
   return {
     id: product.handle,
+    variantId: getDefaultVariantId(product),
     name: product.title,
     descriptor,
     featureLine,
