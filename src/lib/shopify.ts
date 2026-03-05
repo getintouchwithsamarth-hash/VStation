@@ -8,6 +8,8 @@ const SHOPIFY_BACKEND_TOKEN_ENDPOINT =
 const SHOPIFY_BACKEND_PROXY_ENDPOINT = import.meta.env.VITE_SHOPIFY_PROXY_ENDPOINT || '/api/shopify';
 const SHOPIFY_BACKEND_TOKEN_METHOD = (import.meta.env.VITE_SHOPIFY_TOKEN_METHOD || 'GET').toUpperCase();
 const SHOPIFY_AUTH_HEADER = import.meta.env.VITE_SHOPIFY_AUTH_HEADER || 'X-Shopify-Storefront-Access-Token';
+const SHOPIFY_COUNTRY_CODE = (import.meta.env.VITE_SHOPIFY_COUNTRY_CODE || 'IN').toUpperCase();
+const SHOPIFY_LANGUAGE_CODE = (import.meta.env.VITE_SHOPIFY_LANGUAGE_CODE || 'EN').toUpperCase();
 const SHOPIFY_GRAPHQL_URL = `https://${SHOPIFY_STORE_DOMAIN}/api/${SHOPIFY_STOREFRONT_API_VERSION}/graphql.json`;
 const CART_ID_KEY = 'shopify_cart_id';
 const TOKEN_REFRESH_BUFFER_MS = 60 * 1000;
@@ -99,6 +101,34 @@ export interface Product {
   };
 }
 
+type ProductThumbnailSource = {
+  title?: string;
+  featuredImage?: Image | null;
+  images?: {
+    edges?: Array<{ node: Image }>;
+  };
+};
+
+export function resolveProductThumbnail(product: ProductThumbnailSource): { url: string; altText: string } | null {
+  const featured = product.featuredImage;
+  if (featured?.url) {
+    return {
+      url: featured.url,
+      altText: featured.altText || product.title || 'Product image'
+    };
+  }
+
+  const firstImage = product.images?.edges?.[0]?.node;
+  if (firstImage?.url) {
+    return {
+      url: firstImage.url,
+      altText: firstImage.altText || product.title || 'Product image'
+    };
+  }
+
+  return null;
+}
+
 export interface PageInfo {
   hasNextPage: boolean;
   hasPreviousPage: boolean;
@@ -170,6 +200,79 @@ export interface CollectionFilter {
 export interface StorefrontError {
   message: string;
   field?: string[];
+}
+
+export interface CustomerUserError {
+  code?: string;
+  field?: string[];
+  message: string;
+}
+
+export interface CustomerAccessToken {
+  accessToken: string;
+  expiresAt: string;
+}
+
+export interface CustomerAddressInput {
+  address1?: string;
+  address2?: string;
+  city?: string;
+  company?: string;
+  country?: string;
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  province?: string;
+  zip?: string;
+}
+
+export interface CustomerProfile {
+  id: string;
+  email: string;
+  firstName: string | null;
+  lastName: string | null;
+  phone: string | null;
+  defaultAddress: {
+    id?: string;
+    address1?: string;
+    address2?: string;
+    city?: string;
+    province?: string;
+    country?: string;
+    zip?: string;
+  } | null;
+  addresses: {
+    edges: Array<{
+      node: {
+        id: string;
+        address1: string | null;
+        address2: string | null;
+        city: string | null;
+        province: string | null;
+        country: string | null;
+        zip: string | null;
+      };
+    }>;
+  };
+  orders: {
+    edges: Array<{
+      node: {
+        id: string;
+        orderNumber: number;
+        totalPriceV2: Money;
+        processedAt: string;
+        fulfillmentStatus: string | null;
+        lineItems: {
+          edges: Array<{
+            node: {
+              title: string;
+              quantity: number;
+            };
+          }>;
+        };
+      };
+    }>;
+  };
 }
 
 export class StorefrontAPIError extends Error {
@@ -419,6 +522,8 @@ const PRODUCT_CARD_FIELDS = `
   }
 `;
 
+const MARKET_CONTEXT = `@inContext(country: ${SHOPIFY_COUNTRY_CODE}, language: ${SHOPIFY_LANGUAGE_CODE})`;
+
 export const PRODUCT_LIST_QUERY = `
   query ProductList(
     $first: Int = 24
@@ -426,7 +531,7 @@ export const PRODUCT_LIST_QUERY = `
     $sortKey: ProductSortKeys = BEST_SELLING
     $reverse: Boolean = false
     $query: String
-  ) {
+  ) ${MARKET_CONTEXT} {
     products(first: $first, after: $after, sortKey: $sortKey, reverse: $reverse, query: $query) {
       pageInfo {
         hasNextPage
@@ -444,7 +549,7 @@ export const PRODUCT_LIST_QUERY = `
 `;
 
 export const PRODUCTS_BY_COLLECTION_QUERY = `
-  query ProductsByCollection($handle: String!, $first: Int = 24, $after: String) {
+  query ProductsByCollection($handle: String!, $first: Int = 24, $after: String) ${MARKET_CONTEXT} {
     collection(handle: $handle) {
       id
       handle
@@ -467,22 +572,30 @@ export const PRODUCTS_BY_COLLECTION_QUERY = `
 `;
 
 export const PRODUCT_SEARCH_QUERY = `
-  query ProductSearch($query: String!, $first: Int = 10) {
-    search(query: $query, first: $first, types: PRODUCT) {
+  query ProductSearch($query: String!, $first: Int = 20) ${MARKET_CONTEXT} {
+    products(first: $first, query: $query) {
       edges {
         node {
-          ... on Product {
-            id
-            handle
-            title
-            featuredImage {
-              url
-              altText
+          id
+          handle
+          title
+          availableForSale
+          featuredImage {
+            url
+            altText
+          }
+          priceRange {
+            minVariantPrice {
+              amount
+              currencyCode
             }
-            priceRange {
-              minVariantPrice {
-                amount
-                currencyCode
+          }
+          variants(first: 1) {
+            edges {
+              node {
+                id
+                availableForSale
+                quantityAvailable
               }
             }
           }
@@ -493,12 +606,13 @@ export const PRODUCT_SEARCH_QUERY = `
 `;
 
 export const PREDICTIVE_SEARCH_QUERY = `
-  query PredictiveSearch($query: String!, $limit: Int = 5) {
+  query PredictiveSearch($query: String!, $limit: Int = 5) ${MARKET_CONTEXT} {
     predictiveSearch(query: $query, limit: $limit, types: PRODUCT) {
       products {
         id
         handle
         title
+        availableForSale
         featuredImage {
           url
           altText
@@ -507,6 +621,15 @@ export const PREDICTIVE_SEARCH_QUERY = `
           minVariantPrice {
             amount
             currencyCode
+          }
+        }
+        variants(first: 1) {
+          edges {
+            node {
+              id
+              availableForSale
+              quantityAvailable
+            }
           }
         }
       }
@@ -535,7 +658,7 @@ export const COLLECTION_FILTERS_QUERY = `
 `;
 
 export const PRODUCT_DETAIL_QUERY = `
-  query ProductDetail($handle: String!) {
+  query ProductDetail($handle: String!) ${MARKET_CONTEXT} {
     product(handle: $handle) {
       id
       handle
@@ -642,7 +765,7 @@ export const PRODUCT_DETAIL_QUERY = `
 `;
 
 export const PRODUCT_RECOMMENDATIONS_QUERY = `
-  query ProductRecommendations($productId: ID!) {
+  query ProductRecommendations($productId: ID!) ${MARKET_CONTEXT} {
     productRecommendations(productId: $productId) {
       id
       handle
@@ -694,7 +817,7 @@ export const PRODUCT_RECOMMENDATIONS_QUERY = `
 `;
 
 export const PRODUCT_COLLECTIONS_QUERY = `
-  query ProductCollections($productId: ID!) {
+  query ProductCollections($productId: ID!) ${MARKET_CONTEXT} {
     product(id: $productId) {
       collections(first: 5) {
         edges {
@@ -708,6 +831,295 @@ export const PRODUCT_COLLECTIONS_QUERY = `
     }
   }
 `;
+
+// Register new customer
+export const customerCreate = `
+  mutation customerCreate($input: CustomerCreateInput!) {
+    customerCreate(input: $input) {
+      customer {
+        id
+        email
+        firstName
+        lastName
+      }
+      customerUserErrors {
+        code
+        field
+        message
+      }
+    }
+  }
+`;
+
+// Login customer
+export const customerAccessTokenCreate = `
+  mutation customerAccessTokenCreate($input: CustomerAccessTokenCreateInput!) {
+    customerAccessTokenCreate(input: $input) {
+      customerAccessToken {
+        accessToken
+        expiresAt
+      }
+      customerUserErrors {
+        code
+        field
+        message
+      }
+    }
+  }
+`;
+
+// Get customer details
+export const customerQuery = `
+  query customer($customerAccessToken: String!) {
+    customer(customerAccessToken: $customerAccessToken) {
+      id
+      email
+      firstName
+      lastName
+      phone
+      defaultAddress {
+        id
+        address1
+        address2
+        city
+        province
+        country
+        zip
+      }
+      addresses(first: 10) {
+        edges {
+          node {
+            id
+            address1
+            address2
+            city
+            province
+            country
+            zip
+          }
+        }
+      }
+      orders(first: 10) {
+        edges {
+          node {
+            id
+            orderNumber
+            totalPriceV2 {
+              amount
+              currencyCode
+            }
+            processedAt
+            fulfillmentStatus
+            lineItems(first: 10) {
+              edges {
+                node {
+                  title
+                  quantity
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const customerUpdate = `
+  mutation customerUpdate($customerAccessToken: String!, $customer: CustomerUpdateInput!) {
+    customerUpdate(customerAccessToken: $customerAccessToken, customer: $customer) {
+      customer {
+        id
+        email
+        firstName
+        lastName
+        phone
+      }
+      customerUserErrors {
+        code
+        field
+        message
+      }
+    }
+  }
+`;
+
+// Create address
+export const customerAddressCreate = `
+  mutation customerAddressCreate($customerAccessToken: String!, $address: MailingAddressInput!) {
+    customerAddressCreate(customerAccessToken: $customerAccessToken, address: $address) {
+      customerAddress {
+        id
+      }
+      customerUserErrors {
+        code
+        field
+        message
+      }
+    }
+  }
+`;
+
+// Update address
+export const customerAddressUpdate = `
+  mutation customerAddressUpdate($customerAccessToken: String!, $id: ID!, $address: MailingAddressInput!) {
+    customerAddressUpdate(customerAccessToken: $customerAccessToken, id: $id, address: $address) {
+      customerAddress {
+        id
+      }
+      customerUserErrors {
+        code
+        field
+        message
+      }
+    }
+  }
+`;
+
+// Delete address
+export const customerAddressDelete = `
+  mutation customerAddressDelete($customerAccessToken: String!, $id: ID!) {
+    customerAddressDelete(customerAccessToken: $customerAccessToken, id: $id) {
+      deletedCustomerAddressId
+      customerUserErrors {
+        code
+        field
+        message
+      }
+    }
+  }
+`;
+
+const assertCustomerUserErrors = (errors: CustomerUserError[], code: string): void => {
+  if (errors.length > 0) {
+    const firstError = errors[0];
+    throw new StorefrontAPIError(firstError.message, code, firstError.field);
+  }
+};
+
+export async function registerCustomer(input: {
+  email: string;
+  password: string;
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+}): Promise<{
+  id: string;
+  email: string;
+  firstName: string | null;
+  lastName: string | null;
+}> {
+  const data = await shopifyFetch<{
+    customerCreate: {
+      customer: { id: string; email: string; firstName: string | null; lastName: string | null } | null;
+      customerUserErrors: CustomerUserError[];
+    };
+  }>(customerCreate, { input });
+
+  assertCustomerUserErrors(data.customerCreate.customerUserErrors, 'CUSTOMER_CREATE_ERROR');
+  if (!data.customerCreate.customer) {
+    throw new StorefrontAPIError('Customer was not returned by Shopify', 'MISSING_CUSTOMER');
+  }
+  return data.customerCreate.customer;
+}
+
+export async function loginCustomer(email: string, password: string): Promise<CustomerAccessToken> {
+  const data = await shopifyFetch<{
+    customerAccessTokenCreate: {
+      customerAccessToken: CustomerAccessToken | null;
+      customerUserErrors: CustomerUserError[];
+    };
+  }>(customerAccessTokenCreate, { input: { email, password } });
+
+  assertCustomerUserErrors(data.customerAccessTokenCreate.customerUserErrors, 'CUSTOMER_LOGIN_ERROR');
+  if (!data.customerAccessTokenCreate.customerAccessToken) {
+    throw new StorefrontAPIError('Customer access token was not returned by Shopify', 'MISSING_CUSTOMER_TOKEN');
+  }
+  return data.customerAccessTokenCreate.customerAccessToken;
+}
+
+export async function getCustomerData(customerAccessToken: string): Promise<CustomerProfile | null> {
+  const data = await shopifyFetch<{ customer: CustomerProfile | null }>(customerQuery, {
+    customerAccessToken
+  });
+  return data.customer;
+}
+
+export async function updateCustomerProfile(
+  customerAccessToken: string,
+  customer: {
+    email?: string;
+    firstName?: string;
+    lastName?: string;
+    password?: string;
+    phone?: string;
+  }
+): Promise<CustomerProfile> {
+  const data = await shopifyFetch<{
+    customerUpdate: {
+      customer: CustomerProfile | null;
+      customerUserErrors: CustomerUserError[];
+    };
+  }>(customerUpdate, { customerAccessToken, customer });
+
+  assertCustomerUserErrors(data.customerUpdate.customerUserErrors, 'CUSTOMER_UPDATE_ERROR');
+  if (!data.customerUpdate.customer) {
+    throw new StorefrontAPIError('Customer was not returned by Shopify', 'MISSING_CUSTOMER');
+  }
+  return data.customerUpdate.customer;
+}
+
+export async function createCustomerAddress(
+  customerAccessToken: string,
+  address: CustomerAddressInput
+): Promise<{ id: string }> {
+  const data = await shopifyFetch<{
+    customerAddressCreate: {
+      customerAddress: { id: string } | null;
+      customerUserErrors: CustomerUserError[];
+    };
+  }>(customerAddressCreate, { customerAccessToken, address });
+
+  assertCustomerUserErrors(data.customerAddressCreate.customerUserErrors, 'CUSTOMER_ADDRESS_CREATE_ERROR');
+  if (!data.customerAddressCreate.customerAddress) {
+    throw new StorefrontAPIError('Customer address was not returned by Shopify', 'MISSING_CUSTOMER_ADDRESS');
+  }
+  return data.customerAddressCreate.customerAddress;
+}
+
+export async function updateCustomerAddress(
+  customerAccessToken: string,
+  id: string,
+  address: CustomerAddressInput
+): Promise<{ id: string }> {
+  const data = await shopifyFetch<{
+    customerAddressUpdate: {
+      customerAddress: { id: string } | null;
+      customerUserErrors: CustomerUserError[];
+    };
+  }>(customerAddressUpdate, { customerAccessToken, id, address });
+
+  assertCustomerUserErrors(data.customerAddressUpdate.customerUserErrors, 'CUSTOMER_ADDRESS_UPDATE_ERROR');
+  if (!data.customerAddressUpdate.customerAddress) {
+    throw new StorefrontAPIError('Customer address was not returned by Shopify', 'MISSING_CUSTOMER_ADDRESS');
+  }
+  return data.customerAddressUpdate.customerAddress;
+}
+
+export async function deleteCustomerAddress(customerAccessToken: string, id: string): Promise<string> {
+  const data = await shopifyFetch<{
+    customerAddressDelete: {
+      deletedCustomerAddressId: string | null;
+      customerUserErrors: CustomerUserError[];
+    };
+  }>(customerAddressDelete, { customerAccessToken, id });
+
+  assertCustomerUserErrors(data.customerAddressDelete.customerUserErrors, 'CUSTOMER_ADDRESS_DELETE_ERROR');
+  if (!data.customerAddressDelete.deletedCustomerAddressId) {
+    throw new StorefrontAPIError('Deleted customer address id was not returned by Shopify', 'MISSING_CUSTOMER_ADDRESS');
+  }
+  return data.customerAddressDelete.deletedCustomerAddressId;
+}
 
 const CART_FIELDS = `
   id
@@ -772,7 +1184,8 @@ const CART_FIELDS = `
 `;
 
 export const CART_CREATE_MUTATION = `
-  mutation CartCreate($input: CartInput!) {
+  mutation CartCreate($input: CartInput!, $country: CountryCode, $language: LanguageCode)
+  @inContext(country: $country, language: $language) {
     cartCreate(input: $input) {
       cart {
         ${CART_FIELDS}
@@ -839,22 +1252,7 @@ export const CART_BUYER_IDENTITY_UPDATE_MUTATION = `
   mutation CartBuyerIdentityUpdate($cartId: ID!, $buyerIdentity: CartBuyerIdentityInput!) {
     cartBuyerIdentityUpdate(cartId: $cartId, buyerIdentity: $buyerIdentity) {
       cart {
-        id
-        deliveryGroups(first: 5) {
-          edges {
-            node {
-              deliveryOptions {
-                handle
-                title
-                description
-                estimatedCost {
-                  amount
-                  currencyCode
-                }
-              }
-            }
-          }
-        }
+        ${CART_FIELDS}
       }
       userErrors {
         field
@@ -969,7 +1367,14 @@ export async function createCart(lines: CartLineInput[] = []): Promise<Cart> {
   const data = await shopifyFetch<{
     cartCreate: { cart: Cart | null; userErrors: CartUserError[] };
   }>(CART_CREATE_MUTATION, {
-    input: { lines }
+    input: {
+      lines,
+      buyerIdentity: {
+        countryCode: SHOPIFY_COUNTRY_CODE
+      }
+    },
+    country: SHOPIFY_COUNTRY_CODE,
+    language: SHOPIFY_LANGUAGE_CODE
   });
   return extractCartFromMutation(data, 'cartCreate');
 }
@@ -1006,7 +1411,11 @@ export async function getCart(id: string): Promise<Cart | null> {
 export async function updateCartBuyerIdentity(
   cartId: string,
   buyerIdentity: {
-    deliveryAddressPreferences: Array<{
+    countryCode?: string;
+    email?: string;
+    phone?: string;
+    customerAccessToken?: string;
+    deliveryAddressPreferences?: Array<{
       deliveryAddress: {
         address1?: string;
         city: string;

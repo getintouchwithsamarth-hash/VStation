@@ -47,6 +47,8 @@ export function CartItemsColumn() {
             variant={item.variant}
             price={formatINR(item.price)}
             quantity={item.quantity}
+            imageUrl={item.imageUrl}
+            imageAlt={item.imageAlt}
             onIncrement={incrementItem}
             onDecrement={decrementItem}
             onRemove={removeItem}
@@ -98,9 +100,23 @@ export function CartItemsColumn() {
                       width: '100%',
                       height: '160px',
                       backgroundColor: '#F3F4F6',
-                      borderRadius: '12px'
+                      borderRadius: '12px',
+                      overflow: 'hidden'
                     }}
-                  />
+                  >
+                    {addOn.imageUrl ? (
+                      <img
+                        src={addOn.imageUrl}
+                        alt={addOn.imageAlt || addOn.name}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          display: 'block'
+                        }}
+                      />
+                    ) : null}
+                  </div>
                   <div
                     style={{
                       fontSize: '14px',

@@ -7,6 +7,8 @@ export function CartItemCard({
   variant, 
   price, 
   quantity,
+  imageUrl,
+  imageAlt,
   onIncrement,
   onDecrement,
   onRemove
@@ -16,6 +18,8 @@ export function CartItemCard({
   variant: string; 
   price: string; 
   quantity: number;
+  imageUrl?: string;
+  imageAlt?: string;
   onIncrement?: (id: string) => void;
   onDecrement?: (id: string) => void;
   onRemove?: (id: string) => void;
@@ -29,16 +33,29 @@ export function CartItemCard({
           alignItems: 'flex-start'
         }}
       >
-        {/* Image */}
         <div
           style={{
             width: '72px',
             height: '72px',
             backgroundColor: '#F3F4F6',
             borderRadius: '12px',
-            flexShrink: 0
+            flexShrink: 0,
+            overflow: 'hidden'
           }}
-        />
+        >
+          {imageUrl ? (
+            <img
+              src={imageUrl}
+              alt={imageAlt || name}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                display: 'block'
+              }}
+            />
+          ) : null}
+        </div>
 
         {/* Middle section */}
         <div

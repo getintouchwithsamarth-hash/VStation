@@ -3,6 +3,7 @@ import {
   getProductByHandle,
   getProductRecommendations,
   getProducts,
+  resolveProductThumbnail,
   type Product
 } from '../../../lib/shopify';
 
@@ -98,7 +99,13 @@ const DEFAULT_PRODUCT_DETAIL_DATA = {
 };
 
 const getDefaultVariantId = (product: Product): string | null => {
-  const availableVariant = product.variants?.edges.find((edge) => edge.node.availableForSale)?.node;
+  const availableVariant = product.variants?.edges.find((edge) => {
+    const variant = edge.node;
+    return (
+      variant.availableForSale &&
+      (typeof variant.quantityAvailable !== 'number' || variant.quantityAvailable > 0)
+    );
+  })?.node;
   return availableVariant?.id || product.variants?.edges[0]?.node.id || null;
 };
 
@@ -190,7 +197,8 @@ const getStockLabel = (product: Product): 'In stock' | 'Out of stock' => {
     if (typeof variant.quantityAvailable === 'number') {
       return variant.quantityAvailable > 0;
     }
-    return true;
+    // Stricter fallback: only show as available if explicitly marked.
+    return variant.availableForSale === true;
   });
 
   return variantAvailability ? 'In stock' : 'Out of stock';
@@ -297,17 +305,20 @@ const loadProductDetailFromShopify = async () => {
         },
         relatedProducts: {
           ...DEFAULT_PRODUCT_DETAIL_DATA.relatedProducts,
-          items: relatedProducts.slice(0, 3).map((item) => ({
-            id: item.handle,
-            variantId: getDefaultVariantId(item),
-            badge: item.badge?.value || item.tags[0] || 'Curated',
-            name: item.title,
-            descriptor: item.shortDescription?.value || item.description || 'Curated recommendation',
-            featureLine: item.featureLine?.value || item.tags.slice(0, 3).join(' · '),
-            price: formatPrice(item.priceRange.minVariantPrice.amount, item.priceRange.minVariantPrice.currencyCode),
-            imageUrl: item.featuredImage?.url || item.images.edges[0]?.node.url,
-            imageAlt: item.featuredImage?.altText || item.title
-          }))
+          items: relatedProducts.slice(0, 3).map((item) => {
+            const thumbnail = resolveProductThumbnail(item);
+            return {
+              id: item.handle,
+              variantId: getDefaultVariantId(item),
+              badge: item.badge?.value || item.tags[0] || 'Curated',
+              name: item.title,
+              descriptor: item.shortDescription?.value || item.description || 'Curated recommendation',
+              featureLine: item.featureLine?.value || item.tags.slice(0, 3).join(' · '),
+              price: formatPrice(item.priceRange.minVariantPrice.amount, item.priceRange.minVariantPrice.currencyCode),
+              imageUrl: thumbnail?.url,
+              imageAlt: thumbnail?.altText || item.title
+            };
+          })
         },
         specsAndInBox: {
           specificationsTitle: 'Specifications',

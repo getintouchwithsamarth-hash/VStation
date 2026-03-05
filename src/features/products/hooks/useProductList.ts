@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
-import { getProducts, type Product as ShopifyProduct } from '../../../lib/shopify';
+import {
+  getProducts,
+  resolveProductThumbnail,
+  type Product as ShopifyProduct
+} from '../../../lib/shopify';
 import type { Product } from '../types';
 
 const formatPriceLabel = (amount: string, currencyCode: string): string => {
@@ -32,13 +36,20 @@ const isProductInStock = (product: ShopifyProduct): boolean => {
       if (typeof variant.quantityAvailable === 'number') {
         return variant.quantityAvailable > 0;
       }
-      return true;
+      // Stricter fallback: only show as available if explicitly marked.
+      return variant.availableForSale === true;
     }) ?? true
   );
 };
 
 const getDefaultVariantId = (product: ShopifyProduct): string | null => {
-  const availableVariant = product.variants?.edges.find((edge) => edge.node.availableForSale)?.node;
+  const availableVariant = product.variants?.edges.find((edge) => {
+    const variant = edge.node;
+    return (
+      variant.availableForSale &&
+      (typeof variant.quantityAvailable !== 'number' || variant.quantityAvailable > 0)
+    );
+  })?.node;
   return availableVariant?.id || product.variants?.edges[0]?.node.id || null;
 };
 
@@ -47,6 +58,7 @@ const mapShopifyProduct = (product: ShopifyProduct): Product => {
   const featureLine = product.featureLine?.value || product.tags.slice(0, 3).join(' · ') || 'Durable build';
   const shippingLabel = product.shippingInfo?.value || 'Shipping calculated at checkout';
   const badgeLabel = product.badge?.value || product.tags[0] || 'Curated';
+  const thumbnail = resolveProductThumbnail(product);
 
   return {
     id: product.handle,
@@ -62,8 +74,8 @@ const mapShopifyProduct = (product: ShopifyProduct): Product => {
     isInStock: isProductInStock(product),
     badgeLabel,
     badgeVariant: 'accent',
-    imageUrl: product.featuredImage?.url || product.images.edges[0]?.node.url,
-    imageAlt: product.featuredImage?.altText || product.images.edges[0]?.node.altText || product.title
+    imageUrl: thumbnail?.url,
+    imageAlt: thumbnail?.altText
   };
 };
 

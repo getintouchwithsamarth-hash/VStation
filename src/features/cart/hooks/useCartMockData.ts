@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
-import { getProducts } from '../../../lib/shopify';
+import { getProducts, resolveProductThumbnail } from '../../../lib/shopify';
 
 export type CartAddOn = {
   id: string;
   name: string;
   price: number;
+  imageUrl?: string;
+  imageAlt?: string;
 };
 
 const CART_COPY = {
@@ -39,11 +41,16 @@ const loadCartAddOns = async () => {
   cartDataPromise = (async () => {
     try {
       const products = await getProducts({ first: 2 });
-      cartAddOnCache = products.edges.map((edge) => ({
-        id: edge.node.handle,
-        name: edge.node.title,
-        price: Number.parseFloat(edge.node.priceRange.minVariantPrice.amount)
-      }));
+      cartAddOnCache = products.edges.map((edge) => {
+        const thumbnail = resolveProductThumbnail(edge.node);
+        return {
+          id: edge.node.handle,
+          name: edge.node.title,
+          price: Number.parseFloat(edge.node.priceRange.minVariantPrice.amount),
+          imageUrl: thumbnail?.url,
+          imageAlt: thumbnail?.altText || edge.node.title
+        };
+      });
     } catch (error) {
       console.error('Failed to load cart add-ons from Shopify', error);
       cartAddOnCache = [];

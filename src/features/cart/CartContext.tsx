@@ -8,15 +8,18 @@ import {
   type ReactNode
 } from 'react';
 import {
-  addCartLines,
-  createCart,
   getCart,
   getCartId,
-  removeCartLines,
   setCartId,
-  updateCartLines,
+  updateCartBuyerIdentity,
   type Cart as ShopifyCart
 } from '../../lib/shopify';
+import {
+  useCartCreate,
+  useCartLinesAdd,
+  useCartLinesRemove,
+  useCartLinesUpdate
+} from './hooks/useCartMutations';
 
 export type CartItem = {
   id: string;
@@ -25,6 +28,8 @@ export type CartItem = {
   price: number;
   quantity: number;
   variantId: string;
+  imageUrl?: string;
+  imageAlt?: string;
 };
 
 type CartContextValue = {
@@ -35,6 +40,7 @@ type CartContextValue = {
   total: number;
   checkoutUrl: string | null;
   addItem: (variantId: string) => Promise<boolean>;
+  checkout: () => Promise<void>;
   openCartDrawer: () => void;
   closeCartDrawer: () => void;
   toggleCartDrawer: () => void;
@@ -44,6 +50,7 @@ type CartContextValue = {
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
+const SHOPIFY_COUNTRY_CODE = (import.meta.env.VITE_SHOPIFY_COUNTRY_CODE || 'IN').toUpperCase();
 
 const mapCartItems = (cart: ShopifyCart): CartItem[] => {
   return cart.lines.edges.map((edge) => {
@@ -57,7 +64,12 @@ const mapCartItems = (cart: ShopifyCart): CartItem[] => {
           .join(', ') || line.merchandise.title,
       price: Number.parseFloat(line.merchandise.price.amount),
       quantity: line.quantity,
-      variantId: line.merchandise.id
+      variantId: line.merchandise.id,
+      imageUrl: line.merchandise.image?.url || line.merchandise.product.featuredImage?.url,
+      imageAlt:
+        line.merchandise.image?.altText ||
+        line.merchandise.product.featuredImage?.altText ||
+        line.merchandise.product.title
     };
   });
 };
@@ -67,6 +79,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [activeCartId, setActiveCartId] = useState<string | null>(null);
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
+  const cartCreate = useCartCreate();
+  const cartLinesAdd = useCartLinesAdd();
+  const cartLinesUpdate = useCartLinesUpdate();
+  const cartLinesRemove = useCartLinesRemove();
 
   const syncCart = useCallback((cart: ShopifyCart) => {
     setItems(mapCartItems(cart));
@@ -88,7 +104,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
           }
         }
 
-        const newCart = await createCart();
+        const newCart = await cartCreate();
         if (!cancelled) {
           syncCart(newCart);
         }
@@ -103,7 +119,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     return () => {
       cancelled = true;
     };
-  }, [syncCart]);
+  }, [cartCreate, syncCart]);
 
   const cartCount = useMemo(
     () => items.reduce((count, item) => count + item.quantity, 0),
@@ -126,15 +142,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
       try {
         let cartId = activeCartId;
         if (!cartId) {
-          const newCart = await createCart();
+          const newCart = await cartCreate();
           syncCart(newCart);
           cartId = newCart.id;
         }
 
         const existingLine = items.find((entry) => entry.variantId === variantId);
         const updatedCart = existingLine
-          ? await updateCartLines(cartId, [{ id: existingLine.id, quantity: existingLine.quantity + 1 }])
-          : await addCartLines(cartId, [{ merchandiseId: variantId, quantity: 1 }]);
+          ? await cartLinesUpdate(cartId, [{ id: existingLine.id, quantity: existingLine.quantity + 1 }])
+          : await cartLinesAdd(cartId, [{ merchandiseId: variantId, quantity: 1 }]);
 
         syncCart(updatedCart);
         setIsDrawerOpen(true);
@@ -142,6 +158,27 @@ export function CartProvider({ children }: { children: ReactNode }) {
       } catch (error) {
         console.error('Failed to add item to cart', error);
         return false;
+      }
+    },
+    checkout: async () => {
+      try {
+        let cartId = activeCartId;
+        let latestCheckoutUrl = checkoutUrl;
+        if (!cartId) {
+          const newCart = await cartCreate();
+          syncCart(newCart);
+          cartId = newCart.id;
+          latestCheckoutUrl = newCart.checkoutUrl;
+        }
+
+        const updatedCart = await updateCartBuyerIdentity(cartId, {
+          countryCode: SHOPIFY_COUNTRY_CODE
+        });
+        syncCart(updatedCart);
+        window.location.href = updatedCart.checkoutUrl;
+      } catch (error) {
+        console.error('Failed to update buyer identity before checkout', error);
+        window.location.href = latestCheckoutUrl || '/cart';
       }
     },
     openCartDrawer: () => setIsDrawerOpen(true),
@@ -155,7 +192,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       if (!item) {
         return;
       }
-      void updateCartLines(activeCartId, [{ id: item.id, quantity: item.quantity + 1 }])
+      void cartLinesUpdate(activeCartId, [{ id: item.id, quantity: item.quantity + 1 }])
         .then(syncCart)
         .catch((error) => {
           console.error('Failed to increment cart line', error);
@@ -170,7 +207,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         return;
       }
       if (item.quantity <= 1) {
-        void removeCartLines(activeCartId, [item.id])
+        void cartLinesRemove(activeCartId, [item.id])
           .then(syncCart)
           .catch((error) => {
             console.error('Failed to decrement cart line', error);
@@ -178,7 +215,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      void updateCartLines(activeCartId, [{ id: item.id, quantity: item.quantity - 1 }])
+      void cartLinesUpdate(activeCartId, [{ id: item.id, quantity: item.quantity - 1 }])
         .then(syncCart)
         .catch((error) => {
           console.error('Failed to decrement cart line', error);
@@ -188,7 +225,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       if (!activeCartId) {
         return;
       }
-      void removeCartLines(activeCartId, [id])
+      void cartLinesRemove(activeCartId, [id])
         .then(syncCart)
         .catch((error) => {
           console.error('Failed to remove cart line', error);

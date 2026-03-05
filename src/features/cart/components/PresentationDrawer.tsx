@@ -117,6 +117,8 @@ export function PresentationDrawer() {
                   variant={item.variant}
                   price={`₹${item.price.toLocaleString('en-IN')}`}
                   quantity={item.quantity}
+                  imageUrl={item.imageUrl}
+                  imageAlt={item.imageAlt}
                   onIncrement={incrementItem}
                   onDecrement={decrementItem}
                   onRemove={removeItem}

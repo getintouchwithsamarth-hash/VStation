@@ -6,7 +6,7 @@ import { useCart } from '../CartContext';
 import { useCartMockData } from '../hooks/useCartMockData';
 
 export function SummaryColumn() {
-  const { cartCount, subtotal, total, checkoutUrl } = useCart();
+  const { cartCount, subtotal, total, checkout } = useCart();
   const { copy } = useCartMockData();
   const [showCheckoutHandoff, setShowCheckoutHandoff] = useState(false);
 
@@ -63,7 +63,7 @@ export function SummaryColumn() {
           onBack={() => setShowCheckoutHandoff(false)}
           onClose={() => setShowCheckoutHandoff(false)}
           onContinue={() => {
-            window.location.href = checkoutUrl || '/cart';
+            void checkout();
           }}
         />
       ) : null}

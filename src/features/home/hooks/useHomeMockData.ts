@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getProducts } from '../../../lib/shopify';
+import { getProducts, resolveProductThumbnail } from '../../../lib/shopify';
 
 export type HomeTestimonial = {
   id: string;
@@ -92,6 +92,7 @@ const loadHomeDataFromShopify = async () => {
 
       const items = result.edges.map((edge) => edge.node);
       const featured = items[0];
+      const featuredThumbnail = resolveProductThumbnail(featured);
 
       const testimonials = items.slice(0, 3).map((product) => ({
         id: product.id,
@@ -108,10 +109,8 @@ const loadHomeDataFromShopify = async () => {
           featuredDropTitle: featured.title,
           featuredDropSubtitle:
             featured.shortDescription?.value || featured.description || homeDataCache.hero.featuredDropSubtitle,
-          featuredDropImageUrl:
-            featured.featuredImage?.url || featured.images.edges[0]?.node.url || homeDataCache.hero.featuredDropImageUrl,
-          featuredDropImageAlt:
-            featured.featuredImage?.altText || featured.images.edges[0]?.node.altText || featured.title
+          featuredDropImageUrl: featuredThumbnail?.url || homeDataCache.hero.featuredDropImageUrl,
+          featuredDropImageAlt: featuredThumbnail?.altText || featured.title
         },
         featuredDrop: {
           ...homeDataCache.featuredDrop,
@@ -124,14 +123,8 @@ const loadHomeDataFromShopify = async () => {
           productCopy: featured.shortDescription?.value || featured.description || homeDataCache.featuredDrop.productCopy,
           featureLine: featured.featureLine?.value || homeDataCache.featuredDrop.featureLine,
           productBadge: featured.badge?.value || featured.tags[0] || homeDataCache.featuredDrop.productBadge,
-          productImageUrl:
-            featured.featuredImage?.url ||
-            featured.images.edges[0]?.node.url ||
-            homeDataCache.featuredDrop.productImageUrl,
-          productImageAlt:
-            featured.featuredImage?.altText ||
-            featured.images.edges[0]?.node.altText ||
-            featured.title
+          productImageUrl: featuredThumbnail?.url || homeDataCache.featuredDrop.productImageUrl,
+          productImageAlt: featuredThumbnail?.altText || featured.title
         },
         socialProof: {
           ...homeDataCache.socialProof,
