@@ -2,7 +2,8 @@ import type { CSSProperties, ReactNode } from 'react';
 
 type StackProps = {
   children: ReactNode;
-  gap?: string;
+  direction?: 'vertical' | 'horizontal';
+  gap?: 4 | 8 | 12 | 16 | 24 | 32 | string | number;
   align?: CSSProperties['alignItems'];
   justify?: CSSProperties['justifyContent'];
   style?: CSSProperties;
@@ -10,17 +11,21 @@ type StackProps = {
 
 export function Stack({
   children,
-  gap = '16px',
+  direction = 'vertical',
+  gap = 16,
   align = 'stretch',
   justify = 'flex-start',
   style
 }: StackProps) {
+  const flexDirection = direction === 'horizontal' ? 'row' : 'column';
+  const resolvedGap = typeof gap === 'number' ? `${gap}px` : gap;
+
   return (
     <div
       style={{
         display: 'flex',
-        flexDirection: 'column',
-        gap,
+        flexDirection,
+        gap: resolvedGap,
         alignItems: align,
         justifyContent: justify,
         ...style

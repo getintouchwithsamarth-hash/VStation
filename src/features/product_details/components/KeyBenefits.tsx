@@ -1,18 +1,13 @@
 import { CardInstance } from '../../../components/ui/Card';
 import { BadgeInstance } from '../../../components/ui/Badge';
+import { Stack } from '../../../components/layout/Stack';
 import { useProductDetailMockData } from '../hooks/useProductDetailMockData';
 
 export function KeyBenefits() {
   const { keyBenefits } = useProductDetailMockData();
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '40px'
-      }}
-    >
+    <Stack direction="vertical" gap={16}>
       <div style={{ textAlign: 'center' }}>
         <h3
           style={{
@@ -34,14 +29,7 @@ export function KeyBenefits() {
       >
         {keyBenefits.cards.map((card) => (
           <CardInstance key={card.id} variant="elevated" padding="lg">
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '12px',
-                minHeight: '180px'
-              }}
-            >
+            <Stack direction="vertical" gap={12} style={{ minHeight: '180px' }}>
               <BadgeInstance label={card.badge} variant="neutral" size="sm" />
               <h4
                 style={{
@@ -77,10 +65,10 @@ export function KeyBenefits() {
               >
                 {card.footer}
               </div>
-            </div>
+            </Stack>
           </CardInstance>
         ))}
       </div>
-    </div>
+    </Stack>
   );
 }

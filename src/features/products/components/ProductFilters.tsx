@@ -1,20 +1,17 @@
-import { BadgeInstance } from "../../../components/ui/Badge";
-import { ButtonInstance } from "../../../components/ui/Button";
 import { X } from "lucide-react";
 import { useState } from "react";
+import { Cluster } from "../../../components/layout/Cluster";
 
 export function ProductFilters() {
   const [activeFilter, setActiveFilter] = useState("All");
   const filters = ["All", "Practice", "Stage", "Studio", "Power", "Bundles"];
 
   return (
-    <div
+    <Cluster
+      wrap="on"
+      gap={12}
+      align="center"
       style={{
-        display: "flex",
-        flexDirection: "row",
-        flexWrap: "wrap",
-        alignItems: "center",
-        gap: "12px",
         marginBottom: "24px",
         paddingBottom: "24px",
         borderBottom: "1px solid #EAECF0",
@@ -112,6 +109,6 @@ export function ProductFilters() {
           Reset filters
         </button>
       )}
-    </div>
+    </Cluster>
   );
 }

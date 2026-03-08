@@ -1,4 +1,5 @@
 import { BadgeInstance } from '../../../components/ui/Badge';
+import { Cluster } from '../../../components/layout/Cluster';
 import { useHomeMockData } from '../hooks/useHomeMockData';
 
 export function HeroMetaSlot() {
@@ -21,18 +22,11 @@ export function HeroMetaSlot() {
           paddingRight: '24px'
         }}
       >
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            gap: '12px',
-            alignItems: 'center'
-          }}
-        >
+        <Cluster wrap="on" gap={12} align="center">
           {heroMetaBadges.map((badge) => (
             <BadgeInstance key={badge} label={badge} variant="neutral" size="md" />
           ))}
-        </div>
+        </Cluster>
       </div>
     </div>
   );
