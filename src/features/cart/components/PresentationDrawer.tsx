@@ -47,8 +47,8 @@ export function PresentationDrawer() {
           top: 0,
           bottom: 0,
           width: '420px',
-          backgroundColor: '#FFFFFF',
-          borderLeft: '1px solid #E5E7EB',
+          backgroundColor: "var(--card)",
+          borderLeft: '1px solid var(--border)',
           boxShadow: '-4px 0 6px -1px rgba(0, 0, 0, 0.1), -2px 0 4px -1px rgba(0, 0, 0, 0.06)',
           display: 'flex',
           flexDirection: 'column'
@@ -58,7 +58,7 @@ export function PresentationDrawer() {
         <div
           style={{
             padding: '24px',
-            borderBottom: '1px solid #E5E7EB',
+            borderBottom: '1px solid var(--border)',
             flexShrink: 0
           }}
         >
@@ -75,7 +75,7 @@ export function PresentationDrawer() {
                 fontSize: '18px',
                 lineHeight: '28px',
                 fontWeight: '600',
-                color: '#111827',
+                color: "var(--foreground)",
                 fontFamily: 'Inter, system-ui, sans-serif'
               }}
             >
@@ -131,7 +131,7 @@ export function PresentationDrawer() {
                 fontSize: '14px',
                 lineHeight: '20px',
                 fontWeight: '400',
-                color: '#6B7280',
+                color: "var(--muted-foreground)",
                 fontFamily: 'Inter, system-ui, sans-serif'
               }}
             >
@@ -147,7 +147,7 @@ export function PresentationDrawer() {
         <div
           style={{
             padding: '24px',
-            borderTop: '1px solid #E5E7EB',
+            borderTop: '1px solid var(--border)',
             flexShrink: 0,
             display: 'flex',
             flexDirection: 'column',
@@ -179,7 +179,7 @@ export function PresentationDrawer() {
               fontSize: '12px',
               lineHeight: '18px',
               fontWeight: '400',
-              color: '#6B7280',
+              color: "var(--muted-foreground)",
               fontFamily: 'Inter, system-ui, sans-serif',
               textAlign: 'center'
             }}

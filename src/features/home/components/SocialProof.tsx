@@ -7,7 +7,7 @@ export function SocialProof() {
   const { socialProof } = useHomeMockData();
 
   return (
-    <Section paddingTop="56px" paddingBottom="56px" background="#FCFCFD">
+    <Section paddingTop="56px" paddingBottom="56px" background="var(--card)">
       <Container>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '24px' }}>
           <div
@@ -16,7 +16,7 @@ export function SocialProof() {
               fontSize: '12px',
               lineHeight: '18px',
               fontWeight: '500',
-              color: '#667085'
+              color: "var(--muted-foreground)"
             }}
           >
             {socialProof.eyebrow}
@@ -28,7 +28,7 @@ export function SocialProof() {
               fontSize: '36px',
               lineHeight: '44px',
               fontWeight: '600',
-              color: '#101828',
+              color: "var(--foreground)",
               margin: 0
             }}
           >
@@ -41,7 +41,7 @@ export function SocialProof() {
               fontSize: '18px',
               lineHeight: '28px',
               fontWeight: '400',
-              color: '#344054',
+              color: "var(--muted-foreground)",
               margin: 0
             }}
           >
@@ -67,8 +67,8 @@ export function SocialProof() {
             <div
               key={testimonial.id}
               style={{
-                backgroundColor: '#FFFFFF',
-                border: '1px solid #EAECF0',
+                backgroundColor: "var(--card)",
+                border: '1px solid var(--border)',
                 borderRadius: '16px',
                 width: '100%',
                 minHeight: '220px',
@@ -84,7 +84,7 @@ export function SocialProof() {
                       fontSize: '14px',
                       lineHeight: '20px',
                       fontWeight: '600',
-                      color: '#101828'
+                      color: "var(--foreground)"
                     }}
                   >
                     {testimonial.name}
@@ -95,7 +95,7 @@ export function SocialProof() {
                       fontSize: '12px',
                       lineHeight: '18px',
                       fontWeight: '500',
-                      color: '#667085'
+                      color: "var(--muted-foreground)"
                     }}
                   >
                     {testimonial.role}
@@ -108,7 +108,7 @@ export function SocialProof() {
                     fontSize: '16px',
                     lineHeight: '24px',
                     fontWeight: '400',
-                    color: '#344054',
+                    color: "var(--muted-foreground)",
                     margin: 0,
                     flex: 1
                   }}
@@ -140,12 +140,12 @@ function ButtonSecondary({ label }: { label: string }) {
         paddingLeft: '16px',
         paddingRight: '16px',
         borderRadius: '12px',
-        backgroundColor: '#FFFFFF',
-        color: '#101828',
+        backgroundColor: "var(--card)",
+        color: "var(--foreground)",
         fontSize: '14px',
         lineHeight: '20px',
         fontWeight: '600',
-        border: '1px solid #D0D5DD',
+        border: '1px solid var(--border)',
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',

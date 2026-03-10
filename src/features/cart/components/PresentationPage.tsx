@@ -5,7 +5,7 @@ import { SummaryColumn } from './SummaryColumn';
 
 export function PresentationPage() {
   return (
-    <Section paddingTop="80px" paddingBottom="80px" background="#FAFBFC">
+    <Section paddingTop="80px" paddingBottom="80px" background="var(--muted)">
       <Container>
         {/* 2-column layout */}
         <div

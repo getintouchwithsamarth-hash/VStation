@@ -21,7 +21,7 @@ function Anatomy() {
     >
       <div>
         <h2 style={{ marginBottom: "8px" }}>Modal Anatomy</h2>
-        <p style={{ color: "#667085", fontSize: "14px" }}>
+        <p style={{ color: "var(--muted-foreground)", fontSize: "14px" }}>
           Component layers in render order
         </p>
       </div>
@@ -38,7 +38,7 @@ function Anatomy() {
               borderRadius: "8px",
             }}
           />
-          <div style={{ fontSize: "13px", color: "#667085" }}>
+          <div style={{ fontSize: "13px", color: "var(--muted-foreground)" }}>
             Fill: overlay-scrim (rgba(0, 0, 0, 0.5))
           </div>
         </div>
@@ -50,15 +50,15 @@ function Anatomy() {
             style={{
               width: "420px",
               height: "200px",
-              backgroundColor: "#FFFFFF",
+              backgroundColor: "var(--card)",
               borderRadius: "0",
-              border: "1px solid #E5E7EB",
+              border: "1px solid var(--border)",
               borderRight: "none",
               boxShadow:
                 "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
             }}
           />
-          <div style={{ fontSize: "13px", color: "#667085" }}>
+          <div style={{ fontSize: "13px", color: "var(--muted-foreground)" }}>
             Fill: surface-canvas (#FFFFFF) · Border left: 1px border-subtle ·
             Shadow / 3 · Radius: 0
           </div>
@@ -71,12 +71,12 @@ function Anatomy() {
             style={{
               width: "420px",
               padding: "24px",
-              backgroundColor: "#FAFBFC",
-              border: "1px dashed #D0D5DD",
+              backgroundColor: "var(--muted)",
+              border: "1px dashed var(--border)",
               borderRadius: "8px",
             }}
           >
-            <div style={{ fontSize: "14px", color: "#667085" }}>
+            <div style={{ fontSize: "14px", color: "var(--muted-foreground)" }}>
               Header content area
             </div>
           </div>
@@ -89,13 +89,13 @@ function Anatomy() {
             style={{
               width: "420px",
               padding: "24px",
-              backgroundColor: "#FAFBFC",
-              border: "1px dashed #D0D5DD",
+              backgroundColor: "var(--muted)",
+              border: "1px dashed var(--border)",
               borderRadius: "8px",
               minHeight: "200px",
             }}
           >
-            <div style={{ fontSize: "14px", color: "#667085" }}>
+            <div style={{ fontSize: "14px", color: "var(--muted-foreground)" }}>
               Body content area (scrollable)
             </div>
           </div>
@@ -108,12 +108,12 @@ function Anatomy() {
             style={{
               width: "420px",
               padding: "24px",
-              backgroundColor: "#FAFBFC",
-              border: "1px dashed #D0D5DD",
+              backgroundColor: "var(--muted)",
+              border: "1px dashed var(--border)",
               borderRadius: "8px",
             }}
           >
-            <div style={{ fontSize: "14px", color: "#667085" }}>
+            <div style={{ fontSize: "14px", color: "var(--muted-foreground)" }}>
               Footer content area
             </div>
           </div>
@@ -126,15 +126,15 @@ function Anatomy() {
             style={{
               width: "40px",
               height: "40px",
-              backgroundColor: "#FAFBFC",
-              border: "1px dashed #D0D5DD",
+              backgroundColor: "var(--muted)",
+              border: "1px dashed var(--border)",
               borderRadius: "8px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
             }}
           >
-            <div style={{ fontSize: "14px", color: "#667085" }}>×</div>
+            <div style={{ fontSize: "14px", color: "var(--muted-foreground)" }}>×</div>
           </div>
         </div>
       </div>
@@ -150,12 +150,12 @@ function Variants() {
         flexDirection: "column",
         gap: "48px",
         padding: "40px",
-        backgroundColor: "#FAFBFC",
+        backgroundColor: "var(--muted)",
       }}
     >
       <div>
         <h2 style={{ marginBottom: "8px" }}>Modal Variants</h2>
-        <p style={{ color: "#667085", fontSize: "14px" }}>
+        <p style={{ color: "var(--muted-foreground)", fontSize: "14px" }}>
           Center and DrawerRight layouts
         </p>
       </div>
@@ -165,7 +165,7 @@ function Variants() {
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           <h3 style={{ margin: 0 }}>Variant / Center</h3>
           <VariantCenter />
-          <div style={{ fontSize: "13px", color: "#667085" }}>
+          <div style={{ fontSize: "13px", color: "var(--muted-foreground)" }}>
             Width: 520px (max 92% mobile) · Centered · Radius: 20px · Shadow / 3
             · Padding: 20px · Gap: 16px
           </div>
@@ -190,8 +190,8 @@ function Variants() {
               style={{
                 width: "420px",
                 height: "100%",
-                backgroundColor: "#FFFFFF",
-                borderLeft: "1px solid #E5E7EB",
+                backgroundColor: "var(--card)",
+                borderLeft: "1px solid var(--border)",
                 boxShadow:
                   "-4px 0 6px -1px rgba(0, 0, 0, 0.1), -2px 0 4px -1px rgba(0, 0, 0, 0.06)",
                 display: "flex",
@@ -202,7 +202,7 @@ function Variants() {
               <div
                 style={{
                   padding: "24px",
-                  borderBottom: "1px solid #E5E7EB",
+                  borderBottom: "1px solid var(--border)",
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
@@ -213,7 +213,7 @@ function Variants() {
                   style={{
                     fontSize: "18px",
                     fontWeight: 600,
-                    color: "#111827",
+                    color: "var(--foreground)",
                   }}
                 >
                   Shopping Cart
@@ -223,7 +223,7 @@ function Variants() {
                     width: "32px",
                     height: "32px",
                     borderRadius: "6px",
-                    backgroundColor: "#F9FAFB",
+                    backgroundColor: "var(--muted)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -236,7 +236,7 @@ function Variants() {
 
               {/* Body */}
               <div style={{ padding: "24px", flex: 1, overflowY: "auto" }}>
-                <div style={{ fontSize: "14px", color: "#667085" }}>
+                <div style={{ fontSize: "14px", color: "var(--muted-foreground)" }}>
                   Cart items appear here
                 </div>
               </div>
@@ -245,7 +245,7 @@ function Variants() {
               <div
                 style={{
                   padding: "24px",
-                  borderTop: "1px solid #E5E7EB",
+                  borderTop: "1px solid var(--border)",
                   flexShrink: 0,
                 }}
               >
@@ -267,7 +267,7 @@ function Variants() {
               </div>
             </div>
           </div>
-          <div style={{ fontSize: "13px", color: "#667085" }}>
+          <div style={{ fontSize: "13px", color: "var(--muted-foreground)" }}>
             Width: 420px · Height: 100vh · Border left: 1px · Shadow / 3 ·
             Radius: 0
           </div>
@@ -300,9 +300,9 @@ function VariantCenter() {
         style={{
           width: "520px",
           maxWidth: "92%",
-          backgroundColor: "#FFFFFF", // surface-canvas
+          backgroundColor: "var(--card)", // surface-canvas
           borderRadius: "20px",
-          border: "1px solid #EAECF0", // border-subtle
+          border: "1px solid var(--border)", // border-subtle
           boxShadow: "0 12px 24px -4px #1018280F, 0 6px 12px -4px #10182814", // Shadow / 3
           padding: "20px",
           display: "flex",
@@ -325,7 +325,7 @@ function VariantCenter() {
               style={{
                 fontSize: "18px",
                 fontWeight: 600,
-                color: "#101828",
+                color: "var(--foreground)",
                 lineHeight: "28px",
               }}
             >
@@ -334,7 +334,7 @@ function VariantCenter() {
             <div
               style={{
                 fontSize: "14px",
-                color: "#667085",
+                color: "var(--muted-foreground)",
                 lineHeight: "20px",
                 marginTop: "4px",
               }}
@@ -352,7 +352,7 @@ function VariantCenter() {
                 paddingRight: "12px",
                 borderRadius: "10px",
                 backgroundColor: "transparent",
-                color: "#101828",
+                color: "var(--foreground)",
                 fontSize: "14px",
                 lineHeight: "20px",
                 fontWeight: "600",
@@ -378,7 +378,7 @@ function VariantCenter() {
           }}
         >
           <div
-            style={{ fontSize: "14px", color: "#344054", lineHeight: "20px" }}
+            style={{ fontSize: "14px", color: "var(--muted-foreground)", lineHeight: "20px" }}
           >
             Your order will be processed and shipped within 2-3 business days.
             You'll receive a confirmation email with tracking details.
@@ -387,7 +387,7 @@ function VariantCenter() {
           <div
             style={{
               padding: "16px",
-              backgroundColor: "#F9FAFB",
+              backgroundColor: "var(--muted)",
               borderRadius: "12px",
               display: "flex",
               flexDirection: "column",
@@ -395,21 +395,21 @@ function VariantCenter() {
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span style={{ fontSize: "14px", color: "#667085" }}>
+              <span style={{ fontSize: "14px", color: "var(--muted-foreground)" }}>
                 Subtotal
               </span>
               <span
-                style={{ fontSize: "14px", color: "#101828", fontWeight: 500 }}
+                style={{ fontSize: "14px", color: "var(--foreground)", fontWeight: 500 }}
               >
                 ₹5,997
               </span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span style={{ fontSize: "14px", color: "#667085" }}>
+              <span style={{ fontSize: "14px", color: "var(--muted-foreground)" }}>
                 Shipping
               </span>
               <span
-                style={{ fontSize: "14px", color: "#101828", fontWeight: 500 }}
+                style={{ fontSize: "14px", color: "var(--foreground)", fontWeight: 500 }}
               >
                 ₹150
               </span>
@@ -417,18 +417,18 @@ function VariantCenter() {
             <div
               style={{
                 height: "1px",
-                backgroundColor: "#EAECF0",
+                backgroundColor: "var(--border)",
                 margin: "4px 0",
               }}
             />
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <span
-                style={{ fontSize: "16px", color: "#101828", fontWeight: 600 }}
+                style={{ fontSize: "16px", color: "var(--foreground)", fontWeight: 600 }}
               >
                 Total
               </span>
               <span
-                style={{ fontSize: "16px", color: "#101828", fontWeight: 600 }}
+                style={{ fontSize: "16px", color: "var(--foreground)", fontWeight: 600 }}
               >
                 ₹6,147
               </span>
@@ -451,11 +451,11 @@ function VariantCenter() {
               paddingRight: "16px",
               borderRadius: "12px",
               backgroundColor: "transparent",
-              color: "#101828",
+              color: "var(--foreground)",
               fontSize: "14px",
               lineHeight: "20px",
               fontWeight: "600",
-              border: "1px solid #D0D5DD",
+              border: "1px solid var(--border)",
               display: "inline-flex",
               alignItems: "center",
               cursor: "pointer",
@@ -501,7 +501,7 @@ function States() {
     >
       <div>
         <h2 style={{ marginBottom: "8px" }}>Modal States</h2>
-        <p style={{ color: "#667085", fontSize: "14px" }}>
+        <p style={{ color: "var(--muted-foreground)", fontSize: "14px" }}>
           Open state with scrim and panel visible
         </p>
       </div>
@@ -527,8 +527,8 @@ function States() {
               style={{
                 width: "420px",
                 height: "100%",
-                backgroundColor: "#FFFFFF",
-                borderLeft: "1px solid #E5E7EB",
+                backgroundColor: "var(--card)",
+                borderLeft: "1px solid var(--border)",
                 boxShadow:
                   "-4px 0 6px -1px rgba(0, 0, 0, 0.1), -2px 0 4px -1px rgba(0, 0, 0, 0.06)",
                 display: "flex",
@@ -539,7 +539,7 @@ function States() {
               <div
                 style={{
                   padding: "24px",
-                  borderBottom: "1px solid #E5E7EB",
+                  borderBottom: "1px solid var(--border)",
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
@@ -549,7 +549,7 @@ function States() {
                   style={{
                     fontSize: "18px",
                     fontWeight: 600,
-                    color: "#111827",
+                    color: "var(--foreground)",
                   }}
                 >
                   Cart (3 items)
@@ -559,13 +559,13 @@ function States() {
                     width: "32px",
                     height: "32px",
                     borderRadius: "6px",
-                    backgroundColor: "#F9FAFB",
+                    backgroundColor: "var(--muted)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     cursor: "pointer",
                     fontSize: "20px",
-                    color: "#6B7280",
+                    color: "var(--muted-foreground)",
                   }}
                 >
                   ×
@@ -573,7 +573,7 @@ function States() {
               </div>
 
               <div style={{ padding: "24px", flex: 1, overflowY: "auto" }}>
-                <div style={{ fontSize: "14px", color: "#667085" }}>
+                <div style={{ fontSize: "14px", color: "var(--muted-foreground)" }}>
                   Cart drawer content with scrim visible behind
                 </div>
               </div>
@@ -581,7 +581,7 @@ function States() {
               <div
                 style={{
                   padding: "24px",
-                  borderTop: "1px solid #E5E7EB",
+                  borderTop: "1px solid var(--border)",
                   display: "flex",
                   flexDirection: "column",
                   gap: "12px",
@@ -594,14 +594,14 @@ function States() {
                     marginBottom: "12px",
                   }}
                 >
-                  <span style={{ fontSize: "14px", color: "#6B7280" }}>
+                  <span style={{ fontSize: "14px", color: "var(--muted-foreground)" }}>
                     Subtotal
                   </span>
                   <span
                     style={{
                       fontSize: "16px",
                       fontWeight: 600,
-                      color: "#111827",
+                      color: "var(--foreground)",
                     }}
                   >
                     ₹5,997
@@ -625,7 +625,7 @@ function States() {
               </div>
             </div>
           </div>
-          <div style={{ fontSize: "13px", color: "#667085" }}>
+          <div style={{ fontSize: "13px", color: "var(--muted-foreground)" }}>
             Scrim visible (opacity 0.5) · Panel slides in from right · Full
             viewport height
           </div>
@@ -643,12 +643,12 @@ function Examples() {
         flexDirection: "column",
         gap: "48px",
         padding: "40px",
-        backgroundColor: "#FAFBFC",
+        backgroundColor: "var(--muted)",
       }}
     >
       <div>
         <h2 style={{ marginBottom: "8px" }}>Usage Examples</h2>
-        <p style={{ color: "#667085", fontSize: "14px" }}>
+        <p style={{ color: "var(--muted-foreground)", fontSize: "14px" }}>
           Modal component instances
         </p>
       </div>
@@ -658,8 +658,8 @@ function Examples() {
           style={{
             padding: "10px 20px",
             borderRadius: "8px",
-            border: "1px solid #E5E7EB",
-            backgroundColor: "#FFFFFF",
+            border: "1px solid var(--border)",
+            backgroundColor: "var(--card)",
             fontSize: "14px",
             fontWeight: 500,
             cursor: "pointer",
@@ -671,8 +671,8 @@ function Examples() {
           style={{
             padding: "10px 20px",
             borderRadius: "8px",
-            border: "1px solid #E5E7EB",
-            backgroundColor: "#FFFFFF",
+            border: "1px solid var(--border)",
+            backgroundColor: "var(--card)",
             fontSize: "14px",
             fontWeight: 500,
             cursor: "pointer",
@@ -682,7 +682,7 @@ function Examples() {
         </button>
       </div>
 
-      <div style={{ fontSize: "14px", color: "#667085", maxWidth: "600px" }}>
+      <div style={{ fontSize: "14px", color: "var(--muted-foreground)", maxWidth: "600px" }}>
         <p>The Modal component supports two primary variants:</p>
         <ul style={{ paddingLeft: "20px", margin: "12px 0" }}>
           <li style={{ marginBottom: "8px" }}>
@@ -737,9 +737,9 @@ export function ModalCenterInstance({
         style={{
           width: "520px",
           maxWidth: "92%",
-          backgroundColor: "#FFFFFF", // surface-canvas
+          backgroundColor: "var(--card)", // surface-canvas
           borderRadius: "20px",
-          border: "1px solid #EAECF0", // border-subtle
+          border: "1px solid var(--border)", // border-subtle
           boxShadow: "0 12px 24px -4px #1018280F, 0 6px 12px -4px #10182814", // Shadow / 3
           padding: "20px",
           display: "flex",
@@ -765,7 +765,7 @@ export function ModalCenterInstance({
                   style={{
                     fontSize: "18px",
                     fontWeight: 600,
-                    color: "#101828",
+                    color: "var(--foreground)",
                     lineHeight: "28px",
                   }}
                 >
@@ -776,7 +776,7 @@ export function ModalCenterInstance({
                 <div
                   style={{
                     fontSize: "14px",
-                    color: "#667085",
+                    color: "var(--muted-foreground)",
                     lineHeight: "20px",
                     marginTop: "4px",
                   }}
@@ -797,7 +797,7 @@ export function ModalCenterInstance({
                     paddingRight: "12px",
                     borderRadius: "10px",
                     backgroundColor: "transparent",
-                    color: "#101828",
+                    color: "var(--foreground)",
                     fontSize: "14px",
                     lineHeight: "20px",
                     fontWeight: "600",

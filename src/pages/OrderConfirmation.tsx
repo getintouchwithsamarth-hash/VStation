@@ -6,7 +6,7 @@ import { OrderDetails } from "../features/order/components/OrderDetails";
 
 export function OrderConfirmation() {
   return (
-    <Section paddingTop="48px" paddingBottom="64px" background="#FFFFFF">
+    <Section paddingTop="48px" paddingBottom="64px" background="var(--background)">
       <Container>
         <OrderConfirmationHeader />
         <div

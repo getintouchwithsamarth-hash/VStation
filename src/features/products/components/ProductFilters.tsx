@@ -14,7 +14,7 @@ export function ProductFilters() {
       style={{
         marginBottom: "24px",
         paddingBottom: "24px",
-        borderBottom: "1px solid #EAECF0",
+        borderBottom: "1px solid var(--border)",
       }}
     >
       {/* Filter label */}
@@ -24,7 +24,7 @@ export function ProductFilters() {
           fontSize: "14px",
           lineHeight: "20px",
           fontWeight: "600",
-          color: "#344054",
+          color: "var(--muted-foreground)",
           marginRight: "4px",
         }}
       >
@@ -41,30 +41,30 @@ export function ProductFilters() {
             paddingLeft: "12px",
             paddingRight: "12px",
             borderRadius: "16px",
-            backgroundColor: activeFilter === filter ? "#F4F3FF" : "#F9FAFB",
+            backgroundColor: activeFilter === filter ? "var(--accent)" : "var(--muted)",
             border:
               activeFilter === filter
-                ? "1px solid #D6BBFB"
-                : "1px solid #EAECF0",
+                ? "1px solid var(--ring)"
+                : "1px solid var(--border)",
             fontFamily: "Inter, system-ui, sans-serif",
             fontSize: "14px",
             lineHeight: "20px",
             fontWeight: "500",
-            color: activeFilter === filter ? "#6941C6" : "#344054",
+            color: activeFilter === filter ? "var(--primary)" : "var(--muted-foreground)",
             cursor: "pointer",
             transition: "all 150ms ease",
             outline: "none",
           }}
           onMouseEnter={(e) => {
             if (activeFilter !== filter) {
-              e.currentTarget.style.backgroundColor = "#F2F4F7";
-              e.currentTarget.style.borderColor = "#D0D5DD";
+              e.currentTarget.style.backgroundColor = "var(--muted)";
+              e.currentTarget.style.borderColor = "var(--border)";
             }
           }}
           onMouseLeave={(e) => {
             if (activeFilter !== filter) {
-              e.currentTarget.style.backgroundColor = "#F9FAFB";
-              e.currentTarget.style.borderColor = "#EAECF0";
+              e.currentTarget.style.backgroundColor = "var(--muted)";
+              e.currentTarget.style.borderColor = "var(--border)";
             }
           }}
         >
@@ -90,7 +90,7 @@ export function ProductFilters() {
             fontSize: "14px",
             lineHeight: "20px",
             fontWeight: "600",
-            color: "#667085",
+            color: "var(--muted-foreground)",
             cursor: "pointer",
             transition: "color 150ms ease",
             outline: "none",
@@ -99,10 +99,10 @@ export function ProductFilters() {
             gap: "6px",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.color = "#344054";
+            e.currentTarget.style.color = "var(--foreground)";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.color = "#667085";
+            e.currentTarget.style.color = "var(--muted-foreground)";
           }}
         >
           <X size={14} strokeWidth={2.5} />

@@ -17,7 +17,7 @@ export function ProductsPageHeader() {
             fontSize: '12px',
             lineHeight: '18px',
             fontWeight: '400',
-            color: '#98A2B3'
+            color: "var(--muted-foreground)"
           }}
         >
           Curated gear
@@ -27,7 +27,7 @@ export function ProductsPageHeader() {
         <h1
           style={{
             fontFamily: 'Inter, system-ui, sans-serif',
-            color: '#101828',
+            color: "var(--foreground)",
             margin: 0
           }}
         >
@@ -42,7 +42,7 @@ export function ProductsPageHeader() {
           fontSize: '18px',
           lineHeight: '28px',
           fontWeight: '400',
-          color: '#667085',
+          color: "var(--muted-foreground)",
           maxWidth: '640px'
         }}
       >

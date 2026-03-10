@@ -3,14 +3,19 @@ import { ButtonInstance } from "../ui/Button";
 import { Logo } from "../ui/Logo";
 import { Container } from "./Container";
 import { useCart } from "../../features/cart/CartContext";
+import { useTheme } from "next-themes";
+import { Moon, Sun } from "lucide-react";
 
 export function Header() {
+  const { resolvedTheme, setTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
+
   return (
     <header
       style={{
         height: "72px",
-        backgroundColor: "#FFFFFF",
-        borderBottom: "1px solid #E5E7EB",
+        backgroundColor: "var(--background)",
+        borderBottom: "1px solid var(--border)",
       }}
     >
       <Container>
@@ -22,35 +27,78 @@ export function Header() {
             gap: "16px",
           }}
         >
-          <HeaderLeftSlot />
+          <HeaderLeftSlot isDark={isDark} />
           <HeaderCenterSlot />
-          <HeaderRightSlot />
+          <HeaderRightSlot
+            isDark={isDark}
+            onToggleTheme={() => setTheme(isDark ? "light" : "dark")}
+          />
         </div>
       </Container>
     </header>
   );
 }
 
-function HeaderLeftSlot() {
-  return <BrandMarkSlot />;
+function HeaderLeftSlot({ isDark }: { isDark: boolean }) {
+  return <BrandMarkSlot isDark={isDark} />;
 }
 
 function HeaderCenterSlot() {
   return <PrimaryNavSlot />;
 }
 
-function HeaderRightSlot() {
+function HeaderRightSlot({
+  isDark,
+  onToggleTheme,
+}: {
+  isDark: boolean;
+  onToggleTheme: () => void;
+}) {
   return (
     <div style={{ display: "flex", gap: "16px" }}>
-      <SearchSlot />
+      <ThemeToggleSlot isDark={isDark} onToggleTheme={onToggleTheme} />
       <AccountSlot />
       <CartSlot />
     </div>
   );
 }
 
-function BrandMarkSlot() {
-  return <Logo size={32} variant="dark" showText href="/" />;
+function BrandMarkSlot({ isDark }: { isDark: boolean }) {
+  return <Logo size={32} variant={isDark ? "light" : "dark"} showText href="/" />;
+}
+
+function ThemeToggleSlot({
+  isDark,
+  onToggleTheme,
+}: {
+  isDark: boolean;
+  onToggleTheme: () => void;
+}) {
+  return (
+    <button
+      aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
+      onClick={onToggleTheme}
+      style={{
+        height: "36px",
+        paddingLeft: "12px",
+        paddingRight: "12px",
+        borderRadius: "10px",
+        backgroundColor: "transparent",
+        color: "var(--foreground)",
+        fontSize: "14px",
+        lineHeight: "20px",
+        fontWeight: "600",
+        border: "1px solid var(--border)",
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "8px",
+        cursor: "pointer",
+      }}
+    >
+      {isDark ? <Sun size={16} /> : <Moon size={16} />}
+      {isDark ? "Light" : "Dark"}
+    </button>
+  );
 }
 
 function PrimaryNavSlot() {
@@ -66,7 +114,7 @@ function PrimaryNavSlot() {
       <a
         href="/products"
         style={{
-          color: "#475467",
+          color: "var(--muted-foreground)",
           fontSize: "14px",
           lineHeight: "20px",
           fontWeight: "600",
@@ -79,7 +127,7 @@ function PrimaryNavSlot() {
       <a
         href="/philosophy"
         style={{
-          color: "#475467",
+          color: "var(--muted-foreground)",
           fontSize: "14px",
           lineHeight: "20px",
           fontWeight: "600",
@@ -92,7 +140,7 @@ function PrimaryNavSlot() {
       <a
         href="/community"
         style={{
-          color: "#475467",
+          color: "var(--muted-foreground)",
           fontSize: "14px",
           lineHeight: "20px",
           fontWeight: "600",
@@ -106,30 +154,6 @@ function PrimaryNavSlot() {
   );
 }
 
-function SearchSlot() {
-  return (
-    <button
-      style={{
-        height: "36px",
-        paddingLeft: "12px",
-        paddingRight: "12px",
-        borderRadius: "10px",
-        backgroundColor: "transparent",
-        color: "#101828",
-        fontSize: "14px",
-        lineHeight: "20px",
-        fontWeight: "600",
-        border: "none",
-        display: "inline-flex",
-        alignItems: "center",
-        cursor: "pointer",
-      }}
-    >
-      Search
-    </button>
-  );
-}
-
 function AccountSlot() {
   return (
     <button
@@ -139,7 +163,7 @@ function AccountSlot() {
         paddingRight: "12px",
         borderRadius: "10px",
         backgroundColor: "transparent",
-        color: "#101828",
+        color: "var(--foreground)",
         fontSize: "14px",
         lineHeight: "20px",
         fontWeight: "600",
@@ -179,6 +203,7 @@ function CartSlot() {
           top: "-6px",
           right: "-8px",
           pointerEvents: "none",
+          opacity: 0.78,
         }}
       >
         <BadgeInstance label={String(cartCount)} variant="accent" size="sm" />

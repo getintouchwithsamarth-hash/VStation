@@ -146,7 +146,7 @@ function GhostMiniButton({ label }: { label: string }) {
         borderRadius: '8px',
         border: 'none',
         backgroundColor: 'transparent',
-        color: '#344054',
+        color: "var(--muted-foreground)",
         fontFamily: 'Inter, system-ui, sans-serif',
         fontSize: '12px',
         lineHeight: '18px',
@@ -165,18 +165,18 @@ type ToastVariant = 'neutral' | 'success';
 function getToastVariantStyles(variant: ToastVariant) {
   if (variant === 'success') {
     return {
-      backgroundColor: '#ECFDF3',
-      border: '1px solid #EAECF0',
-      titleColor: '#101828',
-      messageColor: '#475467'
+      backgroundColor: 'var(--success-background)',
+      border: '1px solid var(--border)',
+      titleColor: 'var(--success-foreground)',
+      messageColor: 'var(--success-foreground)'
     };
   }
 
   return {
-    backgroundColor: '#FFFFFF',
-    border: '1px solid #EAECF0',
-    titleColor: '#101828',
-    messageColor: '#475467'
+    backgroundColor: "var(--card)",
+    border: '1px solid var(--border)',
+    titleColor: 'var(--foreground)',
+    messageColor: 'var(--muted-foreground)'
   };
 }
 

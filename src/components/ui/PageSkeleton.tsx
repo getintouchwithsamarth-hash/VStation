@@ -6,7 +6,7 @@ import { Skeleton } from './Skeleton';
 export function HomePageSkeleton() {
   return (
     <Stack gap="0px">
-      <Section paddingTop="56px" paddingBottom="48px" background="#FFFFFF">
+      <Section paddingTop="56px" paddingBottom="48px" background="var(--background)">
         <Container>
           <div style={{ display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: '48px' }}>
             <Stack gap="16px">
@@ -23,7 +23,7 @@ export function HomePageSkeleton() {
           </div>
         </Container>
       </Section>
-      <Section paddingTop="48px" paddingBottom="56px" background="#FFFFFF">
+      <Section paddingTop="48px" paddingBottom="56px" background="var(--background)">
         <Container>
           <Stack gap="16px">
             <Skeleton width="180px" height="18px" />
@@ -42,7 +42,7 @@ export function HomePageSkeleton() {
 
 export function ProductsPageSkeleton() {
   return (
-    <Section paddingTop="48px" paddingBottom="64px" background="#FFFFFF">
+    <Section paddingTop="48px" paddingBottom="64px" background="var(--background)">
       <Container>
         <Stack gap="16px">
           <Skeleton width="96px" height="14px" />
@@ -68,12 +68,12 @@ export function ProductsPageSkeleton() {
 export function ProductDetailPageSkeleton() {
   return (
     <Stack gap="0px">
-      <Section paddingTop="24px" paddingBottom="16px" background="#FCFCFD">
+      <Section paddingTop="24px" paddingBottom="16px" background="var(--card)">
         <Container>
           <Skeleton width="280px" height="16px" />
         </Container>
       </Section>
-      <Section paddingTop="16px" paddingBottom="32px" background="#FCFCFD">
+      <Section paddingTop="16px" paddingBottom="32px" background="var(--card)">
         <Container>
           <Stack gap="12px">
             <Skeleton width="120px" height="14px" />
@@ -82,7 +82,7 @@ export function ProductDetailPageSkeleton() {
           </Stack>
         </Container>
       </Section>
-      <Section paddingTop="24px" paddingBottom="48px" background="#FFFFFF">
+      <Section paddingTop="24px" paddingBottom="48px" background="var(--background)">
         <Container>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 420px', gap: '48px' }}>
             <Skeleton width="100%" height="560px" borderRadius="16px" />
@@ -90,7 +90,7 @@ export function ProductDetailPageSkeleton() {
           </div>
         </Container>
       </Section>
-      <Section paddingTop="48px" paddingBottom="56px" background="#FCFCFD">
+      <Section paddingTop="48px" paddingBottom="56px" background="var(--card)">
         <Container>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
             {[1, 2, 3].map((item) => (
@@ -105,7 +105,7 @@ export function ProductDetailPageSkeleton() {
 
 export function CartPageSkeleton() {
   return (
-    <Section paddingTop="80px" paddingBottom="80px" background="#FAFBFC">
+    <Section paddingTop="80px" paddingBottom="80px" background="var(--muted)">
       <Container>
         <div style={{ display: 'grid', gridTemplateColumns: '1.8fr 1fr', gap: '24px', alignItems: 'start' }}>
           <Stack gap="20px">

@@ -4,7 +4,7 @@ import { Stack } from '../components/layout/Stack';
 
 export function Philosophy() {
   return (
-    <Section paddingTop="48px" paddingBottom="64px" background="#FFFFFF">
+    <Section paddingTop="48px" paddingBottom="64px" background="var(--background)">
       <Container>
         <PageHeader />
         <PageBody />

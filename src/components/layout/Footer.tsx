@@ -1,13 +1,17 @@
 import { Container } from './Container';
 import { Stack } from './Stack';
 import { Logo } from '../ui/Logo';
+import { useTheme } from 'next-themes';
 
 export function Footer() {
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
+
   return (
     <footer 
       style={{
-        backgroundColor: '#FCFCFD',
-        borderTop: '1px solid #EAECF0',
+        backgroundColor: 'var(--card)',
+        borderTop: '1px solid var(--border)',
         paddingTop: '32px',
         paddingBottom: '24px'
       }}
@@ -15,7 +19,7 @@ export function Footer() {
       <Container>
         <Stack gap="24px">
           <FooterTopSlot />
-          <FooterBottomSlot />
+          <FooterBottomSlot isDark={isDark} />
         </Stack>
       </Container>
     </footer>
@@ -38,7 +42,7 @@ function FooterTopSlot() {
   );
 }
 
-function FooterBottomSlot() {
+function FooterBottomSlot({ isDark }: { isDark: boolean }) {
   return (
     <div 
       style={{
@@ -47,7 +51,7 @@ function FooterBottomSlot() {
         justifyContent: 'space-between'
       }}
     >
-      <FooterLegalSlot />
+      <FooterLegalSlot isDark={isDark} />
       <FooterSocialSlot />
     </div>
   );
@@ -61,7 +65,7 @@ function FooterNavSlot() {
           fontSize: '12px',
           lineHeight: '18px',
           fontWeight: '600',
-          color: '#667085'
+          color: 'var(--muted-foreground)'
         }}
       >
         Explore
@@ -73,7 +77,7 @@ function FooterNavSlot() {
             fontSize: '14px',
             lineHeight: '20px',
             fontWeight: '500',
-            color: '#344054',
+            color: 'var(--foreground)',
             textDecoration: 'none'
           }}
         >
@@ -85,7 +89,7 @@ function FooterNavSlot() {
             fontSize: '14px',
             lineHeight: '20px',
             fontWeight: '500',
-            color: '#344054',
+            color: 'var(--foreground)',
             textDecoration: 'none'
           }}
         >
@@ -97,7 +101,7 @@ function FooterNavSlot() {
             fontSize: '14px',
             lineHeight: '20px',
             fontWeight: '500',
-            color: '#344054',
+            color: 'var(--foreground)',
             textDecoration: 'none'
           }}
         >
@@ -109,7 +113,7 @@ function FooterNavSlot() {
             fontSize: '14px',
             lineHeight: '20px',
             fontWeight: '500',
-            color: '#344054',
+            color: 'var(--foreground)',
             textDecoration: 'none'
           }}
         >
@@ -128,7 +132,7 @@ function FooterTrustSlot() {
           fontSize: '12px',
           lineHeight: '18px',
           fontWeight: '600',
-          color: '#667085'
+          color: 'var(--muted-foreground)'
         }}
       >
         Standards
@@ -139,7 +143,7 @@ function FooterTrustSlot() {
             fontSize: '14px',
             lineHeight: '20px',
             fontWeight: '500',
-            color: '#344054'
+            color: 'var(--foreground)'
           }}
         >
           Curated for durability
@@ -149,7 +153,7 @@ function FooterTrustSlot() {
             fontSize: '14px',
             lineHeight: '20px',
             fontWeight: '500',
-            color: '#344054'
+            color: 'var(--foreground)'
           }}
         >
           Reliable support
@@ -159,7 +163,7 @@ function FooterTrustSlot() {
             fontSize: '14px',
             lineHeight: '20px',
             fontWeight: '500',
-            color: '#344054'
+            color: 'var(--foreground)'
           }}
         >
           Clear policies
@@ -169,15 +173,15 @@ function FooterTrustSlot() {
   );
 }
 
-function FooterLegalSlot() {
+function FooterLegalSlot({ isDark }: { isDark: boolean }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-      <Logo size={24} variant="dark" showText={false} href="/" />
+      <Logo size={24} variant={isDark ? 'light' : 'dark'} showText={false} href="/" />
       <div
         style={{
           fontSize: '14px',
           lineHeight: '20px',
-          color: '#667085'
+          color: 'var(--muted-foreground)'
         }}
       >
         © VIBE STATION
@@ -196,7 +200,7 @@ function FooterSocialSlot() {
           paddingRight: '12px',
           borderRadius: '10px',
           backgroundColor: 'transparent',
-          color: '#101828',
+          color: 'var(--foreground)',
           fontSize: '14px',
           lineHeight: '20px',
           fontWeight: '600',
@@ -215,7 +219,7 @@ function FooterSocialSlot() {
           paddingRight: '12px',
           borderRadius: '10px',
           backgroundColor: 'transparent',
-          color: '#101828',
+          color: 'var(--foreground)',
           fontSize: '14px',
           lineHeight: '20px',
           fontWeight: '600',
@@ -234,7 +238,7 @@ function FooterSocialSlot() {
           paddingRight: '12px',
           borderRadius: '10px',
           backgroundColor: 'transparent',
-          color: '#101828',
+          color: 'var(--foreground)',
           fontSize: '14px',
           lineHeight: '20px',
           fontWeight: '600',

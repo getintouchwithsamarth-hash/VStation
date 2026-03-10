@@ -11,7 +11,7 @@ export function Skeleton({ width = '100%', height = '16px', borderRadius = '8px'
     width,
     height,
     borderRadius,
-    background: 'linear-gradient(90deg, #f2f4f7 25%, #e4e7ec 37%, #f2f4f7 63%)',
+    background: 'linear-gradient(90deg, var(--skeleton-base) 25%, var(--skeleton-highlight) 37%, var(--skeleton-base) 63%)',
     backgroundSize: '400% 100%',
     animation: 'vs-skeleton-shimmer 1.2s ease-in-out infinite'
   };

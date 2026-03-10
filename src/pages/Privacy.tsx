@@ -41,7 +41,7 @@ export function Privacy() {
   }, []);
 
   return (
-    <Section paddingTop="48px" paddingBottom="64px" background="#FFFFFF">
+    <Section paddingTop="48px" paddingBottom="64px" background="var(--background)">
       <Container>
         <Stack gap="24px">
           <header>
@@ -126,7 +126,7 @@ function PolicySection({ title, children }: { title: string; children: ReactNode
 
 const titleStyle: CSSProperties = {
   margin: 0,
-  color: '#101828',
+  color: "var(--foreground)",
   fontSize: '36px',
   lineHeight: '44px',
   fontWeight: 700
@@ -135,7 +135,7 @@ const titleStyle: CSSProperties = {
 const lastUpdatedStyle: CSSProperties = {
   marginTop: '8px',
   marginBottom: 0,
-  color: '#667085',
+  color: "var(--muted-foreground)",
   fontSize: '14px',
   lineHeight: '20px'
 };
@@ -143,7 +143,7 @@ const lastUpdatedStyle: CSSProperties = {
 const sectionTitleStyle: CSSProperties = {
   marginTop: 0,
   marginBottom: '10px',
-  color: '#101828',
+  color: "var(--foreground)",
   fontSize: '20px',
   lineHeight: '30px',
   fontWeight: 600
@@ -151,13 +151,13 @@ const sectionTitleStyle: CSSProperties = {
 
 const paragraphStyle: CSSProperties = {
   margin: 0,
-  color: '#344054',
+  color: "var(--muted-foreground)",
   fontSize: '16px',
   lineHeight: '24px'
 };
 
 const linkStyle: CSSProperties = {
-  color: '#175CD3',
+  color: "var(--primary)",
   textDecoration: 'none',
   fontWeight: 600
 };

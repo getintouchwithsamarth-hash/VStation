@@ -26,7 +26,7 @@ export function CheckoutHandoff({
       subtitle="You'll complete payment securely in checkout."
       footer={<FooterActions onContinue={onContinue} onBack={onBack} />}
     >
-      <div style={{ height: '1px', backgroundColor: '#EAECF0', marginTop: '-8px' }} />
+      <div style={{ height: '1px', backgroundColor: 'var(--border)', marginTop: '-8px' }} />
       <OrderSummaryCard itemCount={itemCount} subtotal={subtotal} />
       <ProgressCue />
     </ModalCenterInstance>
@@ -88,13 +88,13 @@ function SummaryRow({
         alignItems: 'center'
       }}
     >
-      <div style={{ fontSize: '14px', lineHeight: '20px', color: '#667085' }}>{label}</div>
+      <div style={{ fontSize: '14px', lineHeight: '20px', color: "var(--muted-foreground)" }}>{label}</div>
       <div
         style={{
           fontSize: valueSize,
           lineHeight: valueLineHeight,
           fontWeight: valueWeight,
-          color: '#101828'
+          color: "var(--foreground)"
         }}
       >
         {value}
@@ -111,7 +111,7 @@ function ProgressCue() {
           position: 'relative',
           height: '6px',
           width: '100%',
-          backgroundColor: '#E5E7EB',
+          backgroundColor: 'var(--border)',
           borderRadius: '999px',
           overflow: 'hidden'
         }}
@@ -130,7 +130,7 @@ function ProgressCue() {
         />
       </div>
 
-      <div style={{ fontSize: '12px', lineHeight: '18px', color: '#667085' }}>Preparing your checkout…</div>
+      <div style={{ fontSize: '12px', lineHeight: '18px', color: "var(--muted-foreground)" }}>Preparing your checkout…</div>
     </div>
   );
 }
@@ -160,7 +160,7 @@ function FooterActions({
         style={{
           fontSize: '12px',
           lineHeight: '18px',
-          color: '#667085',
+          color: "var(--muted-foreground)",
           textAlign: 'right'
         }}
       >

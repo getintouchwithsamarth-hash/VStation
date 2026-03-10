@@ -8,7 +8,7 @@ export function HeroMetaSlot() {
   return (
     <div
       style={{
-        backgroundColor: '#FFFFFF',
+        backgroundColor: "var(--card)",
         paddingTop: '24px',
         paddingBottom: '24px'
       }}

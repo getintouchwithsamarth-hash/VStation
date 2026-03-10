@@ -2,8 +2,8 @@ export function OrderDetails() {
   return (
     <div
       style={{
-        backgroundColor: '#FFFFFF',
-        border: '1px solid #EAECF0',
+        backgroundColor: "var(--card)",
+        border: '1px solid var(--border)',
         borderRadius: '16px',
         boxShadow: '0 8px 16px -4px #1018281A, 0 4px 8px -2px #10182814', // Shadow / 3
         padding: '24px',
@@ -19,7 +19,7 @@ export function OrderDetails() {
           fontSize: '18px',
           lineHeight: '28px',
           fontWeight: '600',
-          color: '#101828',
+          color: "var(--foreground)",
           margin: 0
         }}
       >
@@ -48,7 +48,7 @@ export function OrderDetails() {
               fontSize: '14px',
               lineHeight: '20px',
               fontWeight: '400',
-              color: '#667085'
+              color: "var(--muted-foreground)"
             }}
           >
             Order ID
@@ -59,7 +59,7 @@ export function OrderDetails() {
               fontSize: '14px',
               lineHeight: '20px',
               fontWeight: '600',
-              color: '#101828'
+              color: "var(--foreground)"
             }}
           >
             #VS-2026-0047
@@ -80,7 +80,7 @@ export function OrderDetails() {
               fontSize: '14px',
               lineHeight: '20px',
               fontWeight: '400',
-              color: '#667085'
+              color: "var(--muted-foreground)"
             }}
           >
             Items
@@ -91,7 +91,7 @@ export function OrderDetails() {
               fontSize: '14px',
               lineHeight: '20px',
               fontWeight: '600',
-              color: '#101828'
+              color: "var(--foreground)"
             }}
           >
             3 items
@@ -112,7 +112,7 @@ export function OrderDetails() {
               fontSize: '14px',
               lineHeight: '20px',
               fontWeight: '400',
-              color: '#667085'
+              color: "var(--muted-foreground)"
             }}
           >
             Total
@@ -123,7 +123,7 @@ export function OrderDetails() {
               fontSize: '14px',
               lineHeight: '20px',
               fontWeight: '600',
-              color: '#101828'
+              color: "var(--foreground)"
             }}
           >
             ₹5,997
@@ -132,10 +132,10 @@ export function OrderDetails() {
       </div>
 
       {/* Divider */}
-      <div
+        <div
         style={{
           height: '1px',
-          backgroundColor: '#EAECF0'
+          backgroundColor: 'var(--border)'
         }}
       />
 
@@ -160,7 +160,7 @@ export function OrderDetails() {
             style={{
               width: '48px',
               height: '48px',
-              backgroundColor: '#F3F4F6',
+              backgroundColor: "var(--muted)",
               borderRadius: '10px',
               flexShrink: 0
             }}
@@ -174,7 +174,7 @@ export function OrderDetails() {
                 fontSize: '14px',
                 lineHeight: '20px',
                 fontWeight: '600',
-                color: '#101828'
+                color: "var(--foreground)"
               }}
             >
               Clip-on Tuner Pro
@@ -185,7 +185,7 @@ export function OrderDetails() {
                 fontSize: '12px',
                 lineHeight: '18px',
                 fontWeight: '400',
-                color: '#667085'
+                color: "var(--muted-foreground)"
               }}
             >
               Qty 1
@@ -199,7 +199,7 @@ export function OrderDetails() {
               fontSize: '14px',
               lineHeight: '20px',
               fontWeight: '600',
-              color: '#101828'
+              color: "var(--foreground)"
             }}
           >
             ₹2,499
@@ -219,7 +219,7 @@ export function OrderDetails() {
             style={{
               width: '48px',
               height: '48px',
-              backgroundColor: '#F3F4F6',
+              backgroundColor: "var(--muted)",
               borderRadius: '10px',
               flexShrink: 0
             }}
@@ -233,7 +233,7 @@ export function OrderDetails() {
                 fontSize: '14px',
                 lineHeight: '20px',
                 fontWeight: '600',
-                color: '#101828'
+                color: "var(--foreground)"
               }}
             >
               Pro Metronome
@@ -244,7 +244,7 @@ export function OrderDetails() {
                 fontSize: '12px',
                 lineHeight: '18px',
                 fontWeight: '400',
-                color: '#667085'
+                color: "var(--muted-foreground)"
               }}
             >
               Qty 2
@@ -258,7 +258,7 @@ export function OrderDetails() {
               fontSize: '14px',
               lineHeight: '20px',
               fontWeight: '600',
-              color: '#101828'
+              color: "var(--foreground)"
             }}
           >
             ₹3,998

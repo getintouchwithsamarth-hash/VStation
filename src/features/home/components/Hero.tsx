@@ -6,7 +6,7 @@ export function Hero() {
   return (
     <div
       style={{
-        backgroundColor: '#FFFFFF',
+        backgroundColor: "var(--card)",
         paddingTop: '56px',
         paddingBottom: '48px',
         position: 'relative',
@@ -55,7 +55,7 @@ export function Hero() {
                   fontSize: '12px',
                   lineHeight: '18px',
                   fontWeight: '500',
-                  color: '#667085'
+                  color: "var(--muted-foreground)"
                 }}
               >
                 {hero.eyebrow}
@@ -67,7 +67,7 @@ export function Hero() {
                   fontSize: '48px',
                   lineHeight: '56px',
                   fontWeight: '600',
-                  color: '#101828',
+                  color: "var(--foreground)",
                   letterSpacing: '-0.01em',
                   margin: 0
                 }}
@@ -81,7 +81,7 @@ export function Hero() {
                   fontSize: '18px',
                   lineHeight: '28px',
                   fontWeight: '400',
-                  color: '#344054',
+                  color: "var(--muted-foreground)",
                   maxWidth: '540px',
                   margin: 0
                 }}
@@ -100,7 +100,7 @@ export function Hero() {
                   fontSize: '14px',
                   lineHeight: '20px',
                   fontWeight: '400',
-                  color: '#667085',
+                  color: "var(--muted-foreground)",
                   marginTop: '8px'
                 }}
               >
@@ -112,8 +112,8 @@ export function Hero() {
           <div style={{ flex: '0 0 45%', position: 'relative' }}>
             <div
               style={{
-                backgroundColor: '#FFFFFF',
-                border: '1px solid #EAECF0',
+                backgroundColor: "var(--card)",
+                border: '1px solid var(--border)',
                 borderRadius: '16px',
                 width: '480px',
                 height: '420px',
@@ -123,7 +123,7 @@ export function Hero() {
             >
               <div
                 style={{
-                  backgroundColor: '#F2F4F7',
+                  backgroundColor: "var(--muted)",
                   height: '280px',
                   width: '100%'
                 }}
@@ -150,7 +150,7 @@ export function Hero() {
                       fontSize: '12px',
                       lineHeight: '18px',
                       fontWeight: '500',
-                      color: '#667085'
+                      color: "var(--muted-foreground)"
                     }}
                   >
                     {hero.featuredDropEyebrow}
@@ -161,7 +161,7 @@ export function Hero() {
                       fontSize: '22px',
                       lineHeight: '30px',
                       fontWeight: '600',
-                      color: '#101828'
+                      color: "var(--foreground)"
                     }}
                   >
                     {hero.featuredDropTitle}
@@ -172,7 +172,7 @@ export function Hero() {
                       fontSize: '14px',
                       lineHeight: '20px',
                       fontWeight: '400',
-                      color: '#344054'
+                      color: "var(--muted-foreground)"
                     }}
                   >
                     {hero.featuredDropSubtitle}
@@ -221,12 +221,12 @@ function ButtonSecondary({ label }: { label: string }) {
         paddingLeft: '16px',
         paddingRight: '16px',
         borderRadius: '12px',
-        backgroundColor: '#FFFFFF',
-        color: '#101828',
+        backgroundColor: "var(--card)",
+        color: "var(--foreground)",
         fontSize: '14px',
         lineHeight: '20px',
         fontWeight: '600',
-        border: '1px solid #D0D5DD',
+        border: '1px solid var(--border)',
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',

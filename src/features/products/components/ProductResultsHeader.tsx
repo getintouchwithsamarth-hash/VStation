@@ -28,10 +28,10 @@ export function ProductResultsHeader() {
           fontSize: "16px",
           lineHeight: "24px",
           fontWeight: "500",
-          color: "#344054",
+          color: "var(--muted-foreground)",
         }}
       >
-        Showing <span style={{ fontWeight: "600", color: "#101828" }}>12</span>{" "}
+        Showing <span style={{ fontWeight: "600", color: "var(--foreground)" }}>12</span>{" "}
         results
       </div>
 
@@ -43,7 +43,7 @@ export function ProductResultsHeader() {
             fontSize: "14px",
             lineHeight: "20px",
             fontWeight: "500",
-            color: "#667085",
+            color: "var(--muted-foreground)",
           }}
         >
           Sort by:
@@ -56,13 +56,13 @@ export function ProductResultsHeader() {
               paddingLeft: "14px",
               paddingRight: "14px",
               borderRadius: "8px",
-              backgroundColor: "#FFFFFF",
-              border: "1px solid #D0D5DD",
+              backgroundColor: "var(--card)",
+              border: "1px solid var(--border)",
               fontFamily: "Inter, system-ui, sans-serif",
               fontSize: "14px",
               lineHeight: "20px",
               fontWeight: "500",
-              color: "#101828",
+              color: "var(--foreground)",
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
@@ -74,18 +74,18 @@ export function ProductResultsHeader() {
               boxShadow: "0 1px 2px 0 rgba(16, 24, 40, 0.05)",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#F9FAFB";
-              e.currentTarget.style.borderColor = "#98A2B3";
+              e.currentTarget.style.backgroundColor = "var(--muted)";
+              e.currentTarget.style.borderColor = "var(--border)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "#FFFFFF";
-              e.currentTarget.style.borderColor = "#D0D5DD";
+              e.currentTarget.style.backgroundColor = "var(--card)";
+              e.currentTarget.style.borderColor = "var(--border)";
             }}
           >
             {selectedSort}
             <ChevronDown
               size={16}
-              color="#667085"
+              color="var(--muted-foreground)"
               style={{
                 transition: "transform 150ms ease",
                 transform: sortOpen ? "rotate(180deg)" : "rotate(0deg)",
@@ -101,8 +101,8 @@ export function ProductResultsHeader() {
                 top: "calc(100% + 4px)",
                 right: 0,
                 minWidth: "200px",
-                backgroundColor: "#FFFFFF",
-                border: "1px solid #EAECF0",
+                backgroundColor: "var(--card)",
+                border: "1px solid var(--border)",
                 borderRadius: "12px",
                 boxShadow:
                   "0 4px 6px -2px rgba(16, 24, 40, 0.05), 0 12px 16px -4px rgba(16, 24, 40, 0.10)",
@@ -123,20 +123,21 @@ export function ProductResultsHeader() {
                     padding: "10px 12px",
                     borderRadius: "8px",
                     backgroundColor:
-                      selectedSort === option ? "#F9FAFB" : "transparent",
+                      selectedSort === option ? "var(--muted)" : "transparent",
                     border: "none",
                     fontFamily: "Inter, system-ui, sans-serif",
                     fontSize: "14px",
                     lineHeight: "20px",
                     fontWeight: selectedSort === option ? "600" : "500",
-                    color: selectedSort === option ? "#6941C6" : "#344054",
+                    color:
+                      selectedSort === option ? "var(--primary)" : "var(--muted-foreground)",
                     cursor: "pointer",
                     transition: "all 150ms ease",
                     outline: "none",
                   }}
                   onMouseEnter={(e) => {
                     if (selectedSort !== option) {
-                      e.currentTarget.style.backgroundColor = "#F9FAFB";
+                      e.currentTarget.style.backgroundColor = "var(--muted)";
                     }
                   }}
                   onMouseLeave={(e) => {

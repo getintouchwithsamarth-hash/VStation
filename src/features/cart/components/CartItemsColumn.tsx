@@ -24,7 +24,7 @@ export function CartItemsColumn() {
           fontSize: '30px',
           lineHeight: '38px',
           fontWeight: '600',
-          color: '#111827',
+          color: "var(--foreground)",
           fontFamily: 'Inter, system-ui, sans-serif'
         }}
       >
@@ -71,7 +71,7 @@ export function CartItemsColumn() {
               fontSize: '18px',
               lineHeight: '28px',
               fontWeight: '600',
-              color: '#111827',
+              color: "var(--foreground)",
               fontFamily: 'Inter, system-ui, sans-serif'
             }}
           >
@@ -99,7 +99,7 @@ export function CartItemsColumn() {
                     style={{
                       width: '100%',
                       height: '160px',
-                      backgroundColor: '#F3F4F6',
+                      backgroundColor: "var(--muted)",
                       borderRadius: '12px',
                       overflow: 'hidden'
                     }}
@@ -122,7 +122,7 @@ export function CartItemsColumn() {
                       fontSize: '14px',
                       lineHeight: '20px',
                       fontWeight: '600',
-                      color: '#111827',
+                      color: "var(--foreground)",
                       fontFamily: 'Inter, system-ui, sans-serif'
                     }}
                   >
@@ -133,7 +133,7 @@ export function CartItemsColumn() {
                       fontSize: '14px',
                       lineHeight: '20px',
                       fontWeight: '600',
-                      color: '#111827',
+                      color: "var(--foreground)",
                       fontFamily: 'Inter, system-ui, sans-serif'
                     }}
                   >

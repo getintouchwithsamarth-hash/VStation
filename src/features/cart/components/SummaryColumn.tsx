@@ -48,7 +48,7 @@ export function SummaryColumn() {
           fontSize: '12px',
           lineHeight: '18px',
           fontWeight: '400',
-          color: '#6B7280',
+          color: "var(--muted-foreground)",
           fontFamily: 'Inter, system-ui, sans-serif',
           textAlign: 'center'
         }}

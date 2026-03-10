@@ -35,7 +35,7 @@ export function StickyCtaRail() {
               fontSize: '14px',
               lineHeight: '20px',
               fontWeight: '600',
-              color: '#101828'
+              color: "var(--foreground)"
             }}
           >
             {stickyCtaRail.name}
@@ -46,7 +46,7 @@ export function StickyCtaRail() {
               fontSize: '14px',
               lineHeight: '20px',
               fontWeight: '600',
-              color: '#101828'
+              color: "var(--foreground)"
             }}
           >
             {stickyCtaRail.price}
@@ -67,7 +67,7 @@ export function StickyCtaRail() {
               fontSize: '12px',
               lineHeight: '18px',
               fontWeight: '400',
-              color: '#667085'
+              color: "var(--muted-foreground)"
             }}
           >
             {stickyCtaRail.shippingLabel}
@@ -93,7 +93,7 @@ export function StickyCtaRail() {
               fontSize: '12px',
               lineHeight: '18px',
               fontWeight: '400',
-              color: '#98A2B3',
+              color: "var(--muted-foreground)",
               marginTop: '6px'
             }}
           >
@@ -106,7 +106,7 @@ export function StickyCtaRail() {
             display: 'flex',
             gap: '8px',
             paddingTop: '4px',
-            borderTop: '1px solid #F3F4F6'
+            borderTop: '1px solid var(--border)'
           }}
         >
           <ButtonInstance variant="ghost" size="sm" label={stickyCtaRail.shareLabel} />
@@ -115,7 +115,7 @@ export function StickyCtaRail() {
 
         <div
           style={{
-            borderTop: '1px solid #F3F4F6',
+            borderTop: '1px solid var(--border)',
             paddingTop: '10px',
             display: 'flex',
             flexDirection: 'column',
@@ -128,7 +128,7 @@ export function StickyCtaRail() {
               fontSize: '12px',
               lineHeight: '18px',
               fontWeight: '600',
-              color: '#667085'
+              color: "var(--muted-foreground)"
             }}
           >
             Flow

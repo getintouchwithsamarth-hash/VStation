@@ -122,12 +122,12 @@ function VariantSecondary() {
           paddingLeft: '16px',
           paddingRight: '16px',
           borderRadius: '12px',
-          backgroundColor: '#FFFFFF',
-          color: '#101828',
+          backgroundColor: "var(--card)",
+          color: "var(--foreground)",
           fontSize: '14px',
           lineHeight: '20px',
           fontWeight: '600',
-          border: '1px solid #D0D5DD',
+          border: '1px solid var(--border)',
           display: 'inline-flex',
           alignItems: 'center',
           cursor: 'pointer'
@@ -151,7 +151,7 @@ function VariantGhost() {
           paddingRight: '16px',
           borderRadius: '12px',
           backgroundColor: 'transparent',
-          color: '#101828',
+          color: "var(--foreground)",
           fontSize: '14px',
           lineHeight: '20px',
           fontWeight: '600',
@@ -438,7 +438,7 @@ function StateFocus() {
         <span style={{
           position: 'absolute',
           inset: '-4px',
-          border: '2px solid #4F46E5',
+          border: '2px solid var(--ring)',
           borderRadius: '14px',
           pointerEvents: 'none'
         }} />
@@ -522,13 +522,13 @@ export function ButtonInstance({
       border: 'none'
     },
     secondary: {
-      backgroundColor: '#FFFFFF',
-      color: '#101828',
-      border: '1px solid #D0D5DD'
+      backgroundColor: "var(--card)",
+      color: "var(--foreground)",
+      border: '1px solid var(--border)'
     },
     ghost: {
       backgroundColor: 'transparent',
-      color: '#101828',
+      color: "var(--foreground)",
       border: 'none'
     }
   }[variant];
@@ -543,13 +543,13 @@ export function ButtonInstance({
         paddingRight: sizeStyles.paddingRight,
         borderRadius: sizeStyles.borderRadius,
         backgroundColor: disabled
-          ? '#E5E7EB'
+          ? 'var(--muted)'
           : variantStyles.backgroundColor,
         color: variantStyles.color,
         fontSize: sizeStyles.fontSize,
         lineHeight: sizeStyles.lineHeight,
         fontWeight: '600',
-        border: disabled ? '1px solid #D0D5DD' : variantStyles.border,
+        border: disabled ? '1px solid var(--border)' : variantStyles.border,
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',

@@ -102,8 +102,8 @@ function VariantElevated() {
       <div className="text-sm text-gray-600">Variant / Elevated</div>
       <div 
         style={{
-          backgroundColor: '#FFFFFF',
-          border: '1px solid #E5E7EB',
+          backgroundColor: "var(--card)",
+          border: '1px solid var(--border)',
           borderRadius: '16px',
           padding: '16px',
           width: '280px',
@@ -123,8 +123,8 @@ function VariantSubtle() {
       <div className="text-sm text-gray-600">Variant / Subtle</div>
       <div 
         style={{
-          backgroundColor: '#F9FAFB',
-          border: '1px solid #E5E7EB',
+          backgroundColor: "var(--muted)",
+          border: '1px solid var(--border)',
           borderRadius: '16px',
           padding: '16px',
           width: '280px'
@@ -144,7 +144,7 @@ function VariantOutline() {
       <div 
         style={{
           backgroundColor: 'transparent',
-          border: '1px solid #D0D5DD',
+          border: '1px solid var(--border)',
           borderRadius: '16px',
           padding: '16px',
           width: '280px'
@@ -176,8 +176,8 @@ function PaddingSm() {
       <div className="text-sm text-gray-600">Padding / Sm</div>
       <div 
         style={{
-          backgroundColor: '#FFFFFF',
-          border: '1px solid #E5E7EB',
+          backgroundColor: "var(--card)",
+          border: '1px solid var(--border)',
           borderRadius: '16px',
           padding: '12px',
           width: '200px'
@@ -196,8 +196,8 @@ function PaddingMd() {
       <div className="text-sm text-gray-600">Padding / Md</div>
       <div 
         style={{
-          backgroundColor: '#FFFFFF',
-          border: '1px solid #E5E7EB',
+          backgroundColor: "var(--card)",
+          border: '1px solid var(--border)',
           borderRadius: '16px',
           padding: '16px',
           width: '200px'
@@ -216,8 +216,8 @@ function PaddingLg() {
       <div className="text-sm text-gray-600">Padding / Lg</div>
       <div 
         style={{
-          backgroundColor: '#FFFFFF',
-          border: '1px solid #E5E7EB',
+          backgroundColor: "var(--card)",
+          border: '1px solid var(--border)',
           borderRadius: '16px',
           padding: '20px',
           width: '200px'
@@ -249,8 +249,8 @@ function StateDefault() {
       <div className="text-sm text-gray-600">State / Default</div>
       <div 
         style={{
-          backgroundColor: '#FFFFFF',
-          border: '1px solid #E5E7EB',
+          backgroundColor: "var(--card)",
+          border: '1px solid var(--border)',
           borderRadius: '16px',
           padding: '16px',
           width: '280px',
@@ -269,8 +269,8 @@ function StateHover() {
       <div className="text-sm text-gray-600">State / Hover</div>
       <div 
         style={{
-          backgroundColor: '#FFFFFF',
-          border: '1px solid #D0D5DD',
+          backgroundColor: "var(--card)",
+          border: '1px solid var(--border)',
           borderRadius: '16px',
           padding: '16px',
           width: '280px',
@@ -298,8 +298,8 @@ function StatePressed() {
       <div className="text-sm text-gray-600">State / Pressed</div>
       <div 
         style={{
-          backgroundColor: '#FFFFFF',
-          border: '1px solid #E5E7EB',
+          backgroundColor: "var(--card)",
+          border: '1px solid var(--border)',
           borderRadius: '16px',
           padding: '16px',
           width: '280px',
@@ -342,8 +342,8 @@ function ExampleProductCardSkeleton() {
       <div className="text-sm text-gray-600">Example / ProductCardSkeleton</div>
       <div 
         style={{
-          backgroundColor: '#FFFFFF',
-          border: '1px solid #E5E7EB',
+          backgroundColor: "var(--card)",
+          border: '1px solid var(--border)',
           borderRadius: '16px',
           width: '320px',
           boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)',
@@ -353,7 +353,7 @@ function ExampleProductCardSkeleton() {
         {/* MediaSlot */}
         <div 
           style={{
-            backgroundColor: '#F3F4F6',
+            backgroundColor: "var(--muted)",
             height: '240px',
             width: '100%'
           }}
@@ -365,7 +365,7 @@ function ExampleProductCardSkeleton() {
           <div style={{ marginBottom: '12px' }}>
             <div 
               style={{
-                backgroundColor: '#F3F4F6',
+                backgroundColor: "var(--muted)",
                 height: '20px',
                 width: '70%',
                 borderRadius: '4px',
@@ -374,7 +374,7 @@ function ExampleProductCardSkeleton() {
             />
             <div 
               style={{
-                backgroundColor: '#F3F4F6',
+                backgroundColor: "var(--muted)",
                 height: '16px',
                 width: '40%',
                 borderRadius: '4px'
@@ -386,7 +386,7 @@ function ExampleProductCardSkeleton() {
           <div style={{ marginBottom: '16px' }}>
             <div 
               style={{
-                backgroundColor: '#F3F4F6',
+                backgroundColor: "var(--muted)",
                 height: '14px',
                 width: '100%',
                 borderRadius: '4px',
@@ -395,7 +395,7 @@ function ExampleProductCardSkeleton() {
             />
             <div 
               style={{
-                backgroundColor: '#F3F4F6',
+                backgroundColor: "var(--muted)",
                 height: '14px',
                 width: '90%',
                 borderRadius: '4px'
@@ -407,7 +407,7 @@ function ExampleProductCardSkeleton() {
           <div>
             <div 
               style={{
-                backgroundColor: '#F3F4F6',
+                backgroundColor: "var(--muted)",
                 height: '36px',
                 width: '100%',
                 borderRadius: '10px'
@@ -433,21 +433,21 @@ function getCardStyles(variant: CardVariant) {
   switch (variant) {
     case 'subtle':
       return {
-        backgroundColor: '#F9FAFB',
-        border: '1px solid #E5E7EB',
+        backgroundColor: "var(--muted)",
+        border: '1px solid var(--border)',
         boxShadow: 'none'
       };
     case 'outline':
       return {
         backgroundColor: 'transparent',
-        border: '1px solid #D0D5DD',
+        border: '1px solid var(--border)',
         boxShadow: 'none'
       };
     case 'elevated':
     default:
       return {
-        backgroundColor: '#FFFFFF',
-        border: '1px solid #E5E7EB',
+        backgroundColor: "var(--card)",
+        border: '1px solid var(--border)',
         boxShadow: '0 1px 2px 0 #1018280A, 0 1px 3px 0 #1018280F'
       };
   }

@@ -25,7 +25,7 @@ export function SpecsAndInBox() {
             <h3
               style={{
                 fontFamily: 'Inter, system-ui, sans-serif',
-                color: '#101828',
+                color: "var(--foreground)",
                 margin: 0
               }}
             >
@@ -54,7 +54,7 @@ export function SpecsAndInBox() {
                         fontSize: '14px',
                         lineHeight: '20px',
                         fontWeight: '600',
-                        color: '#667085'
+                        color: "var(--muted-foreground)"
                       }}
                     >
                       {spec.label}
@@ -65,7 +65,7 @@ export function SpecsAndInBox() {
                         fontSize: '14px',
                         lineHeight: '20px',
                         fontWeight: '400',
-                        color: '#101828'
+                        color: "var(--foreground)"
                       }}
                     >
                       {spec.value}
@@ -97,7 +97,7 @@ export function SpecsAndInBox() {
             <h3
               style={{
                 fontFamily: 'Inter, system-ui, sans-serif',
-                color: '#101828',
+                color: "var(--foreground)",
                 margin: 0
               }}
             >
@@ -119,7 +119,7 @@ export function SpecsAndInBox() {
                     fontSize: '14px',
                     lineHeight: '20px',
                     fontWeight: '400',
-                    color: '#667085'
+                    color: "var(--muted-foreground)"
                   }}
                 >
                   {item}

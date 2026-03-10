@@ -65,7 +65,7 @@ function FlowReferenceCard({
             fontSize: '12px',
             lineHeight: '18px',
             fontWeight: '600',
-            color: '#667085'
+            color: "var(--muted-foreground)"
           }}
         >
           {title}
@@ -76,7 +76,7 @@ function FlowReferenceCard({
             fontSize: '14px',
             lineHeight: '20px',
             fontWeight: '500',
-            color: '#101828'
+            color: "var(--foreground)"
           }}
         >
           {subtitle} next step: CheckoutHandoff overlay

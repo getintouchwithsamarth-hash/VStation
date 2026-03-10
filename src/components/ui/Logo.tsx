@@ -1,7 +1,7 @@
-import logo24 from "./Logo 24.svg";
-import logo32 from "./Logo 32.svg";
-import logo48 from "./Logo 48.svg";
-import logo64 from "./Logo 64.svg";
+import bigLogo from "./Big Logo.svg";
+import logoDark from "./Logo Dark.svg";
+
+const LOGO_VERSION = "2026-03-10-1";
 
 interface LogoProps {
   size?: 24 | 32 | 48 | 64;
@@ -16,12 +16,7 @@ export function Logo({
   showText = true,
   href = "/",
 }: LogoProps) {
-  const logoSrc = {
-    24: logo24,
-    32: logo32,
-    48: logo48,
-    64: logo64,
-  }[size];
+  const logoSrc = variant === "light" ? logoDark : bigLogo;
 
   const textColor = variant === "dark" ? "#101828" : "#FFFFFF";
 
@@ -45,15 +40,15 @@ export function Logo({
         }}
       >
         <img
-          src={logoSrc}
+          src={`${logoSrc}?v=${LOGO_VERSION}`}
           alt="Vibe Station Logo"
+          width={size}
+          height={size}
           style={{
-            width: "100%",
-            height: "100%",
-            filter:
-              variant === "light"
-                ? "brightness(0) saturate(100%) invert(100%)"
-                : "none",
+            width: `${size}px`,
+            height: `${size}px`,
+            objectFit: "contain",
+            display: "block",
           }}
         />
       </div>

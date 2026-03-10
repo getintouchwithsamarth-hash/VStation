@@ -37,7 +37,7 @@ export function CartItemCard({
           style={{
             width: '72px',
             height: '72px',
-            backgroundColor: '#F3F4F6',
+            backgroundColor: "var(--muted)",
             borderRadius: '12px',
             flexShrink: 0,
             overflow: 'hidden'
@@ -71,7 +71,7 @@ export function CartItemCard({
               fontSize: '14px',
               lineHeight: '20px',
               fontWeight: '600',
-              color: '#111827',
+              color: "var(--foreground)",
               fontFamily: 'Inter, system-ui, sans-serif'
             }}
           >
@@ -82,7 +82,7 @@ export function CartItemCard({
               fontSize: '12px',
               lineHeight: '18px',
               fontWeight: '400',
-              color: '#6B7280',
+              color: "var(--muted-foreground)",
               fontFamily: 'Inter, system-ui, sans-serif'
             }}
           >
@@ -93,7 +93,7 @@ export function CartItemCard({
               fontSize: '14px',
               lineHeight: '20px',
               fontWeight: '600',
-              color: '#111827',
+              color: "var(--foreground)",
               fontFamily: 'Inter, system-ui, sans-serif'
             }}
           >
@@ -129,7 +129,7 @@ export function CartItemCard({
                 fontSize: '14px',
                 lineHeight: '20px',
                 fontWeight: '500',
-                color: '#111827',
+                color: "var(--foreground)",
                 fontFamily: 'Inter, system-ui, sans-serif',
                 minWidth: '20px',
                 textAlign: 'center'

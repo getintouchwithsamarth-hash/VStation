@@ -31,7 +31,7 @@ function ShellFooterSlot() {
 
 function Main({ children }: ShellProps) {
   return (
-    <main style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+    <main style={{ flex: 1, backgroundColor: 'var(--background)' }}>
       <Stack gap="0px" style={{ height: '100%' }}>{children}</Stack>
     </main>
   );

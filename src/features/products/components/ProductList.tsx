@@ -36,7 +36,7 @@ export function ProductList() {
             fontSize: '14px',
             lineHeight: '20px',
             fontWeight: '600',
-            color: '#667085',
+            color: "var(--muted-foreground)",
             marginBottom: '16px'
           }}
         >
@@ -88,8 +88,8 @@ function ProductCard({
             }
       }
       style={{
-        backgroundColor: '#FFFFFF',
-        border: isHoverPreview ? '1px solid #D0D5DD' : '1px solid #EAECF0',
+        backgroundColor: "var(--card)",
+        border: isHoverPreview ? '1px solid var(--border)' : '1px solid var(--border)',
         borderRadius: '16px',
         width: '100%',
         height: '460px',
@@ -106,7 +106,7 @@ function ProductCard({
         style={{
           position: 'relative',
           height: '220px',
-          backgroundColor: '#F2F4F7'
+          backgroundColor: "var(--muted)"
         }}
       >
         {product.imageUrl ? (
@@ -161,7 +161,7 @@ function ProductCard({
               paddingRight: '12px',
               borderRadius: '8px',
               backgroundColor: 'transparent',
-              color: '#344054',
+              color: "var(--muted-foreground)",
               fontSize: '14px',
               lineHeight: '20px',
               fontWeight: '600',
@@ -193,7 +193,7 @@ function ProductCard({
             fontSize: '22px',
             lineHeight: '30px',
             fontWeight: '600',
-            color: '#101828',
+            color: "var(--foreground)",
             margin: 0
           }}
         >
@@ -206,7 +206,7 @@ function ProductCard({
             fontSize: '14px',
             lineHeight: '20px',
             fontWeight: '400',
-            color: '#344054',
+            color: "var(--muted-foreground)",
             margin: 0
           }}
         >
@@ -219,7 +219,7 @@ function ProductCard({
             fontSize: '12px',
             lineHeight: '18px',
             fontWeight: '500',
-            color: '#667085'
+            color: "var(--muted-foreground)"
           }}
         >
           {product.featureLine}
@@ -240,7 +240,7 @@ function ProductCard({
               fontSize: '22px',
               lineHeight: '30px',
               fontWeight: '600',
-              color: '#101828'
+              color: "var(--foreground)"
             }}
           >
             {product.priceLabel}
@@ -251,7 +251,7 @@ function ProductCard({
               fontSize: '12px',
               lineHeight: '18px',
               fontWeight: '500',
-              color: '#667085'
+              color: "var(--muted-foreground)"
             }}
           >
             {product.shippingLabel}

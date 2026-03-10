@@ -32,7 +32,7 @@ export function ProductSearch() {
             zIndex: 1,
           }}
         >
-          <Search size={20} color="#667085" strokeWidth={2} />
+          <Search size={20} color="var(--muted-foreground)" strokeWidth={2} />
         </div>
         <input
           type="text"
@@ -41,26 +41,26 @@ export function ProductSearch() {
             width: "100%",
             height: "48px",
             borderRadius: "12px",
-            backgroundColor: "#FFFFFF",
-            border: "1px solid #D0D5DD",
+            backgroundColor: "var(--card)",
+            border: "1px solid var(--border)",
             paddingLeft: "48px",
             paddingRight: "16px",
             fontFamily: "Inter, system-ui, sans-serif",
             fontSize: "16px",
             lineHeight: "24px",
             fontWeight: "400",
-            color: "#101828",
+            color: "var(--foreground)",
             boxShadow: "0 1px 2px 0 rgba(16, 24, 40, 0.05)",
             outline: "none",
             transition: "all 150ms ease",
           }}
           onFocus={(e) => {
-            e.target.style.borderColor = "#6941C6";
+            e.target.style.borderColor = "var(--ring)";
             e.target.style.boxShadow =
               "0 0 0 4px rgba(105, 65, 198, 0.12), 0 1px 2px 0 rgba(16, 24, 40, 0.05)";
           }}
           onBlur={(e) => {
-            e.target.style.borderColor = "#D0D5DD";
+            e.target.style.borderColor = "var(--border)";
             e.target.style.boxShadow = "0 1px 2px 0 rgba(16, 24, 40, 0.05)";
           }}
         />

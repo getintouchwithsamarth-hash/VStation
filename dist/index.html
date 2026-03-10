@@ -4,9 +4,52 @@
     <head>
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Create organizational components</title>
-      <script type="module" crossorigin src="/assets/index-CZGWhcgy.js"></script>
-      <link rel="stylesheet" crossorigin href="/assets/index-ChbIIogc.css">
+      <title>Vibe Station</title>
+      <script>
+        (function () {
+          try {
+            var root = document.documentElement;
+            var stored = localStorage.getItem("theme");
+            var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+            var isDark = stored === "dark" || (stored !== "light" && prefersDark);
+
+            if (isDark) {
+              root.classList.add("dark");
+            } else {
+              root.classList.remove("dark");
+            }
+
+            root.style.colorScheme = isDark ? "dark" : "light";
+          } catch (_error) {
+            // no-op: keep default rendering if storage or media query is unavailable
+          }
+        })();
+      </script>
+      <style>
+        html,
+        body,
+        #root {
+          min-height: 100%;
+        }
+
+        html {
+          background: #ffffff;
+          color: #101828;
+        }
+
+        html.dark {
+          background: #0f0f0f;
+          color: #f5f5f5;
+        }
+
+        body {
+          margin: 0;
+          background: inherit;
+          color: inherit;
+        }
+      </style>
+      <script type="module" crossorigin src="/assets/index-BqQJgOSR.js"></script>
+      <link rel="stylesheet" crossorigin href="/assets/index-BHciN1BN.css">
     </head>
 
     <body>

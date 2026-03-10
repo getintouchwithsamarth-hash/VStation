@@ -4,8 +4,8 @@ export function NextSteps() {
   return (
     <div
       style={{
-        backgroundColor: '#F9FAFB',
-        border: '1px solid #EAECF0',
+        backgroundColor: "var(--muted)",
+        border: '1px solid var(--border)',
         borderRadius: '16px',
         padding: '24px',
         display: 'flex',
@@ -20,7 +20,7 @@ export function NextSteps() {
           fontSize: '18px',
           lineHeight: '28px',
           fontWeight: '600',
-          color: '#101828',
+          color: "var(--foreground)",
           margin: 0
         }}
       >
@@ -41,7 +41,7 @@ export function NextSteps() {
             fontSize: '14px',
             lineHeight: '20px',
             fontWeight: '400',
-            color: '#667085'
+            color: "var(--muted-foreground)"
           }}
         >
           Check email for confirmation
@@ -52,7 +52,7 @@ export function NextSteps() {
             fontSize: '14px',
             lineHeight: '20px',
             fontWeight: '400',
-            color: '#667085'
+            color: "var(--muted-foreground)"
           }}
         >
           Tracking shared on dispatch
@@ -63,7 +63,7 @@ export function NextSteps() {
             fontSize: '14px',
             lineHeight: '20px',
             fontWeight: '400',
-            color: '#667085'
+            color: "var(--muted-foreground)"
           }}
         >
           Support available if needed

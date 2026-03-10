@@ -25,7 +25,7 @@ export function Reviews() {
         <h3
           style={{
             fontFamily: 'Inter, system-ui, sans-serif',
-            color: '#101828',
+            color: "var(--foreground)",
             margin: 0
           }}
         >
@@ -37,7 +37,7 @@ export function Reviews() {
             fontSize: '14px',
             lineHeight: '20px',
             fontWeight: '400',
-            color: '#667085'
+            color: "var(--muted-foreground)"
           }}
         >
           {reviews.supporting}
@@ -86,7 +86,7 @@ export function Reviews() {
                       fontSize: '14px',
                       lineHeight: '20px',
                       fontWeight: '600',
-                      color: '#101828'
+                      color: "var(--foreground)"
                     }}
                   >
                     {review.name}
@@ -97,7 +97,7 @@ export function Reviews() {
                       fontSize: '12px',
                       lineHeight: '18px',
                       fontWeight: '400',
-                      color: '#98A2B3'
+                      color: "var(--muted-foreground)"
                     }}
                   >
                     {review.role}
@@ -112,7 +112,7 @@ export function Reviews() {
                   fontSize: '16px',
                   lineHeight: '24px',
                   fontWeight: '400',
-                  color: '#667085',
+                  color: "var(--muted-foreground)",
                   flex: 1
                 }}
               >
@@ -125,7 +125,7 @@ export function Reviews() {
                   fontSize: '12px',
                   lineHeight: '18px',
                   fontWeight: '400',
-                  color: '#98A2B3'
+                  color: "var(--muted-foreground)"
                 }}
               >
                 {reviews.useCasePrefix} {review.useCase}

@@ -17,19 +17,19 @@ function FontFamilies() {
     <div className="space-y-3">
       <div>
         <div className="text-sm text-gray-600">Display</div>
-        <div className="font-semibold" style={{ fontFamily: 'Inter, -apple-system, SF Pro Display, system-ui, sans-serif' }}>
+        <div className="font-semibold foundation-font-display">
           Inter
         </div>
       </div>
       <div>
         <div className="text-sm text-gray-600">Text</div>
-        <div className="font-semibold" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
+        <div className="font-semibold foundation-font-text">
           Inter
         </div>
       </div>
       <div>
         <div className="text-sm text-gray-600">Mono</div>
-        <div className="font-semibold" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
+        <div className="font-semibold foundation-font-mono">
           JetBrains Mono
         </div>
       </div>
@@ -64,19 +64,25 @@ function TextStyle({
   lineHeight: string; 
   weight: string;
 }) {
+  const styleClassByName: Record<string, string> = {
+    H1: 'foundation-text-style--h1',
+    H2: 'foundation-text-style--h2',
+    H3: 'foundation-text-style--h3',
+    H4: 'foundation-text-style--h4',
+    BodyLg: 'foundation-text-style--body-lg',
+    Body: 'foundation-text-style--body',
+    BodySm: 'foundation-text-style--body-sm',
+    Caption: 'foundation-text-style--caption',
+    Button: 'foundation-text-style--button'
+  };
+  const textStyleClass = styleClassByName[name] ?? 'foundation-text-style--body';
+
   return (
     <div className="space-y-1">
       <div className="text-sm text-gray-600">
         {name} — {size} / {lineHeight}, weight {weight}
       </div>
-      <div 
-        style={{ 
-          fontFamily: 'Inter, system-ui, sans-serif',
-          fontSize: size,
-          lineHeight: lineHeight,
-          fontWeight: weight
-        }}
-      >
+      <div className={textStyleClass}>
         The quick brown fox jumps
       </div>
     </div>
@@ -92,19 +98,19 @@ function LetterSpacing() {
     <div className="space-y-3">
       <div>
         <div className="text-sm text-gray-600">Default</div>
-        <div className="text-lg" style={{ letterSpacing: '0' }}>
+        <div className="text-lg foundation-letter-spacing-default">
           Letter spacing: 0
         </div>
       </div>
       <div>
         <div className="text-sm text-gray-600">Tight</div>
-        <div className="text-lg" style={{ letterSpacing: '-0.01em' }}>
+        <div className="text-lg foundation-letter-spacing-tight">
           Letter spacing: -1%
         </div>
       </div>
       <div>
         <div className="text-sm text-gray-600">Wide</div>
-        <div className="text-lg" style={{ letterSpacing: '0.02em' }}>
+        <div className="text-lg foundation-letter-spacing-wide">
           Letter spacing: +2%
         </div>
       </div>

@@ -4,7 +4,7 @@ import { Stack } from '../components/layout/Stack';
 
 export function NotFound() {
   return (
-    <Section paddingTop="64px" paddingBottom="80px" background="#FCFCFD">
+    <Section paddingTop="64px" paddingBottom="80px" background="var(--card)">
       <Container>
         <PageHeader />
         <PageBody />

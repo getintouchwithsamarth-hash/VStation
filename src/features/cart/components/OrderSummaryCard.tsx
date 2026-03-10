@@ -27,7 +27,7 @@ export function OrderSummaryCard({
             fontSize: '14px',
             lineHeight: '20px',
             fontWeight: '600',
-            color: '#111827',
+            color: "var(--foreground)",
             fontFamily: 'Inter, system-ui, sans-serif'
           }}
         >
@@ -55,7 +55,7 @@ export function OrderSummaryCard({
                 fontSize: '14px',
                 lineHeight: '20px',
                 fontWeight: '400',
-                color: '#6B7280',
+                color: "var(--muted-foreground)",
                 fontFamily: 'Inter, system-ui, sans-serif'
               }}
             >
@@ -66,7 +66,7 @@ export function OrderSummaryCard({
                 fontSize: '14px',
                 lineHeight: '20px',
                 fontWeight: '600',
-                color: '#111827',
+                color: "var(--foreground)",
                 fontFamily: 'Inter, system-ui, sans-serif'
               }}
             >
@@ -87,7 +87,7 @@ export function OrderSummaryCard({
                 fontSize: '14px',
                 lineHeight: '20px',
                 fontWeight: '400',
-                color: '#6B7280',
+                color: "var(--muted-foreground)",
                 fontFamily: 'Inter, system-ui, sans-serif'
               }}
             >
@@ -98,7 +98,7 @@ export function OrderSummaryCard({
                 fontSize: '14px',
                 lineHeight: '20px',
                 fontWeight: '400',
-                color: '#6B7280',
+                color: "var(--muted-foreground)",
                 fontFamily: 'Inter, system-ui, sans-serif'
               }}
             >
@@ -110,7 +110,7 @@ export function OrderSummaryCard({
           <div
             style={{
               height: '1px',
-              backgroundColor: '#E5E7EB'
+              backgroundColor: 'var(--border)'
             }}
           />
 
@@ -127,7 +127,7 @@ export function OrderSummaryCard({
                 fontSize: '14px',
                 lineHeight: '20px',
                 fontWeight: '600',
-                color: '#111827',
+                color: "var(--foreground)",
                 fontFamily: 'Inter, system-ui, sans-serif'
               }}
             >
@@ -139,7 +139,7 @@ export function OrderSummaryCard({
                 fontSize: '18px',
                 lineHeight: '28px',
                 fontWeight: '600',
-                color: '#111827',
+                color: "var(--foreground)",
                 fontFamily: 'Inter, system-ui, sans-serif'
               }}
             >
@@ -156,7 +156,7 @@ export function OrderSummaryCard({
             fontSize: '12px',
             lineHeight: '18px',
             fontWeight: '400',
-            color: '#6B7280',
+            color: "var(--muted-foreground)",
             fontFamily: 'Inter, system-ui, sans-serif'
           }}
         >

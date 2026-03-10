@@ -64,7 +64,7 @@ function Label({ children }: { children: React.ReactNode }) {
         fontSize: "12px",
         lineHeight: "18px",
         fontWeight: "600",
-        color: "#667085",
+        color: "var(--muted-foreground)",
         fontFamily: "Inter, system-ui, sans-serif",
       }}
     >
@@ -95,7 +95,7 @@ function LeadingSlot() {
         left: "12px",
         display: "flex",
         alignItems: "center",
-        color: "#667085",
+        color: "var(--muted-foreground)",
       }}
     />
   );
@@ -122,7 +122,7 @@ function TextValue({
         lineHeight: "20px",
         fontWeight: "400",
         fontFamily: "Inter, system-ui, sans-serif",
-        color: "#101828",
+        color: "var(--foreground)",
         padding: 0,
       }}
     />
@@ -137,7 +137,7 @@ function TrailingSlot() {
         right: "12px",
         display: "flex",
         alignItems: "center",
-        color: "#667085",
+        color: "var(--muted-foreground)",
       }}
     />
   );
@@ -156,7 +156,7 @@ function HelperText({
         fontSize: "12px",
         lineHeight: "18px",
         fontWeight: "400",
-        color: error ? "#D92D20" : "#667085",
+        color: error ? "var(--destructive)" : "var(--muted-foreground)",
         fontFamily: "Inter, system-ui, sans-serif",
       }}
     >
@@ -176,7 +176,7 @@ function FocusRing({ show }: { show?: boolean }) {
         left: "-2px",
         right: "-2px",
         bottom: "-26px", // Offset for helper text
-        border: "2px solid #4F46E5",
+        border: "2px solid var(--ring)",
         borderRadius: "14px",
         pointerEvents: "none",
       }}
@@ -228,8 +228,8 @@ function SizeSm() {
             alignItems: "center",
             paddingLeft: "12px",
             paddingRight: "12px",
-            backgroundColor: "#FFFFFF",
-            border: "1px solid #D0D5DD",
+            backgroundColor: "var(--card)",
+            border: "1px solid var(--border)",
             borderRadius: "10px",
           }}
         >
@@ -254,8 +254,8 @@ function SizeMd() {
             alignItems: "center",
             paddingLeft: "14px",
             paddingRight: "14px",
-            backgroundColor: "#FFFFFF",
-            border: "1px solid #D0D5DD",
+            backgroundColor: "var(--card)",
+            border: "1px solid var(--border)",
             borderRadius: "12px",
           }}
         >
@@ -304,8 +304,8 @@ function VariantDefault() {
             alignItems: "center",
             paddingLeft: "14px",
             paddingRight: "14px",
-            backgroundColor: "#FFFFFF",
-            border: "1px solid #D0D5DD",
+            backgroundColor: "var(--card)",
+            border: "1px solid var(--border)",
             borderRadius: "12px",
           }}
         >
@@ -376,8 +376,8 @@ function StateDefault() {
             alignItems: "center",
             paddingLeft: "14px",
             paddingRight: "14px",
-            backgroundColor: "#FFFFFF",
-            border: "1px solid #D0D5DD",
+            backgroundColor: "var(--card)",
+            border: "1px solid var(--border)",
             borderRadius: "12px",
           }}
         >
@@ -402,8 +402,8 @@ function StateHover() {
             alignItems: "center",
             paddingLeft: "14px",
             paddingRight: "14px",
-            backgroundColor: "#FFFFFF",
-            border: "1px solid #98A2B3", // border-strong
+            backgroundColor: "var(--card)",
+            border: "1px solid var(--border)", // border-strong
             borderRadius: "12px",
           }}
         >
@@ -428,8 +428,8 @@ function StateFocus() {
             alignItems: "center",
             paddingLeft: "14px",
             paddingRight: "14px",
-            backgroundColor: "#FFFFFF",
-            border: "1px solid #4F46E5", // border-focus
+            backgroundColor: "var(--card)",
+            border: "1px solid var(--ring)", // border-focus
             borderRadius: "12px",
             position: "relative",
           }}
@@ -456,8 +456,8 @@ function StateError() {
             alignItems: "center",
             paddingLeft: "14px",
             paddingRight: "14px",
-            backgroundColor: "#FFFFFF",
-            border: "1px solid #F04438", // error-500
+            backgroundColor: "var(--card)",
+            border: "1px solid var(--destructive)",
             borderRadius: "12px",
           }}
         >
@@ -482,8 +482,8 @@ function StateDisabled() {
             alignItems: "center",
             paddingLeft: "14px",
             paddingRight: "14px",
-            backgroundColor: "#FFFFFF",
-            border: "1px solid #D0D5DD",
+            backgroundColor: "var(--card)",
+            border: "1px solid var(--border)",
             borderRadius: "12px",
             opacity: 0.4,
           }}
@@ -629,8 +629,8 @@ export function InputInstance({
   const paddingX = size === "sm" ? "12px" : "14px";
   const borderRadius = size === "sm" ? "10px" : "12px";
 
-  let borderColor = "#D0D5DD"; // border-default
-  if (error) borderColor = "#F04438"; // error-500
+  let borderColor = "var(--border)"; // border-default
+  if (error) borderColor = "var(--destructive)";
 
   return (
     <FieldContainer>
@@ -644,7 +644,7 @@ export function InputInstance({
             alignItems: "center",
             paddingLeft: paddingX,
             paddingRight: paddingX,
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "var(--card)",
             border: `1px solid ${borderColor}`,
             borderRadius: borderRadius,
             opacity: disabled ? 0.4 : 1,

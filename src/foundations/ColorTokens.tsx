@@ -45,12 +45,11 @@ function Primitives() {
 }
 
 function ColorSwatch({ name, hex }: { name: string; hex: string }) {
+  const swatchClassName = `foundation-color-swatch foundation-color-swatch--${name}`;
+
   return (
     <div className="flex items-center gap-3">
-      <div 
-        className="w-16 h-16 border border-gray-200 rounded"
-        style={{ backgroundColor: hex }}
-      />
+      <div className={swatchClassName} />
       <div>
         <div className="font-medium">{name}</div>
         <div className="text-sm text-gray-600">{hex}</div>

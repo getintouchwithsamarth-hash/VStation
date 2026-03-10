@@ -1,0 +1,159 @@
+.foundation-color-swatch {
+  width: 4rem;
+  height: 4rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.25rem;
+}
+
+.foundation-color-swatch--neutral-0 { background-color: #ffffff; }
+.foundation-color-swatch--neutral-25 { background-color: #fcfcfd; }
+.foundation-color-swatch--neutral-50 { background-color: #f9fafb; }
+.foundation-color-swatch--neutral-100 { background-color: #f2f4f7; }
+.foundation-color-swatch--neutral-200 { background-color: #eaecf0; }
+.foundation-color-swatch--neutral-300 { background-color: #d0d5dd; }
+.foundation-color-swatch--neutral-400 { background-color: #98a2b3; }
+.foundation-color-swatch--neutral-500 { background-color: #667085; }
+.foundation-color-swatch--neutral-600 { background-color: #475467; }
+.foundation-color-swatch--neutral-700 { background-color: #344054; }
+.foundation-color-swatch--neutral-800 { background-color: #1d2939; }
+.foundation-color-swatch--neutral-900 { background-color: #101828; }
+.foundation-color-swatch--accent-500 { background-color: #4f46e5; }
+.foundation-color-swatch--accent-600 { background-color: #4338ca; }
+.foundation-color-swatch--accent-700 { background-color: #3730a3; }
+.foundation-color-swatch--success-50 { background-color: #ecfdf3; }
+.foundation-color-swatch--success-500 { background-color: #12b76a; }
+.foundation-color-swatch--success-600 { background-color: #039855; }
+.foundation-color-swatch--warning-50 { background-color: #fffaeb; }
+.foundation-color-swatch--warning-500 { background-color: #f79009; }
+.foundation-color-swatch--warning-600 { background-color: #dc6803; }
+.foundation-color-swatch--error-50 { background-color: #fef3f2; }
+.foundation-color-swatch--error-500 { background-color: #f04438; }
+.foundation-color-swatch--error-600 { background-color: #d92d20; }
+.foundation-color-swatch--surface-canvas { background-color: #ffffff; }
+.foundation-color-swatch--surface-subtle { background-color: #fcfcfd; }
+.foundation-color-swatch--surface-muted { background-color: #f9fafb; }
+.foundation-color-swatch--surface-elevated { background-color: #ffffff; }
+.foundation-color-swatch--surface-inverse { background-color: #101828; }
+.foundation-color-swatch--text-primary { background-color: #101828; }
+.foundation-color-swatch--text-secondary { background-color: #344054; }
+.foundation-color-swatch--text-muted { background-color: #667085; }
+.foundation-color-swatch--text-inverse { background-color: #ffffff; }
+.foundation-color-swatch--text-link { background-color: #4338ca; }
+.foundation-color-swatch--border-subtle { background-color: #eaecf0; }
+.foundation-color-swatch--border-default { background-color: #d0d5dd; }
+.foundation-color-swatch--border-strong { background-color: #98a2b3; }
+.foundation-color-swatch--border-focus { background-color: #4f46e5; }
+.foundation-color-swatch--overlay-hover { background-color: #0000000f; }
+.foundation-color-swatch--overlay-pressed { background-color: #0000001f; }
+.foundation-color-swatch--overlay-scrim { background-color: #00000066; }
+.foundation-color-swatch--accent-subtle { background-color: #4f46e50f; }
+
+.foundation-shadow-box {
+  width: 120px;
+  height: 80px;
+  background-color: #ffffff;
+  border-radius: 8px;
+}
+
+.foundation-shadow-box--none {
+  border: 1px solid #e5e7eb;
+}
+
+.foundation-shadow-box--1 {
+  box-shadow: 0 1px 2px 0 #1018280a, 0 1px 3px 0 #1018280f;
+}
+
+.foundation-shadow-box--2 {
+  box-shadow: 0 4px 10px -2px #1018280a, 0 2px 6px -2px #10182814;
+}
+
+.foundation-shadow-box--3 {
+  box-shadow: 0 12px 24px -4px #1018280f, 0 6px 12px -4px #10182814;
+}
+
+.foundation-font-display {
+  font-family: Inter, -apple-system, SF Pro Display, system-ui, sans-serif;
+}
+
+.foundation-font-text {
+  font-family: Inter, system-ui, sans-serif;
+}
+
+.foundation-font-mono {
+  font-family: JetBrains Mono, monospace;
+}
+
+.foundation-text-style--h1 {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 48px;
+  line-height: 56px;
+  font-weight: 600;
+}
+
+.foundation-text-style--h2 {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 36px;
+  line-height: 44px;
+  font-weight: 600;
+}
+
+.foundation-text-style--h3 {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 28px;
+  line-height: 36px;
+  font-weight: 600;
+}
+
+.foundation-text-style--h4 {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 22px;
+  line-height: 30px;
+  font-weight: 600;
+}
+
+.foundation-text-style--body-lg {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 400;
+}
+
+.foundation-text-style--body {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+}
+
+.foundation-text-style--body-sm {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+}
+
+.foundation-text-style--caption {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 500;
+}
+
+.foundation-text-style--button {
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+}
+
+.foundation-letter-spacing-default {
+  letter-spacing: 0;
+}
+
+.foundation-letter-spacing-tight {
+  letter-spacing: -0.01em;
+}
+
+.foundation-letter-spacing-wide {
+  letter-spacing: 0.02em;
+}

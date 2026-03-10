@@ -72,8 +72,8 @@ function SizeSm() {
           paddingRight: '10px',
           borderRadius: '999px',
           gap: '8px',
-          backgroundColor: '#FCFCFD',
-          border: '1px solid #EAECF0',
+          backgroundColor: "var(--card)",
+          border: '1px solid var(--border)',
           display: 'inline-flex',
           alignItems: 'center'
         }}
@@ -83,7 +83,7 @@ function SizeSm() {
             width: '6px',
             height: '6px',
             borderRadius: '50%',
-            backgroundColor: '#98A2B3'
+            backgroundColor: 'var(--muted-foreground)'
           }}
         />
         <span
@@ -92,7 +92,7 @@ function SizeSm() {
             fontSize: '12px',
             lineHeight: '18px',
             fontWeight: '500',
-            color: '#344054'
+            color: "var(--muted-foreground)"
           }}
         >
           Badge label
@@ -114,8 +114,8 @@ function SizeMd() {
           paddingRight: '12px',
           borderRadius: '999px',
           gap: '8px',
-          backgroundColor: '#FCFCFD',
-          border: '1px solid #EAECF0',
+          backgroundColor: "var(--card)",
+          border: '1px solid var(--border)',
           display: 'inline-flex',
           alignItems: 'center'
         }}
@@ -125,7 +125,7 @@ function SizeMd() {
             width: '6px',
             height: '6px',
             borderRadius: '50%',
-            backgroundColor: '#98A2B3'
+            backgroundColor: 'var(--muted-foreground)'
           }}
         />
         <span
@@ -134,7 +134,7 @@ function SizeMd() {
             fontSize: '14px',
             lineHeight: '20px',
             fontWeight: '600',
-            color: '#344054'
+            color: "var(--muted-foreground)"
           }}
         >
           Badge label
@@ -168,8 +168,8 @@ function VariantNeutral() {
           paddingRight: '12px',
           borderRadius: '999px',
           gap: '8px',
-          backgroundColor: '#FCFCFD',
-          border: '1px solid #EAECF0',
+          backgroundColor: "var(--card)",
+          border: '1px solid var(--border)',
           display: 'inline-flex',
           alignItems: 'center'
         }}
@@ -179,7 +179,7 @@ function VariantNeutral() {
             width: '6px',
             height: '6px',
             borderRadius: '50%',
-            backgroundColor: '#98A2B3'
+            backgroundColor: 'var(--muted-foreground)'
           }}
         />
         <span
@@ -188,7 +188,7 @@ function VariantNeutral() {
             fontSize: '14px',
             lineHeight: '20px',
             fontWeight: '600',
-            color: '#344054'
+            color: "var(--muted-foreground)"
           }}
         >
           Neutral badge
@@ -210,8 +210,8 @@ function VariantAccent() {
           paddingRight: '12px',
           borderRadius: '999px',
           gap: '8px',
-          backgroundColor: '#4F46E50F',
-          border: '1px solid #EAECF0',
+          backgroundColor: 'var(--accent)',
+          border: '1px solid var(--border)',
           display: 'inline-flex',
           alignItems: 'center'
         }}
@@ -221,7 +221,7 @@ function VariantAccent() {
             width: '6px',
             height: '6px',
             borderRadius: '50%',
-            backgroundColor: '#4338CA'
+            backgroundColor: 'var(--primary)'
           }}
         />
         <span
@@ -230,7 +230,7 @@ function VariantAccent() {
             fontSize: '14px',
             lineHeight: '20px',
             fontWeight: '600',
-            color: '#101828'
+            color: "var(--foreground)"
           }}
         >
           Accent badge
@@ -263,8 +263,8 @@ function StateDefault() {
           paddingRight: '12px',
           borderRadius: '999px',
           gap: '8px',
-          backgroundColor: '#FCFCFD',
-          border: '1px solid #EAECF0',
+          backgroundColor: "var(--card)",
+          border: '1px solid var(--border)',
           display: 'inline-flex',
           alignItems: 'center'
         }}
@@ -274,7 +274,7 @@ function StateDefault() {
             width: '6px',
             height: '6px',
             borderRadius: '50%',
-            backgroundColor: '#98A2B3'
+            backgroundColor: 'var(--muted-foreground)'
           }}
         />
         <span
@@ -283,7 +283,7 @@ function StateDefault() {
             fontSize: '14px',
             lineHeight: '20px',
             fontWeight: '600',
-            color: '#344054'
+            color: "var(--muted-foreground)"
           }}
         >
           Default state
@@ -324,14 +324,14 @@ export function BadgeInstance({
 
   const variantStyles = variant === 'neutral'
     ? {
-        backgroundColor: '#FCFCFD',
-        dotColor: '#98A2B3',
-        textColor: '#344054'
+        backgroundColor: "var(--card)",
+        dotColor: 'var(--muted-foreground)',
+        textColor: 'var(--foreground)'
       }
     : {
-        backgroundColor: '#4F46E50F',
-        dotColor: '#4338CA',
-        textColor: '#101828'
+        backgroundColor: 'var(--accent)',
+        dotColor: 'var(--primary)',
+        textColor: 'var(--accent-foreground)'
       };
 
   return (
@@ -343,7 +343,7 @@ export function BadgeInstance({
         borderRadius: '999px',
         gap: '8px',
         backgroundColor: variantStyles.backgroundColor,
-        border: '1px solid #EAECF0',
+        border: '1px solid var(--border)',
         display: 'inline-flex',
         alignItems: 'center'
       }}

@@ -65,7 +65,7 @@ function Gallery() {
                 style={{
                   width: '100%',
                   height: '100%',
-                  backgroundColor: '#F9FAFB'
+                  backgroundColor: "var(--muted)"
                 }}
               />
             )}
@@ -116,12 +116,12 @@ function Gallery() {
                   width: '88px',
                   height: '88px',
                   borderRadius: '12px',
-                  border: index === activeImageIndex ? '2px solid #4F46E5' : '1px solid #E5E7EB',
+                  border: index === activeImageIndex ? '2px solid var(--ring)' : '1px solid var(--border)',
                   flexShrink: 0,
                   cursor: 'pointer',
                   padding: 0,
                   overflow: 'hidden',
-                  backgroundColor: '#F9FAFB'
+                  backgroundColor: "var(--muted)"
                 }}
               >
                 <img
@@ -143,8 +143,8 @@ function Gallery() {
                   width: '88px',
                   height: '88px',
                   borderRadius: '12px',
-                  backgroundColor: '#F9FAFB',
-                  border: i === 1 ? '2px solid #4F46E5' : '1px solid #E5E7EB',
+                  backgroundColor: "var(--muted)",
+                  border: i === 1 ? '2px solid var(--ring)' : '1px solid var(--border)',
                   flexShrink: 0
                 }}
               />
@@ -170,7 +170,7 @@ function BuyBox() {
           <h2
             style={{
               fontFamily: 'Inter, system-ui, sans-serif',
-              color: '#101828',
+              color: "var(--foreground)",
               margin: 0
             }}
           >
@@ -183,7 +183,7 @@ function BuyBox() {
               fontSize: '16px',
               lineHeight: '24px',
               fontWeight: '400',
-              color: '#667085'
+              color: "var(--muted-foreground)"
             }}
           >
             {productMain.buyBox.descriptor}
@@ -196,14 +196,14 @@ function BuyBox() {
               alignItems: 'center',
               paddingTop: '8px',
               paddingBottom: '8px',
-              borderTop: '1px solid #F3F4F6',
-              borderBottom: '1px solid #F3F4F6'
+              borderTop: '1px solid var(--border)',
+              borderBottom: '1px solid var(--border)'
             }}
           >
             <h3
               style={{
                 fontFamily: 'Inter, system-ui, sans-serif',
-                color: '#101828',
+                color: "var(--foreground)",
                 margin: 0
               }}
             >
@@ -237,7 +237,7 @@ function BuyBox() {
                   fontSize: '14px',
                   lineHeight: '20px',
                   fontWeight: '400',
-                  color: '#667085'
+                  color: "var(--muted-foreground)"
                 }}
               >
                 • {feature}
@@ -269,9 +269,9 @@ function BuyBox() {
               fontSize: '12px',
               lineHeight: '18px',
               fontWeight: '400',
-              color: '#98A2B3',
+              color: "var(--muted-foreground)",
               paddingTop: '8px',
-              borderTop: '1px solid #F3F4F6'
+              borderTop: '1px solid var(--border)'
             }}
           >
             {productMain.buyBox.microLine}
@@ -287,7 +287,7 @@ function BuyBox() {
               fontSize: '14px',
               lineHeight: '20px',
               fontWeight: '600',
-              color: '#101828'
+              color: "var(--foreground)"
             }}
           >
             {productMain.buyBox.inBoxTitle}
@@ -298,7 +298,7 @@ function BuyBox() {
               fontSize: '14px',
               lineHeight: '20px',
               fontWeight: '400',
-              color: '#667085'
+              color: "var(--muted-foreground)"
             }}
           >
             {productMain.buyBox.inBoxLine}

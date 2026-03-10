@@ -7,7 +7,7 @@ export function FeaturedDrop() {
   const { featuredDrop } = useHomeMockData();
 
   return (
-    <Section paddingTop="56px" paddingBottom="56px" background="#FFFFFF">
+    <Section paddingTop="56px" paddingBottom="56px" background="var(--background)">
       <Container>
         <div
           style={{
@@ -25,7 +25,7 @@ export function FeaturedDrop() {
                   fontSize: '12px',
                   lineHeight: '18px',
                   fontWeight: '500',
-                  color: '#667085'
+                  color: "var(--muted-foreground)"
                 }}
               >
                 {featuredDrop.eyebrow}
@@ -37,7 +37,7 @@ export function FeaturedDrop() {
                   fontSize: '36px',
                   lineHeight: '44px',
                   fontWeight: '600',
-                  color: '#101828',
+                  color: "var(--foreground)",
                   margin: 0
                 }}
               >
@@ -50,7 +50,7 @@ export function FeaturedDrop() {
                   fontSize: '18px',
                   lineHeight: '28px',
                   fontWeight: '400',
-                  color: '#344054',
+                  color: "var(--muted-foreground)",
                   maxWidth: '480px',
                   margin: 0
                 }}
@@ -74,8 +74,8 @@ export function FeaturedDrop() {
           <div style={{ flex: '0 0 55%' }}>
             <div
               style={{
-                backgroundColor: '#FFFFFF',
-                border: '1px solid #EAECF0',
+                backgroundColor: "var(--card)",
+                border: '1px solid var(--border)',
                 borderRadius: '16px',
                 width: '560px',
                 height: '360px',
@@ -85,7 +85,7 @@ export function FeaturedDrop() {
             >
               <div
                 style={{
-                  backgroundColor: '#F2F4F7',
+                  backgroundColor: "var(--muted)",
                   height: '200px',
                   width: '100%'
                 }}
@@ -119,7 +119,7 @@ export function FeaturedDrop() {
                         fontSize: '22px',
                         lineHeight: '30px',
                         fontWeight: '600',
-                        color: '#101828'
+                        color: "var(--foreground)"
                       }}
                     >
                       {featuredDrop.productName}
@@ -130,7 +130,7 @@ export function FeaturedDrop() {
                         fontSize: '22px',
                         lineHeight: '30px',
                         fontWeight: '600',
-                        color: '#101828'
+                        color: "var(--foreground)"
                       }}
                     >
                       {featuredDrop.productPrice}
@@ -143,7 +143,7 @@ export function FeaturedDrop() {
                       fontSize: '14px',
                       lineHeight: '20px',
                       fontWeight: '400',
-                      color: '#344054',
+                      color: "var(--muted-foreground)",
                       margin: 0
                     }}
                   >
@@ -156,7 +156,7 @@ export function FeaturedDrop() {
                       fontSize: '14px',
                       lineHeight: '20px',
                       fontWeight: '400',
-                      color: '#667085'
+                      color: "var(--muted-foreground)"
                     }}
                   >
                     {featuredDrop.featureLine}
@@ -209,12 +209,12 @@ function ButtonSecondary({ label }: { label: string }) {
         paddingLeft: '16px',
         paddingRight: '16px',
         borderRadius: '12px',
-        backgroundColor: '#FFFFFF',
-        color: '#101828',
+        backgroundColor: "var(--card)",
+        color: "var(--foreground)",
         fontSize: '14px',
         lineHeight: '20px',
         fontWeight: '600',
-        border: '1px solid #D0D5DD',
+        border: '1px solid var(--border)',
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',

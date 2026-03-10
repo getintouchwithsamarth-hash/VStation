@@ -31,12 +31,12 @@ export function ProductDetail() {
 function PageHeader() {
   return (
     <Stack gap="0px">
-      <Section paddingTop="24px" paddingBottom="16px" background="#FCFCFD">
+      <Section paddingTop="24px" paddingBottom="16px" background="var(--card)">
         <Container>
           <BreadcrumbRow />
         </Container>
       </Section>
-      <Section paddingTop="16px" paddingBottom="32px" background="#FCFCFD">
+      <Section paddingTop="16px" paddingBottom="32px" background="var(--card)">
         <Container>
           <ProductTitleBlock />
         </Container>
@@ -48,42 +48,42 @@ function PageHeader() {
 function PageBody() {
   return (
     <Stack gap="0px">
-      <Section paddingTop="24px" paddingBottom="48px" background="#FFFFFF">
+      <Section paddingTop="24px" paddingBottom="48px" background="var(--background)">
         <Container>
           <ProductMain />
         </Container>
       </Section>
-      <Section paddingTop="48px" paddingBottom="48px" background="#FCFCFD">
+      <Section paddingTop="48px" paddingBottom="48px" background="var(--card)">
         <Container>
           <KeyBenefits />
         </Container>
       </Section>
-      <Section paddingTop="48px" paddingBottom="48px" background="#FFFFFF">
+      <Section paddingTop="48px" paddingBottom="48px" background="var(--background)">
         <Container>
           <FeatureDeepDive />
         </Container>
       </Section>
-      <Section paddingTop="48px" paddingBottom="48px" background="#FCFCFD">
+      <Section paddingTop="48px" paddingBottom="48px" background="var(--card)">
         <Container>
           <SpecsAndInBox />
         </Container>
       </Section>
-      <Section paddingTop="48px" paddingBottom="48px" background="#FFFFFF">
+      <Section paddingTop="48px" paddingBottom="48px" background="var(--background)">
         <Container>
           <DeliveryAndReturns />
         </Container>
       </Section>
-      <Section paddingTop="48px" paddingBottom="48px" background="#FCFCFD">
+      <Section paddingTop="48px" paddingBottom="48px" background="var(--card)">
         <Container>
           <Reviews />
         </Container>
       </Section>
-      <Section paddingTop="48px" paddingBottom="56px" background="#FFFFFF">
+      <Section paddingTop="48px" paddingBottom="56px" background="var(--background)">
         <Container>
           <RelatedProducts />
         </Container>
       </Section>
-      <Section paddingTop="0px" paddingBottom="56px" background="#FFFFFF">
+      <Section paddingTop="0px" paddingBottom="56px" background="var(--background)">
         <Container>
           <StickyCtaRail />
         </Container>

@@ -26,7 +26,7 @@ export function RelatedProducts() {
         <h3
           style={{
             fontFamily: 'Inter, system-ui, sans-serif',
-            color: '#101828',
+            color: "var(--foreground)",
             margin: 0
           }}
         >
@@ -64,7 +64,7 @@ export function RelatedProducts() {
                     style={{
                       width: '100%',
                       height: '100%',
-                      backgroundColor: '#F9FAFB'
+                      backgroundColor: "var(--muted)"
                     }}
                   />
                 )}
@@ -98,7 +98,7 @@ export function RelatedProducts() {
               <h4
                 style={{
                   fontFamily: 'Inter, system-ui, sans-serif',
-                  color: '#101828',
+                  color: "var(--foreground)",
                   margin: 0
                 }}
               >
@@ -111,7 +111,7 @@ export function RelatedProducts() {
                   fontSize: '14px',
                   lineHeight: '20px',
                   fontWeight: '400',
-                  color: '#667085'
+                  color: "var(--muted-foreground)"
                 }}
               >
                 {item.descriptor}
@@ -123,7 +123,7 @@ export function RelatedProducts() {
                   fontSize: '12px',
                   lineHeight: '18px',
                   fontWeight: '400',
-                  color: '#98A2B3'
+                  color: "var(--muted-foreground)"
                 }}
               >
                 {item.featureLine}
@@ -132,7 +132,7 @@ export function RelatedProducts() {
               <h4
                 style={{
                   fontFamily: 'Inter, system-ui, sans-serif',
-                  color: '#101828',
+                  color: "var(--foreground)",
                   margin: 0
                 }}
               >
