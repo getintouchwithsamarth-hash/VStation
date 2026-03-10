@@ -103,6 +103,18 @@ function FooterNavSlot() {
         >
           Community
         </a>
+        <a
+          href="/privacy"
+          style={{
+            fontSize: '14px',
+            lineHeight: '20px',
+            fontWeight: '500',
+            color: '#344054',
+            textDecoration: 'none'
+          }}
+        >
+          Privacy Policy
+        </a>
       </Stack>
     </Stack>
   );
