@@ -1,9 +1,23 @@
 import { ButtonInstance } from "../../../components/ui/Button";
 import { Search } from "lucide-react";
 
-export function ProductSearch() {
+export function ProductSearch({
+  query,
+  onQueryChange,
+  onSearch,
+  isSearching = false
+}: {
+  query: string;
+  onQueryChange: (value: string) => void;
+  onSearch: () => void;
+  isSearching?: boolean;
+}) {
   return (
-    <div
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        onSearch();
+      }}
       style={{
         display: "flex",
         flexDirection: "row",
@@ -37,6 +51,8 @@ export function ProductSearch() {
         <input
           type="text"
           placeholder="Search curated gear…"
+          value={query}
+          onChange={(event) => onQueryChange(event.target.value)}
           style={{
             width: "100%",
             height: "48px",
@@ -54,6 +70,7 @@ export function ProductSearch() {
             outline: "none",
             transition: "all 150ms ease",
           }}
+          aria-label="Search products"
           onFocus={(e) => {
             e.target.style.borderColor = "var(--ring)";
             e.target.style.boxShadow =
@@ -67,7 +84,7 @@ export function ProductSearch() {
       </div>
 
       {/* Search button */}
-      <ButtonInstance variant="primary" size="md" label="Search" />
-    </div>
+      <ButtonInstance variant="primary" size="md" label={isSearching ? "Searching..." : "Search"} disabled={isSearching} />
+    </form>
   );
 }

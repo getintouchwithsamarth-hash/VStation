@@ -2,12 +2,9 @@ import { BadgeInstance } from '../../../components/ui/Badge';
 import { ButtonInstance } from '../../../components/ui/Button';
 import { toast } from 'sonner';
 import type { Product } from '../types';
-import { useProductList } from '../hooks';
 import { useCart } from '../../cart/CartContext';
 
-export function ProductList() {
-  const { products, hoverPreviewProduct } = useProductList();
-
+export function ProductList({ products }: { products: Product[] }) {
   return (
     <div
       style={{
@@ -23,30 +20,24 @@ export function ProductList() {
           gap: '16px'
         }}
       >
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+        {products.length > 0 ? (
+          products.map((product) => <ProductCard key={product.id} product={product} />)
+        ) : (
+          <div
+            style={{
+              gridColumn: '1 / -1',
+              border: '1px solid var(--border)',
+              borderRadius: '16px',
+              backgroundColor: 'var(--card)',
+              padding: '24px',
+              fontFamily: 'Inter, system-ui, sans-serif',
+              color: 'var(--muted-foreground)'
+            }}
+          >
+            No products matched your search.
+          </div>
+        )}
       </div>
-
-      {hoverPreviewProduct ? (
-        <div style={{ marginTop: '32px' }}>
-        <div
-          style={{
-            fontFamily: 'Inter, system-ui, sans-serif',
-            fontSize: '14px',
-            lineHeight: '20px',
-            fontWeight: '600',
-            color: "var(--muted-foreground)",
-            marginBottom: '16px'
-          }}
-        >
-          Hover Example
-        </div>
-        <div style={{ maxWidth: '360px' }}>
-          <ProductCard product={hoverPreviewProduct} isHoverPreview />
-        </div>
-      </div>
-      ) : null}
     </div>
   );
 }
@@ -207,7 +198,11 @@ function ProductCard({
             lineHeight: '20px',
             fontWeight: '400',
             color: "var(--muted-foreground)",
-            margin: 0
+            margin: 0,
+            display: '-webkit-box',
+            WebkitLineClamp: 4,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden'
           }}
         >
           {product.descriptor}

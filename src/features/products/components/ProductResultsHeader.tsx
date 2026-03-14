@@ -1,7 +1,7 @@
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 
-export function ProductResultsHeader() {
+export function ProductResultsHeader({ resultCount }: { resultCount: number }) {
   const [sortOpen, setSortOpen] = useState(false);
   const [selectedSort, setSelectedSort] = useState("Recommended");
   const sortOptions = [
@@ -31,7 +31,7 @@ export function ProductResultsHeader() {
           color: "var(--muted-foreground)",
         }}
       >
-        Showing <span style={{ fontWeight: "600", color: "var(--foreground)" }}>12</span>{" "}
+        Showing <span style={{ fontWeight: "600", color: "var(--foreground)" }}>{resultCount}</span>{" "}
         results
       </div>
 

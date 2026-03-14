@@ -132,6 +132,63 @@ export function SpecsAndInBox() {
             </div>
           </div>
         </CardInstance>
+
+        <div style={{ height: '24px' }} />
+
+        <CardInstance variant="subtle" padding="lg">
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '12px'
+            }}
+          >
+            <h3
+              style={{
+                fontFamily: 'Inter, system-ui, sans-serif',
+                color: 'var(--foreground)',
+                margin: 0
+              }}
+            >
+              {specsAndInBox.productDetailsTitle}
+            </h3>
+
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px'
+              }}
+            >
+              {specsAndInBox.productDetails.map((detail) => (
+                <div key={detail.label}>
+                  <div
+                    style={{
+                      fontFamily: 'Inter, system-ui, sans-serif',
+                      fontSize: '12px',
+                      lineHeight: '18px',
+                      fontWeight: '600',
+                      color: 'var(--muted-foreground)'
+                    }}
+                  >
+                    {detail.label}
+                  </div>
+                  <div
+                    style={{
+                      fontFamily: 'Inter, system-ui, sans-serif',
+                      fontSize: '14px',
+                      lineHeight: '20px',
+                      fontWeight: '400',
+                      color: 'var(--foreground)'
+                    }}
+                  >
+                    {detail.value}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </CardInstance>
       </div>
     </div>
   );

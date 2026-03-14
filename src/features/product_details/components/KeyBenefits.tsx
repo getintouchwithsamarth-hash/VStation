@@ -6,6 +6,10 @@ import { useProductDetailMockData } from '../hooks/useProductDetailMockData';
 export function KeyBenefits() {
   const { keyBenefits } = useProductDetailMockData();
 
+  if (keyBenefits.cards.length === 0) {
+    return null;
+  }
+
   return (
     <Stack direction="vertical" gap={16}>
       <div style={{ textAlign: 'center' }}>
@@ -40,31 +44,35 @@ export function KeyBenefits() {
               >
                 {card.title}
               </h4>
-              <div
-                style={{
-                  fontFamily: 'Inter, system-ui, sans-serif',
-                  fontSize: '14px',
-                  lineHeight: '20px',
-                  fontWeight: '400',
-                  color: "var(--muted-foreground)",
-                  flex: 1
-                }}
-              >
-                {card.description}
-              </div>
-              <div
-                style={{
-                  fontFamily: 'Inter, system-ui, sans-serif',
-                  fontSize: '12px',
-                  lineHeight: '18px',
-                  fontWeight: '400',
-                  color: "var(--muted-foreground)",
-                  paddingTop: '8px',
-                  borderTop: '1px solid var(--border)'
-                }}
-              >
-                {card.footer}
-              </div>
+              {card.description ? (
+                <div
+                  style={{
+                    fontFamily: 'Inter, system-ui, sans-serif',
+                    fontSize: '14px',
+                    lineHeight: '20px',
+                    fontWeight: '400',
+                    color: "var(--muted-foreground)",
+                    flex: 1
+                  }}
+                >
+                  {card.description}
+                </div>
+              ) : null}
+              {card.footer ? (
+                <div
+                  style={{
+                    fontFamily: 'Inter, system-ui, sans-serif',
+                    fontSize: '12px',
+                    lineHeight: '18px',
+                    fontWeight: '400',
+                    color: "var(--muted-foreground)",
+                    paddingTop: '8px',
+                    borderTop: '1px solid var(--border)'
+                  }}
+                >
+                  {card.footer}
+                </div>
+              ) : null}
             </Stack>
           </CardInstance>
         ))}

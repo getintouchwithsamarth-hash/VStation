@@ -6,6 +6,8 @@ import {
 } from '../../../lib/shopify';
 import type { Product } from '../types';
 
+const PRODUCT_CARD_DESCRIPTION_LIMIT = 120;
+
 const formatPriceLabel = (amount: string, currencyCode: string): string => {
   const numericAmount = Number.parseFloat(amount);
   if (!Number.isFinite(numericAmount)) {
@@ -53,8 +55,18 @@ const getDefaultVariantId = (product: ShopifyProduct): string | null => {
   return availableVariant?.id || product.variants?.edges[0]?.node.id || null;
 };
 
+const truncateProductCardText = (value: string, maxLength = PRODUCT_CARD_DESCRIPTION_LIMIT): string => {
+  const normalized = value.replace(/\s+/g, ' ').trim();
+  if (normalized.length <= maxLength) {
+    return normalized;
+  }
+
+  return `${normalized.slice(0, maxLength).trimEnd()}...`;
+};
+
 const mapShopifyProduct = (product: ShopifyProduct): Product => {
-  const descriptor = product.shortDescription?.value || product.description || 'Curated by Vibe Station';
+  const descriptorSource = product.shortDescription?.value || product.description || 'Curated by Vibe Station';
+  const descriptor = truncateProductCardText(descriptorSource);
   const featureLine = product.featureLine?.value || product.tags.slice(0, 3).join(' · ') || 'Durable build';
   const shippingLabel = product.shippingInfo?.value || 'Shipping calculated at checkout';
   const badgeLabel = product.badge?.value || product.tags[0] || 'Curated';
@@ -82,54 +94,91 @@ const mapShopifyProduct = (product: ShopifyProduct): Product => {
 let productListCache: Product[] = [];
 let productListResolved = false;
 let productListPromise: Promise<void> | null = null;
+const productSearchCache = new Map<string, Product[]>();
+const productSearchResolved = new Set<string>();
+const productSearchPromises = new Map<string, Promise<void>>();
 
-const loadProductListFromShopify = async () => {
-  if (productListPromise) {
+const normalizeSearchQuery = (query?: string): string => query?.trim() ?? '';
+
+const loadProductListFromShopify = async (rawQuery?: string) => {
+  const query = normalizeSearchQuery(rawQuery);
+  if (!query) {
+    if (productListPromise) {
+      return productListPromise;
+    }
+
+    productListPromise = (async () => {
+      try {
+        const result = await getProducts({ first: 24 });
+        productListCache = result.edges.map((edge) => mapShopifyProduct(edge.node));
+      } catch (error) {
+        console.error('Failed to load products from Shopify', error);
+        productListCache = [];
+      } finally {
+        productListResolved = true;
+        productListPromise = null;
+      }
+    })();
+
     return productListPromise;
   }
 
-  productListPromise = (async () => {
+  const existingSearchPromise = productSearchPromises.get(query);
+  if (existingSearchPromise) {
+    return existingSearchPromise;
+  }
+
+  const searchPromise = (async () => {
     try {
-      const result = await getProducts({ first: 24 });
-      productListCache = result.edges.map((edge) => mapShopifyProduct(edge.node));
+      const result = await getProducts({ first: 24, query });
+      const mappedProducts = result.edges.map((edge) => mapShopifyProduct(edge.node));
+      productSearchCache.set(query, mappedProducts);
     } catch (error) {
-      console.error('Failed to load products from Shopify', error);
-      productListCache = [];
+      console.error('Failed to load searched products from Shopify', error);
+      productSearchCache.set(query, []);
     } finally {
-      productListResolved = true;
-      productListPromise = null;
+      productSearchResolved.add(query);
+      productSearchPromises.delete(query);
     }
   })();
 
-  return productListPromise;
+  productSearchPromises.set(query, searchPromise);
+  return searchPromise;
 };
 
-export function useProductList() {
-  const [products, setProducts] = useState<Product[]>(productListCache);
-  const [isLoading, setIsLoading] = useState(!productListResolved);
+export function useProductList(searchQuery?: string) {
+  const normalizedQuery = normalizeSearchQuery(searchQuery);
+  const [products, setProducts] = useState<Product[]>(
+    normalizedQuery ? (productSearchCache.get(normalizedQuery) ?? []) : productListCache
+  );
+  const [isLoading, setIsLoading] = useState(
+    normalizedQuery ? !productSearchResolved.has(normalizedQuery) : !productListResolved
+  );
 
   useEffect(() => {
     let cancelled = false;
-    if (productListResolved) {
-      setProducts(productListCache);
+    const resolved = normalizedQuery ? productSearchResolved.has(normalizedQuery) : productListResolved;
+    if (resolved) {
+      setProducts(normalizedQuery ? (productSearchCache.get(normalizedQuery) ?? []) : productListCache);
       setIsLoading(false);
       return () => {
         cancelled = true;
       };
     }
 
-    void loadProductListFromShopify().then(() => {
+    setIsLoading(true);
+    void loadProductListFromShopify(normalizedQuery).then(() => {
       if (cancelled) {
         return;
       }
-      setProducts(productListCache);
+      setProducts(normalizedQuery ? (productSearchCache.get(normalizedQuery) ?? []) : productListCache);
       setIsLoading(false);
     });
 
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [normalizedQuery]);
 
   return {
     products,

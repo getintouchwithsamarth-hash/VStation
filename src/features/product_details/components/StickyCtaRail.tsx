@@ -74,6 +74,14 @@ export function StickyCtaRail() {
           </div>
         </div>
 
+        {stickyCtaRail.reassurancePoints.length > 0 ? (
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            {stickyCtaRail.reassurancePoints.map((point) => (
+              <BadgeInstance key={point} label={point} variant="neutral" size="sm" />
+            ))}
+          </div>
+        ) : null}
+
         <div style={{ paddingTop: '4px' }}>
           <ButtonInstance
             variant="primary"

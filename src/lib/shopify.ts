@@ -47,6 +47,7 @@ export interface ProductOption {
 export interface ProductVariant {
   id: string;
   title: string;
+  sku?: string | null;
   availableForSale: boolean;
   quantityAvailable?: number;
   price: Money;
@@ -62,6 +63,8 @@ export interface Product {
   id: string;
   handle: string;
   title: string;
+  vendor?: string;
+  onlineStoreUrl?: string | null;
   description: string;
   descriptionHtml: string;
   tags: string[];
@@ -93,6 +96,23 @@ export interface Product {
   deliveryInfo?: Metafield | null;
   returnsPolicy?: Metafield | null;
   supportInfo?: Metafield | null;
+  whyDifferent?: Metafield | null;
+  buyingGuide?: Metafield | null;
+  countryOfOrigin?: Metafield | null;
+  careInstructions?: Metafield | null;
+  gstInvoice?: Metafield | null;
+  faq?: Metafield | null;
+  reviewSummary?: Metafield | null;
+  curatedFor?: Metafield | null;
+  notFor?: Metafield | null;
+  dispatchTime?: Metafield | null;
+  deliveryWindow?: Metafield | null;
+  replacementPolicy?: Metafield | null;
+  supportResponseTime?: Metafield | null;
+  codAvailable?: Metafield | null;
+  packCount?: Metafield | null;
+  bestFor?: Metafield | null;
+  secureCheckout?: Metafield | null;
   ctaLabel?: Metafield | null;
   ctaSubtext?: Metafield | null;
   seo?: {
@@ -663,6 +683,8 @@ export const PRODUCT_DETAIL_QUERY = `
       id
       handle
       title
+      vendor
+      onlineStoreUrl
       description
       descriptionHtml
       tags
@@ -700,6 +722,7 @@ export const PRODUCT_DETAIL_QUERY = `
           node {
             id
             title
+            sku
             availableForSale
             quantityAvailable
             price {
@@ -729,6 +752,18 @@ export const PRODUCT_DETAIL_QUERY = `
       subtitle: metafield(namespace: "custom", key: "subtitle") {
         value
       }
+      featureLine: metafield(namespace: "custom", key: "feature_line") {
+        value
+      }
+      badge: metafield(namespace: "custom", key: "badge_label") {
+        value
+      }
+      shortDescription: metafield(namespace: "custom", key: "short_description") {
+        value
+      }
+      shippingInfo: metafield(namespace: "custom", key: "shipping_snippet") {
+        value
+      }
       bulletFeatures: metafield(namespace: "custom", key: "bullet_features") {
         value
         type
@@ -748,6 +783,61 @@ export const PRODUCT_DETAIL_QUERY = `
         value
       }
       supportInfo: metafield(namespace: "custom", key: "support_info") {
+        value
+      }
+      whyDifferent: metafield(namespace: "custom", key: "why_different") {
+        value
+        type
+      }
+      buyingGuide: metafield(namespace: "custom", key: "buying_guide") {
+        value
+        type
+      }
+      countryOfOrigin: metafield(namespace: "custom", key: "country_of_origin") {
+        value
+      }
+      careInstructions: metafield(namespace: "custom", key: "care_instructions") {
+        value
+      }
+      gstInvoice: metafield(namespace: "custom", key: "gst_invoice") {
+        value
+      }
+      faq: metafield(namespace: "custom", key: "faq") {
+        value
+        type
+      }
+      reviewSummary: metafield(namespace: "custom", key: "reviews") {
+        value
+        type
+      }
+      curatedFor: metafield(namespace: "custom", key: "curated_for") {
+        value
+      }
+      notFor: metafield(namespace: "custom", key: "not_for") {
+        value
+      }
+      dispatchTime: metafield(namespace: "custom", key: "dispatch_time") {
+        value
+      }
+      deliveryWindow: metafield(namespace: "custom", key: "delivery_window") {
+        value
+      }
+      replacementPolicy: metafield(namespace: "custom", key: "replacement_policy") {
+        value
+      }
+      supportResponseTime: metafield(namespace: "custom", key: "support_response_time") {
+        value
+      }
+      codAvailable: metafield(namespace: "custom", key: "cod_available") {
+        value
+      }
+      packCount: metafield(namespace: "custom", key: "pack_count") {
+        value
+      }
+      bestFor: metafield(namespace: "custom", key: "best_for") {
+        value
+      }
+      secureCheckout: metafield(namespace: "custom", key: "secure_checkout") {
         value
       }
       ctaLabel: metafield(namespace: "custom", key: "cta_label") {

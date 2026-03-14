@@ -46,12 +46,93 @@ export function Reviews() {
 
       <div
         style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center'
+          display: 'grid',
+          gridTemplateColumns: '280px 1fr auto',
+          gap: '24px',
+          alignItems: 'start'
         }}
       >
-        <BadgeInstance label={reviews.averageLabel} variant="neutral" size="md" />
+        <CardInstance variant="subtle" padding="md">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <BadgeInstance label={reviews.averageLabel} variant="neutral" size="md" />
+            <div
+              style={{
+                fontFamily: 'Inter, system-ui, sans-serif',
+                fontSize: '30px',
+                lineHeight: '34px',
+                fontWeight: '700',
+                color: 'var(--foreground)'
+              }}
+            >
+              {reviews.averageValue}
+            </div>
+            <div
+              style={{
+                fontFamily: 'Inter, system-ui, sans-serif',
+                fontSize: '13px',
+                lineHeight: '18px',
+                fontWeight: '500',
+                color: 'var(--muted-foreground)'
+              }}
+            >
+              {reviews.totalReviewsLabel}
+            </div>
+          </div>
+        </CardInstance>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          {reviews.breakdown.map((entry) => (
+            <div key={entry.stars} style={{ display: 'grid', gridTemplateColumns: '64px 1fr 42px', gap: '12px', alignItems: 'center' }}>
+              <div
+                style={{
+                  fontFamily: 'Inter, system-ui, sans-serif',
+                  fontSize: '13px',
+                  lineHeight: '18px',
+                  fontWeight: '500',
+                  color: 'var(--muted-foreground)'
+                }}
+              >
+                {entry.label}
+              </div>
+              <div
+                style={{
+                  height: '8px',
+                  borderRadius: '999px',
+                  backgroundColor: 'var(--border)',
+                  overflow: 'hidden'
+                }}
+              >
+                <div
+                  style={{
+                    width: `${Math.min(entry.count * 10, 100)}%`,
+                    height: '100%',
+                    backgroundColor: 'var(--accent)'
+                  }}
+                />
+              </div>
+              <div
+                style={{
+                  fontFamily: 'Inter, system-ui, sans-serif',
+                  fontSize: '13px',
+                  lineHeight: '18px',
+                  fontWeight: '500',
+                  color: 'var(--foreground)'
+                }}
+              >
+                {entry.count}
+              </div>
+            </div>
+          ))}
+
+          {reviews.tags.length > 0 ? (
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', paddingTop: '4px' }}>
+              {reviews.tags.map((tag) => (
+                <BadgeInstance key={tag} label={tag} variant="neutral" size="sm" />
+              ))}
+            </div>
+          ) : null}
+        </div>
+
         <ButtonInstance variant="secondary" size="sm" label={reviews.writeReviewLabel} />
       </div>
 
@@ -118,6 +199,14 @@ export function Reviews() {
               >
                 {review.quote}
               </div>
+
+              {review.tags.length > 0 ? (
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                  {review.tags.map((tag) => (
+                    <BadgeInstance key={tag} label={tag} variant="neutral" size="sm" />
+                  ))}
+                </div>
+              ) : null}
 
               <div
                 style={{

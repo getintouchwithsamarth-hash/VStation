@@ -6,6 +6,7 @@ import { FeatureDeepDive } from '../features/product_details/components/FeatureD
 import { SpecsAndInBox } from '../features/product_details/components/SpecsAndInBox';
 import { DeliveryAndReturns } from '../features/product_details/components/DeliveryAndReturns';
 import { Reviews } from '../features/product_details/components/Reviews';
+import { Faq } from '../features/product_details/components/Faq';
 import { RelatedProducts } from '../features/product_details/components/RelatedProducts';
 import { StickyCtaRail } from '../features/product_details/components/StickyCtaRail';
 import { Container } from '../components/layout/Container';
@@ -76,6 +77,11 @@ function PageBody() {
       <Section paddingTop="48px" paddingBottom="48px" background="var(--card)">
         <Container>
           <Reviews />
+        </Container>
+      </Section>
+      <Section paddingTop="48px" paddingBottom="48px" background="var(--background)">
+        <Container>
+          <Faq />
         </Container>
       </Section>
       <Section paddingTop="48px" paddingBottom="56px" background="var(--background)">
