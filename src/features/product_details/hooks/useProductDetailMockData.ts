@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import {
   getProductByHandle,
-  getProductRecommendations,
+  getProductWithShopifyMetafields,
+  getProductsByCategories,
   getProducts,
   resolveProductThumbnail,
-  type Product
+  type Product,
+  type ShopifyNamespaceMetafield
 } from '../../../lib/shopify';
 
 const IS_DEV = import.meta.env.DEV;
@@ -212,6 +214,118 @@ const escapeHtml = (value: string): string =>
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
 
+const normalizeShopifyText = (value?: string): string => {
+  if (!value) {
+    return '';
+  }
+
+  return value
+    .replace(/\r\n?/g, '\n')
+    .replace(/\\r\\n|\\r/g, '\n')
+    .replace(/\\n/g, '\n')
+    .replace(/\\t/g, ' ')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+};
+
+const toReadableLabel = (value: string): string =>
+  value
+    .replace(/[_-]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+
+const splitNormalizedLines = (value?: string): string[] =>
+  normalizeShopifyText(value)
+    .replace(/<br\s*\/?>/gi, '\n')
+    .split('\n')
+    .map((line) => stripHtml(line).trim())
+    .filter(Boolean);
+
+const parseSpecificationRows = (value?: string): Array<{ label: string; value: string }> =>
+  splitNormalizedLines(value)
+    .map((line) => {
+      const match = line.match(/^([^:]+):\s*(.+)$/);
+      if (!match) {
+        return null;
+      }
+
+      return {
+        label: toReadableLabel(match[1]),
+        value: normalizeShopifyText(match[2]).replace(/\s*\n+\s*/g, ' ').trim()
+      };
+    })
+    .filter((item): item is { label: string; value: string } => Boolean(item) && item.value.length > 0);
+
+const plainTextToHtml = (value?: string): string => {
+  const normalized = normalizeShopifyText(value);
+  if (!normalized) {
+    return '';
+  }
+
+  const blocks = normalized
+    .replace(/<br\s*\/?>/gi, '\n')
+    .split(/\n{2,}/)
+    .map((block) => block.trim())
+    .filter(Boolean);
+
+  return blocks
+    .map((block) => {
+      const lines = block
+        .split('\n')
+        .map((line) => stripHtml(line).trim())
+        .filter(Boolean);
+
+      if (lines.length === 0) {
+        return '';
+      }
+
+      if (lines.length > 1 && lines[0].endsWith(':')) {
+        const heading = `<p><strong>${escapeHtml(lines[0])}</strong></p>`;
+        const items = lines
+          .slice(1)
+          .map((line) => `<li>${escapeHtml(line)}</li>`)
+          .join('');
+        return items ? `${heading}<ul>${items}</ul>` : heading;
+      }
+
+      const htmlParts: string[] = [];
+      let paragraphLines: string[] = [];
+
+      const flushParagraph = () => {
+        if (paragraphLines.length === 0) {
+          return;
+        }
+
+        htmlParts.push(`<p>${escapeHtml(paragraphLines.join(' '))}</p>`);
+        paragraphLines = [];
+      };
+
+      lines.forEach((line) => {
+        const match = line.match(/^([^:]{1,60}):\s*(.+)$/);
+        if (match) {
+          flushParagraph();
+          htmlParts.push(`<p><strong>${escapeHtml(match[1].trim())}:</strong> ${escapeHtml(match[2].trim())}</p>`);
+          return;
+        }
+
+        paragraphLines.push(line);
+      });
+
+      flushParagraph();
+
+      return htmlParts.join('');
+    })
+    .join('');
+};
+
+const looksLikeListMetafield = (value: string): boolean => {
+  const trimmed = value.trim();
+  return trimmed.startsWith('[') || trimmed.includes('•') || trimmed.includes('|');
+};
+
 const renderRichTextNode = (node: Record<string, unknown>): string => {
   const type = typeof node.type === 'string' ? node.type : '';
   const value = typeof node.value === 'string' ? escapeHtml(node.value) : '';
@@ -250,29 +364,37 @@ const parseRichTextMetafieldToHtml = (value?: string): string => {
     return '';
   }
 
-  if (value.includes('<')) {
-    return value;
+  const normalized = normalizeShopifyText(value);
+
+  if (looksLikeListMetafield(normalized)) {
+    const arrayItems = parseArrayMetafield(normalized);
+    if (arrayItems.length > 0) {
+      return `<ul>${arrayItems.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`;
+    }
+  }
+
+  if (normalized.includes('<')) {
+    return normalized;
   }
 
   try {
-    const parsed = JSON.parse(value) as Record<string, unknown>;
+    const parsed = JSON.parse(normalized) as Record<string, unknown>;
     if (parsed && typeof parsed === 'object') {
       return renderRichTextNode(parsed);
     }
   } catch {
-    return value
-      .split(/\n{2,}/)
-      .map((block) => `<p>${escapeHtml(block.trim())}</p>`)
-      .join('');
+    return plainTextToHtml(normalized);
   }
 
-  return '';
+  return plainTextToHtml(normalized);
 };
 
 const parseArrayMetafield = (value?: string): string[] => {
-  if (!value) {
+  const normalized = normalizeShopifyText(value);
+  if (!normalized) {
     return [];
   }
+
   const splitMetafieldItems = (input: string): string[] =>
     input
       .replace(/<br\s*\/?>/gi, '\n')
@@ -281,7 +403,7 @@ const parseArrayMetafield = (value?: string): string[] => {
       .filter(Boolean);
 
   try {
-    const parsed = JSON.parse(value) as unknown;
+    const parsed = JSON.parse(normalized) as unknown;
     if (Array.isArray(parsed)) {
       return parsed
         .flatMap((item) => (typeof item === 'string' ? splitMetafieldItems(item) : []))
@@ -291,43 +413,38 @@ const parseArrayMetafield = (value?: string): string[] => {
       return splitMetafieldItems(parsed);
     }
   } catch {
-    return splitMetafieldItems(value);
+    return splitMetafieldItems(normalized);
   }
   return [];
 };
 
 const parseObjectMetafield = (value?: string): Array<{ label: string; value: string }> => {
-  if (!value) {
+  const normalized = normalizeShopifyText(value);
+  if (!normalized) {
     return [];
   }
+
   try {
-    const parsed = JSON.parse(value) as Record<string, unknown>;
+    const parsed = JSON.parse(normalized) as Record<string, unknown>;
     if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
-      return Object.entries(parsed)
-        .map(([label, itemValue]) => ({
-          label: label.replace(/[_-]/g, ' '),
-          value: String(itemValue).trim()
-        }))
+      const rows = Object.entries(parsed)
+        .flatMap(([label, itemValue]) => {
+          const itemRows = parseSpecificationRows(`${toReadableLabel(label)}: ${String(itemValue)}`);
+          return itemRows.length > 0
+            ? itemRows
+            : [{ label: toReadableLabel(label), value: normalizeShopifyText(String(itemValue)).replace(/\s*\n+\s*/g, ' ').trim() }];
+        })
         .filter((item) => item.value.length > 0);
+
+      if (rows.length > 0) {
+        return rows;
+      }
     }
   } catch {
-    const rows = value
-      .replace(/<br\s*\/?>/gi, '\n')
-      .split('\n')
-      .map((line) => stripHtml(line))
-      .filter(Boolean);
-
-    return rows
-      .map((row) => {
-        const match = row.match(/^([^:]+):\s*(.+)$/);
-        if (!match) {
-          return null;
-        }
-        return { label: match[1].trim(), value: match[2].trim() };
-      })
-      .filter((item): item is { label: string; value: string } => Boolean(item));
+    return parseSpecificationRows(normalized);
   }
-  return [];
+
+  return parseSpecificationRows(normalized);
 };
 
 const parseFaqMetafield = (value?: string): ProductDetailFaq[] => {
@@ -426,7 +543,7 @@ const getStockLabel = (product: Product): string => {
 };
 
 const mapProductCards = (product: Product): ProductDetailCard[] => {
-  const features = parseArrayMetafield(product.bulletFeatures?.value);
+  const features = parseArrayMetafield(product.whyDifferent?.value);
   return features.slice(0, 3).map((feature, index) => ({
     id: `${product.handle}-feature-${index}`,
     badge: `0${index + 1}`,
@@ -503,23 +620,6 @@ const parseReviewData = (product: Product) => {
   }
 };
 
-const buildSpecFallback = (product: Product): Array<{ label: string; value: string }> => {
-  const primaryVariant = getPrimaryVariant(product);
-  return [
-    { label: 'Brand', value: product.vendor || 'Vibe Station' },
-    { label: 'SKU', value: primaryVariant?.sku || 'Available on request' },
-    { label: 'Material', value: product.tags.find((tag) => /celluloid|nylon|delrin|tortex|poly/i.test(tag)) || 'See product overview' },
-    { label: 'Best for', value: product.bestFor?.value || 'Everyday practice and testing preferences' }
-  ];
-};
-
-const buildInBoxFallback = (product: Product): string[] => {
-  const packCount = product.packCount?.value || '1 pack';
-  const features = parseArrayMetafield(product.bulletFeatures?.value);
-  const firstFeature = features[0] || product.bestFor?.value || 'Assorted playing feel';
-  return [packCount, firstFeature, 'No extras listed in Shopify yet'];
-};
-
 const buildReassurancePoints = (product: Product): string[] => {
   const points = [
     product.packCount?.value,
@@ -541,11 +641,76 @@ const buildProductDetails = (product: Product): Array<{ label: string; value: st
   return [
     { label: 'SKU', value: primaryVariant?.sku || 'Available on request' },
     { label: 'Brand', value: product.vendor || 'Vibe Station' },
-    { label: 'Country of origin', value: product.countryOfOrigin?.value || 'Not specified' },
+    { label: 'Country of origin', value: product.countryOfOrigin?.value || '' },
     { label: 'GST invoice', value: normalizeBooleanLabel(product.gstInvoice?.value, 'Available', 'Not specified') || 'Not specified' },
-    { label: 'Care / storage', value: stripHtml(product.careInstructions?.value) || 'Store dry and away from direct heat.' },
+    { label: 'Care / storage', value: stripHtml(product.careInstructions?.value) },
     { label: 'Shareable short URL', value: getShareUrl(product) }
-  ];
+  ].filter((detail) => detail.value.trim().length > 0);
+};
+
+const parseCategoryMetafield = (value?: string): string[] => {
+  const normalized = value?.trim();
+  if (!normalized) {
+    return [];
+  }
+
+  try {
+    const parsed = JSON.parse(normalized) as unknown;
+    if (Array.isArray(parsed)) {
+      return parsed
+        .map((entry) => (typeof entry === 'string' ? entry.trim() : ''))
+        .filter((entry): entry is string => entry.length > 0);
+    }
+  } catch {
+    // Fall back to line/comma-delimited strings when the metafield isn't stored as JSON.
+  }
+
+  return normalized
+    .split(/[\n,]+/)
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+};
+
+const buildShopifyMetafieldSpecifications = (
+  metafields?: Array<{ node: ShopifyNamespaceMetafield }>
+): Array<{ label: string; value: string }> =>
+  (metafields ?? [])
+    .map((edge) => edge.node)
+    .flatMap((metafield) => {
+      const label = toReadableLabel(metafield.key);
+      const referenceValues =
+        metafield.references?.edges
+          .map((edge) => edge.node)
+          .filter(Boolean)
+          .map((reference) =>
+            reference.fields
+              .map((field) => {
+                const value = normalizeShopifyText(field.value ?? '').replace(/\s*\n+\s*/g, ' ').trim();
+                return value.length > 0 ? `${toReadableLabel(field.key)}: ${value}` : '';
+              })
+              .filter(Boolean)
+              .join(', ')
+          )
+          .filter(Boolean) ?? [];
+      const fallbackValue = normalizeShopifyText(metafield.value).replace(/\s*\n+\s*/g, ' ').trim();
+      const value = referenceValues.length > 0 ? referenceValues.join(' | ') : fallbackValue;
+
+      return value.length > 0 ? [{ label, value }] : [];
+    });
+
+const buildSpecifications = (
+  product: Product,
+  shopifyMetafields?: Array<{ node: ShopifyNamespaceMetafield }>
+): Array<{ label: string; value: string }> => {
+  const specificationRows = parseObjectMetafield(product.specifications?.value);
+  const categories = parseCategoryMetafield(product.categories?.value);
+  const categoryRows = categories.length > 0 ? [{ label: 'Category', value: categories.join(', ') }] : [];
+  const shopifyRows = buildShopifyMetafieldSpecifications(shopifyMetafields);
+
+  return [...categoryRows, ...shopifyRows, ...specificationRows].filter((item, index, rows) => {
+    const key = `${item.label.toLowerCase()}::${item.value.toLowerCase()}`;
+    return rows.findIndex((row) => `${row.label.toLowerCase()}::${row.value.toLowerCase()}` === key) === index;
+  });
 };
 
 const loadProductDetailFromShopify = async (requestedHandle?: string | null) => {
@@ -569,19 +734,25 @@ const loadProductDetailFromShopify = async (requestedHandle?: string | null) => 
       }
 
       productDetailHandle = handle;
-      const product = await getProductByHandle(handle);
+      const [product, productWithShopifyMetafields] = await Promise.all([
+        getProductByHandle(handle),
+        getProductWithShopifyMetafields(handle).catch(() => null)
+      ]);
       if (!product) {
         productDetailResolved = true;
         return;
       }
 
-      const relatedProducts = await getProductRecommendations(product.id).catch(() => []);
+      const productCategories = parseCategoryMetafield(product.categories?.value);
+      const relatedProducts = await getProductsByCategories(productCategories, 20).catch(() => []);
       const primaryVariant = getPrimaryVariant(product);
       const whyDifferentHtml = parseRichTextMetafieldToHtml(product.whyDifferent?.value);
       const buyingGuideHtml = parseRichTextMetafieldToHtml(product.buyingGuide?.value);
-      const overviewHtml = product.descriptionHtml || `<p>${escapeHtml(product.description)}</p>`;
-      const storyText = stripHtml(whyDifferentHtml);
-      const specifications = parseObjectMetafield(product.specifications?.value);
+      const overviewHtml =
+        parseRichTextMetafieldToHtml(product.description) ||
+        product.descriptionHtml ||
+        `<p>${escapeHtml(product.description)}</p>`;
+      const specifications = buildSpecifications(product, productWithShopifyMetafields?.shopifyMetafields.edges);
       const inBoxItems = parseArrayMetafield(product.whatsInBox?.value);
       const features = parseArrayMetafield(product.bulletFeatures?.value);
       const keyBenefitCards = mapProductCards(product);
@@ -631,12 +802,7 @@ const loadProductDetailFromShopify = async (requestedHandle?: string | null) => 
               : null,
             stock: stockLabel,
             isInStock,
-            features:
-              features.length > 0
-                ? features
-                : [product.packCount?.value, product.bestFor?.value, product.featureLine?.value].filter(
-                    (item): item is string => Boolean(item)
-                  ),
+            features,
             reassurancePoints,
             primaryCta: product.ctaLabel?.value || 'Add to cart',
             secondaryCta: product.ctaSubtext?.value || 'Buy now',
@@ -651,10 +817,7 @@ const loadProductDetailFromShopify = async (requestedHandle?: string | null) => 
                 .join(' · ') ||
               'Shipping calculated at checkout · Clear returns · Responsive support',
             inBoxTitle: "What's in the box",
-            inBoxLine:
-              (inBoxItems.length > 0 ? inBoxItems.join(' · ') : null) ||
-              product.packCount?.value ||
-              'Details available in product description'
+            inBoxLine: inBoxItems.join(' · ')
           }
         },
         keyBenefits: {
@@ -665,11 +828,9 @@ const loadProductDetailFromShopify = async (requestedHandle?: string | null) => 
           overviewTitle: 'Product overview',
           overviewHtml,
           storyTitle: 'Why this made the cut',
-          storyHtml: whyDifferentHtml || `<p>${escapeHtml(product.featureLine?.value || product.shortDescription?.value || product.description)}</p>`,
+          storyHtml: whyDifferentHtml,
           buyingGuideTitle: 'Buying guide',
-          buyingGuideHtml:
-            buyingGuideHtml ||
-            '<p>Don&apos;t know what to choose? Start with medium for the most balanced feel.</p>',
+          buyingGuideHtml,
           curatedFor: product.curatedFor?.value || product.bestFor?.value || 'Players comparing feel, grip, and attack quickly.',
           notFor: product.notFor?.value || 'Players who already know they only want one exact gauge.'
         },
@@ -678,26 +839,24 @@ const loadProductDetailFromShopify = async (requestedHandle?: string | null) => 
             id: 'dispatch',
             badge: 'Dispatch',
             title: 'Estimated dispatch',
-            description: product.dispatchTime?.value || product.deliveryInfo?.value || 'Dispatch timing not added in Shopify yet.',
-            footer: product.deliveryWindow?.value || 'Use pincode check for final delivery ETA'
+            description: product.deliveryInfo?.value || '',
+            footer: product.deliveryWindow?.value || ''
           },
           {
             id: 'returns',
             badge: 'Returns',
             title: 'Returns & replacements',
-            description:
-              product.returnsPolicy?.value ||
-              'Return window and opened-accessory rules should be added in Shopify for this product.',
-            footer: product.replacementPolicy?.value || 'Damaged or missing items can be reviewed for replacement'
+            description: product.returnsPolicy?.value || '',
+            footer: product.replacementPolicy?.value || ''
           },
           {
             id: 'support',
             badge: 'Support',
             title: 'Support response',
-            description: product.supportInfo?.value || 'Need setup help or order support? Reach out to Vibe Station.',
-            footer: product.supportResponseTime?.value || 'Response time not specified yet'
+            description: product.supportInfo?.value || '',
+            footer: product.supportResponseTime?.value || ''
           }
-        ],
+        ].filter((card) => card.description.trim().length > 0 || card.footer.trim().length > 0),
         reviews: {
           ...DEFAULT_PRODUCT_DETAIL_DATA.reviews,
           supporting: product.reviewSummary?.value
@@ -713,26 +872,29 @@ const loadProductDetailFromShopify = async (requestedHandle?: string | null) => 
         relatedProducts: {
           ...DEFAULT_PRODUCT_DETAIL_DATA.relatedProducts,
           title: getCrossSellTitle(product),
-          items: relatedProducts.slice(0, 6).map((item) => {
-            const thumbnail = resolveProductThumbnail(item);
-            return {
-              id: item.handle,
-              variantId: getDefaultVariantId(item),
-              badge: item.badge?.value || item.tags[0] || 'Curated',
-              name: item.title,
-              descriptor: item.shortDescription?.value || item.description || 'Curated recommendation',
-              featureLine: item.featureLine?.value || item.tags.slice(0, 3).join(' · ') || 'Pairs well with this setup',
-              price: formatPrice(item.priceRange.minVariantPrice.amount, item.priceRange.minVariantPrice.currencyCode),
-              imageUrl: thumbnail?.url,
-              imageAlt: thumbnail?.altText || item.title
-            };
-          })
+          items: relatedProducts
+            .filter((item) => item.id !== product.id && item.handle !== product.handle)
+            .slice(0, 6)
+            .map((item) => {
+              const thumbnail = resolveProductThumbnail(item);
+              return {
+                id: item.handle,
+                variantId: getDefaultVariantId(item),
+                badge: item.badge?.value || item.tags[0] || 'Curated',
+                name: item.title,
+                descriptor: item.shortDescription?.value || item.description || 'Curated recommendation',
+                featureLine: item.featureLine?.value || item.tags.slice(0, 3).join(' · ') || 'Pairs well with this setup',
+                price: formatPrice(item.priceRange.minVariantPrice.amount, item.priceRange.minVariantPrice.currencyCode),
+                imageUrl: thumbnail?.url,
+                imageAlt: thumbnail?.altText || item.title
+              };
+            })
         },
         specsAndInBox: {
           specificationsTitle: 'Specifications',
-          specifications: specifications.length > 0 ? specifications : buildSpecFallback(product),
+          specifications,
           inBoxTitle: 'In the box',
-          inBoxItems: inBoxItems.length > 0 ? inBoxItems : buildInBoxFallback(product),
+          inBoxItems,
           inBoxBadge: product.packCount?.value || 'No extras required',
           productDetailsTitle: 'Product details',
           productDetails: buildProductDetails(product)

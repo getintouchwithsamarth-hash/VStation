@@ -1,37 +1,39 @@
-import { BadgeInstance } from '../../../components/ui/Badge';
-import { ButtonInstance } from '../../../components/ui/Button';
-import { toast } from 'sonner';
-import type { Product } from '../types';
-import { useCart } from '../../cart/CartContext';
+import { BadgeInstance } from "../../../components/ui/Badge";
+import { ButtonInstance } from "../../../components/ui/Button";
+import { toast } from "sonner";
+import type { Product } from "../types";
+import { useCart } from "../../cart/CartContext";
 
 export function ProductList({ products }: { products: Product[] }) {
   return (
     <div
       style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '16px'
+        display: "flex",
+        flexDirection: "column",
+        gap: "16px",
       }}
     >
       <div
         style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: '16px'
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)",
+          gap: "16px",
         }}
       >
         {products.length > 0 ? (
-          products.map((product) => <ProductCard key={product.id} product={product} />)
+          products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))
         ) : (
           <div
             style={{
-              gridColumn: '1 / -1',
-              border: '1px solid var(--border)',
-              borderRadius: '16px',
-              backgroundColor: 'var(--card)',
-              padding: '24px',
-              fontFamily: 'Inter, system-ui, sans-serif',
-              color: 'var(--muted-foreground)'
+              gridColumn: "1 / -1",
+              border: "1px solid var(--border)",
+              borderRadius: "16px",
+              backgroundColor: "var(--card)",
+              padding: "24px",
+              fontFamily: "Inter, system-ui, sans-serif",
+              color: "var(--muted-foreground)",
             }}
           >
             No products matched your search.
@@ -44,7 +46,7 @@ export function ProductList({ products }: { products: Product[] }) {
 
 function ProductCard({
   product,
-  isHoverPreview = false
+  isHoverPreview = false,
 }: {
   product: Product;
   isHoverPreview?: boolean;
@@ -54,14 +56,14 @@ function ProductCard({
 
   return (
     <div
-      role={isHoverPreview ? undefined : 'link'}
+      role={isHoverPreview ? undefined : "link"}
       tabIndex={isHoverPreview ? undefined : 0}
       onClick={
         isHoverPreview
           ? undefined
           : (event) => {
               const target = event.target as HTMLElement;
-              if (target.closest('button')) {
+              if (target.closest("button")) {
                 return;
               }
 
@@ -72,7 +74,7 @@ function ProductCard({
         isHoverPreview
           ? undefined
           : (event) => {
-              if (event.key === 'Enter' || event.key === ' ') {
+              if (event.key === "Enter" || event.key === " ") {
                 event.preventDefault();
                 window.location.href = productHref;
               }
@@ -80,24 +82,27 @@ function ProductCard({
       }
       style={{
         backgroundColor: "var(--card)",
-        border: isHoverPreview ? '1px solid var(--border)' : '1px solid var(--border)',
-        borderRadius: '16px',
-        width: '100%',
-        height: '460px',
+        border: isHoverPreview
+          ? "1px solid var(--border)"
+          : "1px solid var(--border)",
+        borderRadius: "16px",
+        width: "100%",
+        minHeight: "460px",
+        maxHeight: "520px",
         boxShadow: isHoverPreview
-          ? '0 4px 6px -2px #1018280D, 0 12px 16px -4px #10182814'
-          : '0 1px 2px 0 #1018280A, 0 1px 3px 0 #1018280F',
-        overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
-        cursor: isHoverPreview ? 'default' : 'pointer'
+          ? "0 4px 6px -2px #1018280D, 0 12px 16px -4px #10182814"
+          : "0 1px 2px 0 #1018280A, 0 1px 3px 0 #1018280F",
+        overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
+        cursor: isHoverPreview ? "default" : "pointer",
       }}
     >
       <div
         style={{
-          position: 'relative',
-          height: '220px',
-          backgroundColor: "var(--muted)"
+          position: "relative",
+          height: "220px",
+          backgroundColor: "var(--muted)",
         }}
       >
         {product.imageUrl ? (
@@ -105,10 +110,10 @@ function ProductCard({
             src={product.imageUrl}
             alt={product.imageAlt || product.name}
             style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              display: 'block'
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block",
             }}
           />
         ) : null}
@@ -116,52 +121,56 @@ function ProductCard({
         {isHoverPreview ? (
           <div
             style={{
-              position: 'absolute',
+              position: "absolute",
               top: 0,
               left: 0,
               right: 0,
               bottom: 0,
-              backgroundColor: '#10182808'
+              backgroundColor: "#10182808",
             }}
           />
         ) : null}
 
         <div
           style={{
-            position: 'absolute',
-            top: '12px',
-            left: '12px',
-            zIndex: isHoverPreview ? 1 : 'auto'
+            position: "absolute",
+            top: "12px",
+            left: "12px",
+            zIndex: isHoverPreview ? 1 : "auto",
           }}
         >
-          <BadgeInstance label={product.badgeLabel} variant={product.badgeVariant} size="sm" />
+          <BadgeInstance
+            label={product.badgeLabel}
+            variant={product.badgeVariant}
+            size="sm"
+          />
         </div>
 
         <div
           style={{
-            position: 'absolute',
-            top: '12px',
-            right: '12px',
-            zIndex: isHoverPreview ? 1 : 'auto'
+            position: "absolute",
+            top: "12px",
+            right: "12px",
+            zIndex: isHoverPreview ? 1 : "auto",
           }}
         >
           <button
             style={{
-              height: '32px',
-              paddingLeft: '12px',
-              paddingRight: '12px',
-              borderRadius: '8px',
-              backgroundColor: 'transparent',
+              height: "32px",
+              paddingLeft: "12px",
+              paddingRight: "12px",
+              borderRadius: "8px",
+              backgroundColor: "transparent",
               color: "var(--muted-foreground)",
-              fontSize: '14px',
-              lineHeight: '20px',
-              fontWeight: '600',
-              border: 'none',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              fontFamily: 'Inter, system-ui, sans-serif'
+              fontSize: "14px",
+              lineHeight: "20px",
+              fontWeight: "600",
+              border: "none",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              fontFamily: "Inter, system-ui, sans-serif",
             }}
           >
             Save
@@ -171,21 +180,21 @@ function ProductCard({
 
       <div
         style={{
-          padding: '16px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '10px',
-          flex: 1
+          padding: "16px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "10px",
+          flex: 1,
         }}
       >
         <h4
           style={{
-            fontFamily: 'Inter, system-ui, sans-serif',
-            fontSize: '22px',
-            lineHeight: '30px',
-            fontWeight: '600',
+            fontFamily: "Inter, system-ui, sans-serif",
+            fontSize: "22px",
+            lineHeight: "30px",
+            fontWeight: "600",
             color: "var(--foreground)",
-            margin: 0
+            margin: 0,
           }}
         >
           {product.name}
@@ -193,16 +202,16 @@ function ProductCard({
 
         <p
           style={{
-            fontFamily: 'Inter, system-ui, sans-serif',
-            fontSize: '14px',
-            lineHeight: '20px',
-            fontWeight: '400',
+            fontFamily: "Inter, system-ui, sans-serif",
+            fontSize: "14px",
+            lineHeight: "20px",
+            fontWeight: "400",
             color: "var(--muted-foreground)",
             margin: 0,
-            display: '-webkit-box',
+            display: "-webkit-box",
             WebkitLineClamp: 4,
-            WebkitBoxOrient: 'vertical',
-            overflow: 'hidden'
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
           }}
         >
           {product.descriptor}
@@ -210,11 +219,11 @@ function ProductCard({
 
         <div
           style={{
-            fontFamily: 'Inter, system-ui, sans-serif',
-            fontSize: '12px',
-            lineHeight: '18px',
-            fontWeight: '500',
-            color: "var(--muted-foreground)"
+            fontFamily: "Inter, system-ui, sans-serif",
+            fontSize: "12px",
+            lineHeight: "18px",
+            fontWeight: "500",
+            color: "var(--muted-foreground)",
           }}
         >
           {product.featureLine}
@@ -222,31 +231,31 @@ function ProductCard({
 
         <div
           style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginTop: 'auto',
-            paddingTop: '8px'
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginTop: "auto",
+            paddingTop: "8px",
           }}
         >
           <div
             style={{
-              fontFamily: 'Inter, system-ui, sans-serif',
-              fontSize: '22px',
-              lineHeight: '30px',
-              fontWeight: '600',
-              color: "var(--foreground)"
+              fontFamily: "Inter, system-ui, sans-serif",
+              fontSize: "22px",
+              lineHeight: "30px",
+              fontWeight: "600",
+              color: "var(--foreground)",
             }}
           >
             {product.priceLabel}
           </div>
           <div
             style={{
-              fontFamily: 'Inter, system-ui, sans-serif',
-              fontSize: '12px',
-              lineHeight: '18px',
-              fontWeight: '500',
-              color: "var(--muted-foreground)"
+              fontFamily: "Inter, system-ui, sans-serif",
+              fontSize: "12px",
+              lineHeight: "18px",
+              fontWeight: "500",
+              color: "var(--muted-foreground)",
             }}
           >
             {product.shippingLabel}
@@ -254,11 +263,11 @@ function ProductCard({
         </div>
       </div>
 
-      <div style={{ padding: '16px', paddingTop: '0' }}>
+      <div style={{ padding: "16px", paddingTop: "0" }}>
         <ButtonInstance
           variant="primary"
           size="md"
-          label={product.isInStock ? 'Add to cart' : 'Out of stock'}
+          label={product.isInStock ? "Add to cart" : "Out of stock"}
           disabled={!product.isInStock || !product.variantId}
           onClick={async () => {
             if (!product.variantId) {
@@ -267,24 +276,24 @@ function ProductCard({
 
             const added = await addItem(product.variantId);
             if (!added) {
-              toast.error('Unable to add item', {
-                description: 'Please try again.',
-                duration: 5000
+              toast.error("Unable to add item", {
+                description: "Please try again.",
+                duration: 5000,
               });
               return;
             }
 
-            toast.success('Added to cart', {
+            toast.success("Added to cart", {
               description: `${product.name} is in your cart.`,
               duration: Infinity,
               action: {
-                label: 'View cart',
-                onClick: () => openCartDrawer()
+                label: "View cart",
+                onClick: () => openCartDrawer(),
               },
               cancel: {
-                label: 'Close',
-                onClick: () => {}
-              }
+                label: "Close",
+                onClick: () => {},
+              },
             });
           }}
           fullWidth

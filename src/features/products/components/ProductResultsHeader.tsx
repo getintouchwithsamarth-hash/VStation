@@ -18,7 +18,7 @@ export function ProductResultsHeader({ resultCount }: { resultCount: number }) {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        marginBottom: "24px",
+        marginBottom: "16px",
       }}
     >
       {/* Left - Results count */}

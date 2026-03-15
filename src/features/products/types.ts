@@ -15,6 +15,8 @@ export interface Product {
   badgeVariant: ProductBadgeVariant;
   imageUrl?: string;
   imageAlt?: string;
+  categoryIds: ProductCategory[];
+  categoryLabels: string[];
 }
 
 export interface ProductFilterOption {

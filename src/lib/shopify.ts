@@ -6,6 +6,7 @@ const SHOPIFY_BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://loc
 const SHOPIFY_BACKEND_TOKEN_ENDPOINT =
   import.meta.env.VITE_SHOPIFY_TOKEN_ENDPOINT || '/api/shopify/access-token';
 const SHOPIFY_BACKEND_PROXY_ENDPOINT = import.meta.env.VITE_SHOPIFY_PROXY_ENDPOINT || '/api/shopify';
+const SHOPIFY_ADMIN_PROXY_ENDPOINT = import.meta.env.VITE_SHOPIFY_ADMIN_PROXY_ENDPOINT || '/api/shopify/admin';
 const SHOPIFY_BACKEND_TOKEN_METHOD = (import.meta.env.VITE_SHOPIFY_TOKEN_METHOD || 'GET').toUpperCase();
 const SHOPIFY_AUTH_HEADER = import.meta.env.VITE_SHOPIFY_AUTH_HEADER || 'X-Shopify-Storefront-Access-Token';
 const SHOPIFY_COUNTRY_CODE = (import.meta.env.VITE_SHOPIFY_COUNTRY_CODE || 'IN').toUpperCase();
@@ -35,6 +36,55 @@ export interface Metafield {
   reference?: unknown;
   references?: {
     edges: Array<{ node: unknown }>;
+  };
+}
+
+export interface MetaobjectField {
+  key: string;
+  value: string | null;
+}
+
+export interface MetaobjectReference {
+  id: string;
+  handle: string;
+  type: string;
+  fields: MetaobjectField[];
+}
+
+export interface ShopifyNamespaceMetafield {
+  namespace: string;
+  key: string;
+  value: string;
+  type: string;
+  references?: {
+    edges: Array<{ node: MetaobjectReference }>;
+  };
+}
+
+export interface ProductWithShopifyMetafields {
+  id: string;
+  title: string;
+  shopifyMetafields: {
+    edges: Array<{ node: ShopifyNamespaceMetafield }>;
+  };
+}
+
+export interface MetafieldValidation {
+  name: string;
+  value: string | null;
+}
+
+export interface ProductMetafieldDefinition {
+  id: string;
+  name: string;
+  key: string;
+  namespace: string;
+  type: {
+    name: string;
+  };
+  validations: MetafieldValidation[];
+  access: {
+    storefront: string;
   };
 }
 
@@ -85,7 +135,9 @@ export interface Product {
     edges: Array<{ node: ProductVariant }>;
   };
   options?: ProductOption[];
+  category?: Metafield | null;
   featureLine?: Metafield | null;
+  categories?: Metafield | null;
   badge?: Metafield | null;
   shortDescription?: Metafield | null;
   shippingInfo?: Metafield | null;
@@ -349,6 +401,17 @@ const getBackendProxyUrl = (): string => {
   return `${SHOPIFY_BACKEND_BASE_URL.replace(/\/+$/, '')}/${SHOPIFY_BACKEND_PROXY_ENDPOINT.replace(/^\/+/, '')}`;
 };
 
+const hasAdminProxyConfig = (): boolean => {
+  return SHOPIFY_BACKEND_BASE_URL.length > 0 && SHOPIFY_ADMIN_PROXY_ENDPOINT.length > 0;
+};
+
+const getAdminProxyUrl = (): string => {
+  if (SHOPIFY_ADMIN_PROXY_ENDPOINT.startsWith('http://') || SHOPIFY_ADMIN_PROXY_ENDPOINT.startsWith('https://')) {
+    return SHOPIFY_ADMIN_PROXY_ENDPOINT;
+  }
+  return `${SHOPIFY_BACKEND_BASE_URL.replace(/\/+$/, '')}/${SHOPIFY_ADMIN_PROXY_ENDPOINT.replace(/^\/+/, '')}`;
+};
+
 const shouldUseBackendProxy = (): boolean => {
   return hasBackendProxyConfig() && !hasStoreDomainConfig();
 };
@@ -484,6 +547,44 @@ async function shopifyFetch<TData>(
   return data;
 }
 
+async function shopifyAdminFetch<TData>(
+  query: string,
+  variables: Record<string, unknown> = {}
+): Promise<TData> {
+  if (!hasAdminProxyConfig()) {
+    throw new StorefrontAPIError(
+      'Shopify Admin API requires a backend proxy. Set VITE_SHOPIFY_ADMIN_PROXY_ENDPOINT to a backend route that uses your private admin token.',
+      'SHOPIFY_ADMIN_NOT_CONFIGURED'
+    );
+  }
+
+  const response = await fetch(getAdminProxyUrl(), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    body: JSON.stringify({ query, variables })
+  });
+
+  if (!response.ok) {
+    if (response.status === 429) {
+      throw new StorefrontAPIError('Rate limit exceeded', 'RATE_LIMIT');
+    }
+    throw new StorefrontAPIError(`HTTP ${response.status}`, 'HTTP_ERROR');
+  }
+
+  const { data, errors } = (await response.json()) as GraphQLResponse<TData>;
+  if (errors && errors.length > 0) {
+    throw new StorefrontAPIError(errors[0].message, 'GRAPHQL_ERROR', errors[0].field);
+  }
+  if (!data) {
+    throw new StorefrontAPIError('Missing response data', 'EMPTY_DATA');
+  }
+
+  return data;
+}
+
 const PRODUCT_CARD_FIELDS = `
   id
   handle
@@ -530,6 +631,10 @@ const PRODUCT_CARD_FIELDS = `
   }
   featureLine: metafield(namespace: "custom", key: "feature_line") {
     value
+  }
+  categories: metafield(namespace: "custom", key: "categories") {
+    value
+    type
   }
   badge: metafield(namespace: "custom", key: "badge_label") {
     value
@@ -752,8 +857,16 @@ export const PRODUCT_DETAIL_QUERY = `
       subtitle: metafield(namespace: "custom", key: "subtitle") {
         value
       }
+      category: metafield(namespace: "shopify", key: "category") {
+        value
+        type
+      }
       featureLine: metafield(namespace: "custom", key: "feature_line") {
         value
+      }
+      categories: metafield(namespace: "custom", key: "categories") {
+        value
+        type
       }
       badge: metafield(namespace: "custom", key: "badge_label") {
         value
@@ -768,7 +881,7 @@ export const PRODUCT_DETAIL_QUERY = `
         value
         type
       }
-      whatsInBox: metafield(namespace: "custom", key: "whats_in_box") {
+      whatsInBox: metafield(namespace: "custom", key: "what_s_in_the_box") {
         value
         type
       }
@@ -779,13 +892,13 @@ export const PRODUCT_DETAIL_QUERY = `
       deliveryInfo: metafield(namespace: "custom", key: "delivery_info") {
         value
       }
-      returnsPolicy: metafield(namespace: "custom", key: "returns_policy") {
+      returnsPolicy: metafield(namespace: "custom", key: "return_policy") {
         value
       }
       supportInfo: metafield(namespace: "custom", key: "support_info") {
         value
       }
-      whyDifferent: metafield(namespace: "custom", key: "why_different") {
+      whyDifferent: metafield(namespace: "custom", key: "why_it_feels_different") {
         value
         type
       }
@@ -796,7 +909,7 @@ export const PRODUCT_DETAIL_QUERY = `
       countryOfOrigin: metafield(namespace: "custom", key: "country_of_origin") {
         value
       }
-      careInstructions: metafield(namespace: "custom", key: "care_instructions") {
+      careInstructions: metafield(namespace: "custom", key: "care_instruction") {
         value
       }
       gstInvoice: metafield(namespace: "custom", key: "gst_invoice") {
@@ -849,6 +962,40 @@ export const PRODUCT_DETAIL_QUERY = `
       seo {
         title
         description
+      }
+    }
+  }
+`;
+
+export const PRODUCT_SHOPIFY_METAFIELDS_QUERY = `
+  query GetProductWithShopifyMetafields($handle: String!) ${MARKET_CONTEXT} {
+    product(handle: $handle) {
+      id
+      title
+      shopifyMetafields: metafields(first: 50, namespace: "shopify") {
+        edges {
+          node {
+            namespace
+            key
+            value
+            type
+            references(first: 10) {
+              edges {
+                node {
+                  ... on Metaobject {
+                    id
+                    handle
+                    type
+                    fields {
+                      key
+                      value
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -915,6 +1062,35 @@ export const PRODUCT_COLLECTIONS_QUERY = `
             id
             handle
             title
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const PRODUCT_METAFIELD_DEFINITIONS_QUERY = `
+  query GetProductCategoryMetafields {
+    metafieldDefinitions(
+      first: 50
+      ownerType: PRODUCT
+      namespace: "shopify"
+    ) {
+      edges {
+        node {
+          id
+          name
+          key
+          namespace
+          type {
+            name
+          }
+          validations {
+            name
+            value
+          }
+          access {
+            storefront
           }
         }
       }
@@ -1437,11 +1613,131 @@ export async function getProductByHandle(handle: string): Promise<Product | null
   return data.product;
 }
 
+export async function getProductWithShopifyMetafields(
+  handle: string
+): Promise<ProductWithShopifyMetafields | null> {
+  const data = await shopifyFetch<{ product: ProductWithShopifyMetafields | null }>(
+    PRODUCT_SHOPIFY_METAFIELDS_QUERY,
+    { handle }
+  );
+  return data.product;
+}
+
 export async function getProductRecommendations(productId: string): Promise<Product[]> {
   const data = await shopifyFetch<{ productRecommendations: Product[] }>(PRODUCT_RECOMMENDATIONS_QUERY, {
     productId
   });
   return data.productRecommendations;
+}
+
+const normalizeProductCategoryValues = (categories: string[]): string[] =>
+  Array.from(
+    new Set(
+      categories
+        .map((category) => category.trim())
+        .filter((category) => category.length > 0)
+    )
+  );
+
+const escapeProductQueryValue = (value: string): string => value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+
+const parseMetafieldListValue = (value?: string | null): string[] => {
+  const normalized = value?.trim();
+  if (!normalized) {
+    return [];
+  }
+
+  try {
+    const parsed = JSON.parse(normalized) as unknown;
+    if (Array.isArray(parsed)) {
+      return normalizeProductCategoryValues(
+        parsed.map((entry) => (typeof entry === 'string' ? entry : ''))
+      );
+    }
+  } catch {
+    // Fall back to plain text parsing for non-JSON metafield values.
+  }
+
+  return normalizeProductCategoryValues(normalized.split(/[\n,]+/));
+};
+
+const productMatchesCategories = (product: Product, categories: string[]): boolean => {
+  const productCategories = parseMetafieldListValue(product.categories?.value);
+  if (productCategories.length === 0) {
+    return false;
+  }
+
+  const requestedCategories = new Set(normalizeProductCategoryValues(categories).map((category) => category.toLowerCase()));
+  return productCategories.some((category) => requestedCategories.has(category.toLowerCase()));
+};
+
+export function buildProductCategoryQuery(categories: string[]): string {
+  const normalizedCategories = normalizeProductCategoryValues(categories);
+
+  return normalizedCategories
+    .flatMap((category) => {
+      const escapedCategory = escapeProductQueryValue(category);
+      return [
+        `metafield.custom.categories:\"${escapedCategory}\"`,
+        `metafield.custom.category:\"${escapedCategory}\"`
+      ];
+    })
+    .join(' OR ');
+}
+
+export async function getProductsByCategories(categories: string[], first = 20): Promise<Product[]> {
+  const query = buildProductCategoryQuery(categories);
+  const normalizedCategories = normalizeProductCategoryValues(categories);
+  if (normalizedCategories.length === 0) {
+    return [];
+  }
+
+  if (query) {
+    const products = await getProducts({
+      first,
+      query
+    });
+
+    const matchedProducts = products.edges.map((edge) => edge.node);
+    if (matchedProducts.length > 0) {
+      return matchedProducts;
+    }
+  }
+
+  const fallbackProducts: Product[] = [];
+  let after: string | null = null;
+  let hasNextPage = true;
+
+  while (fallbackProducts.length < first && hasNextPage) {
+    const page = await getProducts({
+      first: 100,
+      after
+    });
+
+    const matches = page.edges
+      .map((edge) => edge.node)
+      .filter((product) => productMatchesCategories(product, normalizedCategories));
+
+    for (const product of matches) {
+      if (fallbackProducts.some((candidate) => candidate.id === product.id)) {
+        continue;
+      }
+
+      fallbackProducts.push(product);
+      if (fallbackProducts.length >= first) {
+        break;
+      }
+    }
+
+    hasNextPage = page.pageInfo.hasNextPage;
+    after = page.pageInfo.endCursor;
+
+    if (fallbackProducts.length >= first || !hasNextPage) {
+      break;
+    }
+  }
+
+  return fallbackProducts;
 }
 
 export async function getProductCollections(productId: string): Promise<Array<{ id: string; handle: string; title: string }>> {
@@ -1451,6 +1747,18 @@ export async function getProductCollections(productId: string): Promise<Array<{ 
     } | null;
   }>(PRODUCT_COLLECTIONS_QUERY, { productId });
   return data.product?.collections.edges.map((edge) => edge.node) ?? [];
+}
+
+export async function getProductMetafieldDefinitions(): Promise<ProductMetafieldDefinition[]> {
+  const data = await shopifyAdminFetch<{
+    metafieldDefinitions: {
+      edges: Array<{
+        node: ProductMetafieldDefinition;
+      }>;
+    };
+  }>(PRODUCT_METAFIELD_DEFINITIONS_QUERY);
+
+  return data.metafieldDefinitions.edges.map((edge) => edge.node);
 }
 
 export async function createCart(lines: CartLineInput[] = []): Promise<Cart> {

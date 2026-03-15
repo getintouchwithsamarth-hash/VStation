@@ -23,7 +23,7 @@ export function ProductSearch({
         flexDirection: "row",
         alignItems: "center",
         gap: "12px",
-        marginBottom: "32px",
+        marginBottom: "20px",
       }}
     >
       {/* Search field */}
@@ -31,7 +31,7 @@ export function ProductSearch({
         style={{
           flex: 1,
           position: "relative",
-          height: "48px",
+          height: "44px",
         }}
       >
         <div
@@ -55,7 +55,7 @@ export function ProductSearch({
           onChange={(event) => onQueryChange(event.target.value)}
           style={{
             width: "100%",
-            height: "48px",
+            height: "44px",
             borderRadius: "12px",
             backgroundColor: "var(--card)",
             border: "1px solid var(--border)",

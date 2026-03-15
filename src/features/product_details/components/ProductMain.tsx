@@ -1,21 +1,16 @@
-import { useState } from 'react';
-import { CardInstance } from '../../../components/ui/Card';
-import { BadgeInstance } from '../../../components/ui/Badge';
-import { ButtonInstance } from '../../../components/ui/Button';
-import { PincodeEstimator } from '../../../components/ui/PincodeEstimator';
-import { useProductDetailMockData } from '../hooks/useProductDetailMockData';
-import { useCart } from '../../cart/CartContext';
+import { useState } from "react";
+import { CardInstance } from "../../../components/ui/Card";
+import { BadgeInstance } from "../../../components/ui/Badge";
+import { ButtonInstance } from "../../../components/ui/Button";
+import { PincodeEstimator } from "../../../components/ui/PincodeEstimator";
+import { useProductDetailMockData } from "../hooks/useProductDetailMockData";
+import { useCart } from "../../cart/CartContext";
+import { Check } from "lucide-react";
+import "./ProductMain.css";
 
 export function ProductMain() {
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 420px',
-        gap: '48px',
-        alignItems: 'flex-start'
-      }}
-    >
+    <div className="product-main">
       <Gallery />
       <BuyBox />
     </div>
@@ -32,7 +27,9 @@ function Gallery() {
     if (images.length === 0) {
       return;
     }
-    setActiveImageIndex((current) => (current === 0 ? images.length - 1 : current - 1));
+    setActiveImageIndex((current) =>
+      current === 0 ? images.length - 1 : current - 1,
+    );
   };
 
   const showNext = () => {
@@ -43,46 +40,31 @@ function Gallery() {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%' }}>
+    <div className="product-main__gallery">
       <CardInstance
         variant="elevated"
         height="560px"
         mediaSlot={
-          <div style={{ position: 'relative', width: '100%', height: '560px' }}>
+          <div className="product-main__gallery-frame">
             {activeImage ? (
               <img
+                className="product-main__gallery-image"
                 src={activeImage.url}
                 alt={activeImage.altText}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  display: 'block'
-                }}
               />
             ) : (
-              <div
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  backgroundColor: "var(--muted)"
-                }}
-              />
+              <div className="product-main__gallery-placeholder" />
             )}
 
-            <div style={{ position: 'absolute', top: '16px', left: '16px' }}>
-              <BadgeInstance label={productMain.gallery.zoomLabel} variant="neutral" size="sm" />
+            <div className="product-main__gallery-badge">
+              <BadgeInstance
+                label={productMain.gallery.zoomLabel}
+                variant="neutral"
+                size="sm"
+              />
             </div>
 
-            <div
-              style={{
-                position: 'absolute',
-                top: '16px',
-                right: '16px',
-                display: 'flex',
-                gap: '8px'
-              }}
-            >
+            <div className="product-main__gallery-actions">
               <ButtonInstance
                 variant="ghost"
                 size="sm"
@@ -100,53 +82,26 @@ function Gallery() {
         }
       />
 
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          gap: '12px'
-        }}
-      >
+      <div className="product-main__thumbnail-row">
         {images.length > 0
           ? images.map((image, index) => (
               <button
+                className={`product-main__thumbnail-button${index === activeImageIndex ? " product-main__thumbnail-button--active" : ""}`}
                 key={image.id}
+                type="button"
                 onClick={() => setActiveImageIndex(index)}
-                style={{
-                  width: '88px',
-                  height: '88px',
-                  borderRadius: '12px',
-                  border: index === activeImageIndex ? '2px solid var(--ring)' : '1px solid var(--border)',
-                  flexShrink: 0,
-                  cursor: 'pointer',
-                  padding: 0,
-                  overflow: 'hidden',
-                  backgroundColor: "var(--muted)"
-                }}
               >
                 <img
+                  className="product-main__thumbnail-image"
                   src={image.url}
                   alt={image.altText}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    display: 'block'
-                  }}
                 />
               </button>
             ))
           : [1, 2, 3, 4].map((i) => (
               <div
                 key={i}
-                style={{
-                  width: '88px',
-                  height: '88px',
-                  borderRadius: '12px',
-                  backgroundColor: "var(--muted)",
-                  border: i === 1 ? '2px solid var(--ring)' : '1px solid var(--border)',
-                  flexShrink: 0
-                }}
+                className={`product-main__thumbnail-placeholder${i === 1 ? " product-main__thumbnail-placeholder--active" : ""}`}
               />
             ))}
       </div>
@@ -160,139 +115,61 @@ function BuyBox() {
   const isInStock = productMain.buyBox.isInStock;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%' }}>
+    <div className="product-main__buy-box">
       <CardInstance variant="elevated" padding="lg">
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div>
-            <BadgeInstance label={productMain.buyBox.badge} variant="accent" size="sm" />
+        <div className="product-main__buy-box-content">
+          <div className="product-main__badge-row">
+            <BadgeInstance
+              label={productMain.buyBox.badge}
+              variant="accent"
+              size="sm"
+            />
           </div>
 
-          <h2
-            style={{
-              fontFamily: 'Inter, system-ui, sans-serif',
-              color: "var(--foreground)",
-              margin: 0
-            }}
-          >
-            {productMain.buyBox.name}
-          </h2>
+          <h2 className="product-main__title">{productMain.buyBox.name}</h2>
 
-          <div
-            style={{
-              fontFamily: 'Inter, system-ui, sans-serif',
-              fontSize: '16px',
-              lineHeight: '24px',
-              fontWeight: '400',
-              color: "var(--muted-foreground)"
-            }}
-          >
+          <div className="product-main__descriptor">
             {productMain.buyBox.descriptor}
           </div>
 
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              paddingTop: '8px',
-              paddingBottom: '8px',
-              borderTop: '1px solid var(--border)',
-              borderBottom: '1px solid var(--border)'
-            }}
-          >
-            <h3
-              style={{
-                fontFamily: 'Inter, system-ui, sans-serif',
-                color: "var(--foreground)",
-                margin: 0
-              }}
-            >
-              {productMain.buyBox.price}
-            </h3>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
+          <div className="product-main__price-row">
+            <h3 className="product-main__price">{productMain.buyBox.price}</h3>
+            <div className="product-main__stock-column">
               {productMain.buyBox.compareAtPrice ? (
-                <span
-                  style={{
-                    fontFamily: 'Inter, system-ui, sans-serif',
-                    fontSize: '13px',
-                    lineHeight: '18px',
-                    fontWeight: '400',
-                    color: 'var(--muted-foreground)',
-                    textDecoration: 'line-through'
-                  }}
-                >
+                <span className="product-main__compare-price">
                   {productMain.buyBox.compareAtPrice}
                 </span>
               ) : null}
               <span
-                style={{
-                  fontFamily: 'Inter, system-ui, sans-serif',
-                  fontSize: '14px',
-                  lineHeight: '20px',
-                  fontWeight: '500',
-                  color: isInStock ? '#10B981' : '#EF4444'
-                }}
+                className={`product-main__stock${isInStock ? " product-main__stock--in-stock" : " product-main__stock--out-of-stock"}`}
               >
                 {productMain.buyBox.stock}
               </span>
             </div>
           </div>
 
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '8px'
-            }}
-          >
-            {productMain.buyBox.features.map((feature) => (
-              <div
-                key={feature}
-                style={{
-                  fontFamily: 'Inter, system-ui, sans-serif',
-                  fontSize: '14px',
-                  lineHeight: '20px',
-                  fontWeight: '400',
-                  color: "var(--muted-foreground)"
-                }}
-              >
-                • {feature}
-              </div>
-            ))}
-          </div>
-
           <PincodeEstimator />
 
           {productMain.buyBox.reassurancePoints.length > 0 ? (
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
-                gap: '8px 12px',
-                padding: '12px',
-                borderRadius: '12px',
-                backgroundColor: 'var(--card)',
-                border: '1px solid var(--border)'
-              }}
-            >
+            <div className="product-main__reassurance-list">
               {productMain.buyBox.reassurancePoints.map((point) => (
-                <div
-                  key={point}
-                  style={{
-                    fontFamily: 'Inter, system-ui, sans-serif',
-                    fontSize: '13px',
-                    lineHeight: '18px',
-                    fontWeight: '500',
-                    color: 'var(--muted-foreground)'
-                  }}
-                >
-                  • {point}
+                <div key={point} className="product-main__reassurance-item">
+                  <div className="product-main__reassurance-icon">
+                    <Check
+                      className="product-main__reassurance-check"
+                      size={12}
+                      strokeWidth={3}
+                    />
+                  </div>
+                  <div className="product-main__reassurance-text">
+                    {point}
+                  </div>
                 </div>
               ))}
             </div>
           ) : null}
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', paddingTop: '8px' }}>
+          <div className="product-main__actions">
             <ButtonInstance
               variant="primary"
               size="lg"
@@ -305,48 +182,15 @@ function BuyBox() {
                 void addItem(productMain.buyBox.variantId);
               }}
             />
-            <ButtonInstance variant="secondary" size="lg" label={productMain.buyBox.secondaryCta} />
+            <ButtonInstance
+              variant="secondary"
+              size="lg"
+              label={productMain.buyBox.secondaryCta}
+            />
           </div>
 
-          <div
-            style={{
-              fontFamily: 'Inter, system-ui, sans-serif',
-              fontSize: '12px',
-              lineHeight: '18px',
-              fontWeight: '400',
-              color: "var(--muted-foreground)",
-              paddingTop: '8px',
-              borderTop: '1px solid var(--border)'
-            }}
-          >
+          <div className="product-main__micro-line">
             {productMain.buyBox.microLine}
-          </div>
-        </div>
-      </CardInstance>
-
-      <CardInstance variant="subtle" padding="md">
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <div
-            style={{
-              fontFamily: 'Inter, system-ui, sans-serif',
-              fontSize: '14px',
-              lineHeight: '20px',
-              fontWeight: '600',
-              color: "var(--foreground)"
-            }}
-          >
-            {productMain.buyBox.inBoxTitle}
-          </div>
-          <div
-            style={{
-              fontFamily: 'Inter, system-ui, sans-serif',
-              fontSize: '14px',
-              lineHeight: '20px',
-              fontWeight: '400',
-              color: "var(--muted-foreground)"
-            }}
-          >
-            {productMain.buyBox.inBoxLine}
           </div>
         </div>
       </CardInstance>

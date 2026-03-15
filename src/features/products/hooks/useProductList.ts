@@ -5,6 +5,7 @@ import {
   type Product as ShopifyProduct
 } from '../../../lib/shopify';
 import type { Product } from '../types';
+import { toCategoryFilterId } from '../utils/categoryFilters';
 
 const PRODUCT_CARD_DESCRIPTION_LIMIT = 120;
 
@@ -71,6 +72,8 @@ const mapShopifyProduct = (product: ShopifyProduct): Product => {
   const shippingLabel = product.shippingInfo?.value || 'Shipping calculated at checkout';
   const badgeLabel = product.badge?.value || product.tags[0] || 'Curated';
   const thumbnail = resolveProductThumbnail(product);
+  const categoryLabels = Array.from(new Set(product.tags.map((tag) => tag.trim()).filter(Boolean)));
+  const categoryIds = categoryLabels.map((tag) => toCategoryFilterId(tag)).filter(Boolean);
 
   return {
     id: product.handle,
@@ -87,7 +90,9 @@ const mapShopifyProduct = (product: ShopifyProduct): Product => {
     badgeLabel,
     badgeVariant: 'accent',
     imageUrl: thumbnail?.url,
-    imageAlt: thumbnail?.altText
+    imageAlt: thumbnail?.altText,
+    categoryIds,
+    categoryLabels
   };
 };
 

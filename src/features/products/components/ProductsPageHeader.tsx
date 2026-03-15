@@ -7,7 +7,7 @@ export function ProductsPageHeader() {
           display: 'flex',
           flexDirection: 'column',
           gap: '8px',
-          marginBottom: '8px'
+          marginBottom: '12px'
         }}
       >
         {/* Eyebrow */}
@@ -39,8 +39,8 @@ export function ProductsPageHeader() {
       <div
         style={{
           fontFamily: 'Inter, system-ui, sans-serif',
-          fontSize: '18px',
-          lineHeight: '28px',
+          fontSize: '16px',
+          lineHeight: '24px',
           fontWeight: '400',
           color: "var(--muted-foreground)",
           maxWidth: '640px'

@@ -1,7 +1,8 @@
-import { CardInstance } from '../../../components/ui/Card';
-import { BadgeInstance } from '../../../components/ui/Badge';
-import { Stack } from '../../../components/layout/Stack';
-import { useProductDetailMockData } from '../hooks/useProductDetailMockData';
+import { CardInstance } from "../../../components/ui/Card";
+import { BadgeInstance } from "../../../components/ui/Badge";
+import { Stack } from "../../../components/layout/Stack";
+import { useProductDetailMockData } from "../hooks/useProductDetailMockData";
+import { Shield, Package, Zap } from "lucide-react";
 
 export function KeyBenefits() {
   const { keyBenefits } = useProductDetailMockData();
@@ -10,14 +11,16 @@ export function KeyBenefits() {
     return null;
   }
 
+  const icons = [Shield, Package, Zap];
+
   return (
-    <Stack direction="vertical" gap={16}>
-      <div style={{ textAlign: 'center' }}>
+    <Stack direction="vertical" gap={24}>
+      <div style={{ textAlign: "center" }}>
         <h3
           style={{
-            fontFamily: 'Inter, system-ui, sans-serif',
+            fontFamily: "Inter, system-ui, sans-serif",
             color: "var(--foreground)",
-            margin: 0
+            margin: 0,
           }}
         >
           {keyBenefits.title}
@@ -26,56 +29,103 @@ export function KeyBenefits() {
 
       <div
         style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: '24px'
+          display: "grid",
+          gridTemplateColumns: "repeat(3, 1fr)",
+          gap: "24px",
         }}
       >
-        {keyBenefits.cards.map((card) => (
-          <CardInstance key={card.id} variant="elevated" padding="lg">
-            <Stack direction="vertical" gap={12} style={{ minHeight: '180px' }}>
-              <BadgeInstance label={card.badge} variant="neutral" size="sm" />
-              <h4
-                style={{
-                  fontFamily: 'Inter, system-ui, sans-serif',
-                  color: "var(--foreground)",
-                  margin: 0
-                }}
+        {keyBenefits.cards.map((card, index) => {
+          const IconComponent = icons[index % icons.length];
+
+          return (
+            <CardInstance key={card.id} variant="elevated" padding="lg">
+              <Stack
+                direction="vertical"
+                gap={16}
+                style={{ alignItems: "flex-start" }}
               >
-                {card.title}
-              </h4>
-              {card.description ? (
+                {/* Icon with gradient background */}
                 <div
                   style={{
-                    fontFamily: 'Inter, system-ui, sans-serif',
-                    fontSize: '14px',
-                    lineHeight: '20px',
-                    fontWeight: '400',
-                    color: "var(--muted-foreground)",
-                    flex: 1
+                    width: "48px",
+                    height: "48px",
+                    borderRadius: "12px",
+                    background:
+                      "linear-gradient(135deg, color-mix(in srgb, var(--primary) 10%, transparent) 0%, color-mix(in srgb, var(--primary) 5%, transparent) 100%)",
+                    border: "1px solid color-mix(in srgb, var(--primary) 20%, transparent)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
                 >
-                  {card.description}
+                  <IconComponent
+                    size={24}
+                    style={{
+                      color: "var(--primary)",
+                      strokeWidth: 2,
+                    }}
+                  />
                 </div>
-              ) : null}
-              {card.footer ? (
+
+                {/* Number badge */}
                 <div
                   style={{
-                    fontFamily: 'Inter, system-ui, sans-serif',
-                    fontSize: '12px',
-                    lineHeight: '18px',
-                    fontWeight: '400',
-                    color: "var(--muted-foreground)",
-                    paddingTop: '8px',
-                    borderTop: '1px solid var(--border)'
+                    fontFamily: "Inter, system-ui, sans-serif",
+                    fontSize: "12px",
+                    fontWeight: "600",
+                    color: "var(--primary)",
+                    letterSpacing: "0.05em",
                   }}
                 >
-                  {card.footer}
+                  {card.badge}
                 </div>
-              ) : null}
-            </Stack>
-          </CardInstance>
-        ))}
+
+                {/* Title */}
+                <h4
+                  style={{
+                    fontFamily: "Inter, system-ui, sans-serif",
+                    fontSize: "16px",
+                    lineHeight: "24px",
+                    fontWeight: "600",
+                    color: "var(--foreground)",
+                    margin: 0,
+                  }}
+                >
+                  {card.title}
+                </h4>
+
+                {card.description ? (
+                  <div
+                    style={{
+                      fontFamily: "Inter, system-ui, sans-serif",
+                      fontSize: "14px",
+                      lineHeight: "20px",
+                      fontWeight: "400",
+                      color: "var(--muted-foreground)",
+                    }}
+                  >
+                    {card.description}
+                  </div>
+                ) : null}
+                {card.footer ? (
+                  <div
+                    style={{
+                      fontFamily: "Inter, system-ui, sans-serif",
+                      fontSize: "12px",
+                      lineHeight: "18px",
+                      fontWeight: "400",
+                      color: "var(--muted-foreground)",
+                      paddingTop: "8px",
+                      borderTop: "1px solid var(--border)",
+                    }}
+                  >
+                    {card.footer}
+                  </div>
+                ) : null}
+              </Stack>
+            </CardInstance>
+          );
+        })}
       </div>
     </Stack>
   );

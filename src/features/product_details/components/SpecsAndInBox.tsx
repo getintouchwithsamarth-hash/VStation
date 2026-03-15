@@ -1,195 +1,204 @@
-import { CardInstance } from '../../../components/ui/Card';
-import { BadgeInstance } from '../../../components/ui/Badge';
-import { useProductDetailMockData } from '../hooks/useProductDetailMockData';
+import { CardInstance } from "../../../components/ui/Card";
+import { BadgeInstance } from "../../../components/ui/Badge";
+import { useProductDetailMockData } from "../hooks/useProductDetailMockData";
 
 export function SpecsAndInBox() {
   const { specsAndInBox } = useProductDetailMockData();
 
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 420px',
-        gap: '48px'
-      }}
-    >
-      <div>
-        <CardInstance variant="elevated" padding="lg">
-          <div
+    <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+      <h3
+        style={{
+          fontFamily: "Inter, system-ui, sans-serif",
+          color: "var(--foreground)",
+          margin: 0,
+          fontSize: "20px",
+          lineHeight: "28px",
+        }}
+      >
+        Specifications & What's Included
+      </h3>
+
+      {/* Technical Specs */}
+      <CardInstance variant="elevated" padding="md">
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "12px",
+          }}
+        >
+          <h4
             style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '14px'
+              fontFamily: "Inter, system-ui, sans-serif",
+              fontSize: "15px",
+              lineHeight: "20px",
+              fontWeight: "600",
+              color: "var(--foreground)",
+              margin: 0,
             }}
           >
-            <h3
-              style={{
-                fontFamily: 'Inter, system-ui, sans-serif',
-                color: "var(--foreground)",
-                margin: 0
-              }}
-            >
-              {specsAndInBox.specificationsTitle}
-            </h3>
+            {specsAndInBox.specificationsTitle}
+          </h4>
 
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '10px'
-              }}
-            >
-              {specsAndInBox.specifications.map((spec) => (
-                <div key={spec.label}>
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center'
-                    }}
-                  >
-                    <div
-                      style={{
-                        fontFamily: 'Inter, system-ui, sans-serif',
-                        fontSize: '14px',
-                        lineHeight: '20px',
-                        fontWeight: '600',
-                        color: "var(--muted-foreground)"
-                      }}
-                    >
-                      {spec.label}
-                    </div>
-                    <div
-                      style={{
-                        fontFamily: 'Inter, system-ui, sans-serif',
-                        fontSize: '14px',
-                        lineHeight: '20px',
-                        fontWeight: '400',
-                        color: "var(--foreground)"
-                      }}
-                    >
-                      {spec.value}
-                    </div>
-                  </div>
-                  <div
-                    style={{
-                      height: '1px',
-                      backgroundColor: 'rgba(0, 0, 0, 0.1)',
-                      marginTop: '10px'
-                    }}
-                  />
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "8px",
+            }}
+          >
+            {specsAndInBox.specifications.map((spec) => (
+              <div
+                key={spec.label}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  paddingBottom: "8px",
+                  borderBottom: "1px solid var(--border)",
+                }}
+              >
+                <div
+                  style={{
+                    fontFamily: "Inter, system-ui, sans-serif",
+                    fontSize: "13px",
+                    lineHeight: "18px",
+                    fontWeight: "500",
+                    color: "var(--muted-foreground)",
+                  }}
+                >
+                  {spec.label}
                 </div>
-              ))}
-            </div>
+                <div
+                  style={{
+                    fontFamily: "Inter, system-ui, sans-serif",
+                    fontSize: "13px",
+                    lineHeight: "18px",
+                    fontWeight: "400",
+                    color: "var(--foreground)",
+                  }}
+                >
+                  {spec.value}
+                </div>
+              </div>
+            ))}
           </div>
-        </CardInstance>
-      </div>
+        </div>
+      </CardInstance>
 
-      <div>
-        <CardInstance variant="subtle" padding="lg">
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '12px'
-            }}
-          >
-            <h3
+      {/* In the Box */}
+      <CardInstance variant="subtle" padding="md">
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <h4
               style={{
-                fontFamily: 'Inter, system-ui, sans-serif',
+                fontFamily: "Inter, system-ui, sans-serif",
+                fontSize: "15px",
+                lineHeight: "20px",
+                fontWeight: "600",
                 color: "var(--foreground)",
-                margin: 0
+                margin: 0,
               }}
             >
               {specsAndInBox.inBoxTitle}
-            </h3>
-
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '4px'
-              }}
-            >
-              {specsAndInBox.inBoxItems.map((item) => (
-                <div
-                  key={item}
-                  style={{
-                    fontFamily: 'Inter, system-ui, sans-serif',
-                    fontSize: '14px',
-                    lineHeight: '20px',
-                    fontWeight: '400',
-                    color: "var(--muted-foreground)"
-                  }}
-                >
-                  {item}
-                </div>
-              ))}
-            </div>
-
-            <div style={{ marginTop: '4px' }}>
-              <BadgeInstance label={specsAndInBox.inBoxBadge} variant="neutral" size="sm" />
-            </div>
+            </h4>
+            <BadgeInstance
+              label={specsAndInBox.inBoxBadge}
+              variant="neutral"
+              size="sm"
+            />
           </div>
-        </CardInstance>
 
-        <div style={{ height: '24px' }} />
-
-        <CardInstance variant="subtle" padding="lg">
           <div
             style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '12px'
+              display: "flex",
+              flexDirection: "column",
+              gap: "6px",
             }}
           >
-            <h3
-              style={{
-                fontFamily: 'Inter, system-ui, sans-serif',
-                color: 'var(--foreground)',
-                margin: 0
-              }}
-            >
-              {specsAndInBox.productDetailsTitle}
-            </h3>
-
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '10px'
-              }}
-            >
-              {specsAndInBox.productDetails.map((detail) => (
-                <div key={detail.label}>
-                  <div
-                    style={{
-                      fontFamily: 'Inter, system-ui, sans-serif',
-                      fontSize: '12px',
-                      lineHeight: '18px',
-                      fontWeight: '600',
-                      color: 'var(--muted-foreground)'
-                    }}
-                  >
-                    {detail.label}
-                  </div>
-                  <div
-                    style={{
-                      fontFamily: 'Inter, system-ui, sans-serif',
-                      fontSize: '14px',
-                      lineHeight: '20px',
-                      fontWeight: '400',
-                      color: 'var(--foreground)'
-                    }}
-                  >
-                    {detail.value}
-                  </div>
-                </div>
-              ))}
-            </div>
+            {specsAndInBox.inBoxItems.map((item) => (
+              <div
+                key={item}
+                style={{
+                  fontFamily: "Inter, system-ui, sans-serif",
+                  fontSize: "13px",
+                  lineHeight: "18px",
+                  fontWeight: "400",
+                  color: "var(--muted-foreground)",
+                }}
+              >
+                • {item}
+              </div>
+            ))}
           </div>
-        </CardInstance>
-      </div>
+        </div>
+      </CardInstance>
+
+      {/* Product Details */}
+      <CardInstance variant="subtle" padding="md">
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
+          }}
+        >
+          <h4
+            style={{
+              fontFamily: "Inter, system-ui, sans-serif",
+              fontSize: "15px",
+              lineHeight: "20px",
+              fontWeight: "600",
+              color: "var(--foreground)",
+              margin: 0,
+            }}
+          >
+            {specsAndInBox.productDetailsTitle}
+          </h4>
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "8px",
+            }}
+          >
+            {specsAndInBox.productDetails.map((detail) => (
+              <div key={detail.label}>
+                <div
+                  style={{
+                    fontFamily: "Inter, system-ui, sans-serif",
+                    fontSize: "12px",
+                    lineHeight: "18px",
+                    fontWeight: "600",
+                    color: "var(--muted-foreground)",
+                  }}
+                >
+                  {detail.label}
+                </div>
+                <div
+                  style={{
+                    fontFamily: "Inter, system-ui, sans-serif",
+                    fontSize: "13px",
+                    lineHeight: "18px",
+                    fontWeight: "400",
+                    color: "var(--foreground)",
+                  }}
+                >
+                  {detail.value}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </CardInstance>
     </div>
   );
 }
