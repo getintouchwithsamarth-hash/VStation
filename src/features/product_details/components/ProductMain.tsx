@@ -148,7 +148,11 @@ function BuyBox() {
             </div>
           </div>
 
-          <PincodeEstimator />
+          <PincodeEstimator
+            pickupPostcode={productMain.buyBox.serviceability.pickupPostcode}
+            weightKg={productMain.buyBox.serviceability.defaultWeightKg}
+            cod={productMain.buyBox.serviceability.cod}
+          />
 
           {productMain.buyBox.reassurancePoints.length > 0 ? (
             <div className="product-main__reassurance-list">

@@ -104,15 +104,35 @@ function LeadingSlot() {
 function TextValue({
   placeholder,
   value,
+  onChange,
+  onKeyDown,
+  disabled,
+  type,
+  inputMode,
+  maxLength,
+  autoComplete
 }: {
   placeholder?: string;
   value?: string;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
+  disabled?: boolean;
+  type?: string;
+  inputMode?: React.HTMLAttributes<HTMLInputElement>['inputMode'];
+  maxLength?: number;
+  autoComplete?: string;
 }) {
   return (
     <input
-      type="text"
+      type={type || "text"}
       placeholder={placeholder || "Enter text..."}
       value={value}
+      onChange={onChange}
+      onKeyDown={onKeyDown}
+      disabled={disabled}
+      inputMode={inputMode}
+      maxLength={maxLength}
+      autoComplete={autoComplete}
       style={{
         width: "100%",
         border: "none",
@@ -617,6 +637,13 @@ export function InputInstance({
   error,
   disabled,
   size = "md",
+  value,
+  onChange,
+  onKeyDown,
+  type,
+  inputMode,
+  maxLength,
+  autoComplete,
 }: {
   label?: string;
   placeholder?: string;
@@ -624,6 +651,13 @@ export function InputInstance({
   error?: boolean;
   disabled?: boolean;
   size?: "sm" | "md";
+  value?: string;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
+  type?: string;
+  inputMode?: React.HTMLAttributes<HTMLInputElement>['inputMode'];
+  maxLength?: number;
+  autoComplete?: string;
 }) {
   const height = size === "sm" ? "36px" : "44px";
   const paddingX = size === "sm" ? "12px" : "14px";
@@ -651,7 +685,17 @@ export function InputInstance({
             transition: "border-color 150ms ease",
           }}
         >
-          <TextValue placeholder={placeholder} />
+          <TextValue
+            placeholder={placeholder}
+            value={value}
+            onChange={onChange}
+            onKeyDown={onKeyDown}
+            disabled={disabled}
+            type={type}
+            inputMode={inputMode}
+            maxLength={maxLength}
+            autoComplete={autoComplete}
+          />
         </div>
       </InputRow>
       {helperText && (

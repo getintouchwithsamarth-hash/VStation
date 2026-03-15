@@ -27,6 +27,22 @@ type BuildProductDetailDataParams = {
   relatedProducts: Product[];
 };
 
+const DEFAULT_PICKUP_POSTCODE = import.meta.env.VITE_SHIPROCKET_PICKUP_POSTCODE || '';
+const DEFAULT_WEIGHT_KG_RAW = import.meta.env.VITE_SHIPROCKET_DEFAULT_WEIGHT_KG || '0.5';
+
+const parseWeightKg = (): number | null => {
+  const value = Number.parseFloat(DEFAULT_WEIGHT_KG_RAW);
+  return Number.isFinite(value) ? value : null;
+};
+
+const parseCodAvailability = (value?: string): boolean => {
+  if (!value) {
+    return false;
+  }
+
+  return ['true', 'yes', 'available', '1'].includes(value.trim().toLowerCase());
+};
+
 export const buildProductDetailData = ({
   product,
   adminMetadata,
@@ -49,6 +65,9 @@ export const buildProductDetailData = ({
   const reviewData = parseReviewData(product);
   const reassurancePoints = buildReassurancePoints(product);
   const shareUrl = getShareUrl(product);
+  const defaultWeightKg = parseWeightKg();
+  const pickupPostcode = DEFAULT_PICKUP_POSTCODE.trim() || null;
+  const cod = parseCodAvailability(product.codAvailable?.value);
 
   return {
     productHeader: {
@@ -97,7 +116,12 @@ export const buildProductDetailData = ({
             .join(' · ') ||
           'Shipping calculated at checkout · Clear returns · Responsive support',
         inBoxTitle: "What's in the box",
-        inBoxLine: inBoxItems.join(' · ')
+        inBoxLine: inBoxItems.join(' · '),
+        serviceability: {
+          pickupPostcode,
+          defaultWeightKg,
+          cod
+        }
       }
     },
     keyBenefits: {

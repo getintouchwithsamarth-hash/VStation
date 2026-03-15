@@ -60,6 +60,11 @@ export type ProductDetailData = {
       microLine: string;
       inBoxTitle: string;
       inBoxLine: string;
+      serviceability: {
+        pickupPostcode: string | null;
+        defaultWeightKg: number | null;
+        cod: boolean;
+      };
     };
   };
   keyBenefits: {
@@ -165,7 +170,12 @@ export const EMPTY_PRODUCT_DETAIL_DATA: ProductDetailData = {
       secondaryCta: 'Buy now',
       microLine: '',
       inBoxTitle: '',
-      inBoxLine: ''
+      inBoxLine: '',
+      serviceability: {
+        pickupPostcode: null,
+        defaultWeightKg: null,
+        cod: false
+      }
     }
   },
   keyBenefits: {
