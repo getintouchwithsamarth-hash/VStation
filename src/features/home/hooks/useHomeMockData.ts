@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getProducts, resolveProductThumbnail } from '../../../lib/shopify';
+import { getProducts, resolveProductThumbnail } from '../../../lib/shopify-storefront';
 
 export type HomeTestimonial = {
   id: string;

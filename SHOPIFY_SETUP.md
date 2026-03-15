@@ -23,7 +23,7 @@ Required direct Storefront mode:
 
 ```env
 VITE_SHOPIFY_STORE_DOMAIN=your-store.myshopify.com
-VITE_SHOPIFY_STOREFRONT_ACCESS_TOKEN=your_storefront_access_token
+VITE_SHOPIFY_STOREFRONT_PUBLIC_TOKEN=your_storefront_public_token
 VITE_SHOPIFY_STOREFRONT_API_VERSION=2026-01
 ```
 

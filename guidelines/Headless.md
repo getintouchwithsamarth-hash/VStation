@@ -1,437 +1,188 @@
-Shopify Headless Storefront - Access Token Usage Guide
-Overview
-Your Shopify headless setup uses two types of access tokens:
-Storefront API Public Access Token
-For frontend (React app)
-Admin API Private Access Token
-For backend server operations only
+Here are the hard rules for when to use each Shopify API:
+STOREFRONT API - Customer-Facing Operations
+Use for:
+✅ Product browsing and search (product listings, collections, filters)
+✅ Product details (variants, images, prices, inventory availability)
+✅ Cart operations (create, add items, update quantities, remove items)
+✅ Checkout initiation and management
+✅ Customer account queries (orders, addresses) - read-only
+✅ Blog posts and articles (content marketing)
+✅ Menus and navigation
+✅ Any customer-facing frontend functionality
+Token Type:
+Public token: browser/mobile app (React frontend)
+Private token: server-side rendering or sensitive operations
+NEVER use for:
+❌ Creating/editing products
+❌ Order management/fulfillment
+❌ Inventory updates
+❌ Admin operations
+❌ Discount creation
+❌ Customer data modification
+ADMIN API - Store Management & Operations
+Use for:
+✅ Product CRUD (create, update, delete products/variants)
+✅ Inventory management (stock levels, locations, transfers)
+✅ Order management (view, update, fulfill, cancel, refund)
+✅ Customer management (create, update, delete, segmentation)
+✅ Discount/promotion creation and management
+✅ Collection management (automated/manual collections)
+✅ Shipping rates and fulfillment services
+✅ Store settings and configuration
+✅ Analytics and reports
+✅ Webhooks setup
+✅ Metafields and metaobjects
+✅ 3PL integrations (Shiprocket, etc.)
+✅ Bulk operations
+✅ Multi-location inventory sync
+Token Type:
+Admin access token (custom app credentials)
+ALWAYS server-side only
+never expose in frontend
+NEVER use for:
+❌ Customer-facing checkout flows
+❌ Public product browsing (use Storefront API instead)
+❌ Frontend cart operations
+CUSTOMER ACCOUNT API - Customer Authentication & Self-Service
+Use for:
+✅ Customer login/logout (OAuth flow)
+✅ Customer profile management (addresses, preferences)
+✅ Order history viewing (customer's own orders)
+✅ Password reset flows
+✅ Customer-initiated account updates
+✅ Saved payment methods
+✅ Subscription management (if applicable)
+Token Type:
+OAuth client credentials + customer access tokens
+Hybrid: server initiates OAuth, customer gets session token
+NEVER use for:
+❌ Admin viewing all customers
+❌ Checkout operations (use Storefront API)
+❌ Product browsing (use Storefront API)
+DECISION MATRIX
+Operation API Token Where
+Browse products Storefront Public Frontend
+Add to cart Storefront Public Frontend
+Checkout Storefront Public Frontend
+Customer login Customer Account OAuth Backend → Frontend
+View my orders Customer Account Customer token Frontend
+Create product Admin Admin token Backend only
+Update inventory Admin Admin token Backend only
+Fulfill order Admin Admin token Backend only
+Create discount Admin Admin token Backend only
+Sync 3PL stock Admin Admin token Backend only
+SSR product page Storefront Private Backend (Node)
+Webhook processing Admin Admin token Backend only
+SECURITY RULES
+Frontend (React/Azure) can use:
+✅ Storefront API public token
+✅ Customer Account API customer tokens (after OAuth)
+❌ NEVER Admin API
+❌ NEVER Storefront private token
+Backend (Node/Express) can use:
+✅ All APIs
+✅ Storefront private token
+✅ Admin API token
+✅ Customer Account OAuth credentials
+YOUR HEADLESS ARCHITECTURE
+Frontend (Azure/React):
+// Use Storefront API public token
 
-1. Storefront API Public Access Token (Frontend)
-   Purpose: Customer-facing operations in your React application
-   Safe to use in: Client-side code (browser)
-   Use cases:
-   Fetch products, collections, variants
-   Query inventory and availability
-   Create and manage shopping carts
-   Customer authentication (login/register)
-   Generate checkout URLs
-   Fetch customer orders and account data
-   Implementation:
-   // config/shopify.js
-   export const SHOPIFY_CONFIG = {
-   domain: 'kz9z4f-2a.myshopify.com',
-   storefrontAccessToken: 'YOUR_PUBLIC_STOREFRONT_TOKEN',
-   apiVersion: '2024-01'
-   };
+- Product listings
+- Product details
+- Cart operations
+- Checkout initiation
+- Customer order viewing (with Customer Account API)
+  Backend (Node/Express):
+  // Use Admin API
+- Inventory sync with 3PL
+- Order fulfillment automation
+- Product imports/updates
+- Webhook handlers
+- Analytics processing
 
-// utils/storefrontApi.js
-import { SHOPIFY_CONFIG } from '../config/shopify';
+// Use Storefront API private token
 
-const storefrontApiUrl = `https://${SHOPIFY_CONFIG.domain}/api/${SHOPIFY_CONFIG.apiVersion}/graphql.json`;
+- SSR product pages (if needed)
+- Server-side cart operations
+- Rate-limit-sensitive queries
+  RATE LIMITS TO REMEMBER
+  Storefront API: 2 requests/second (public), higher for private
+  Admin API: Cost-based (1000 points/second)
+  Customer Account API: OAuth flow limits
+  Rule of Thumb:
+  Customer sees it? → Storefront API
+  You manage it? → Admin API
+  Customer logs in? → Customer Account API
+  Need specific implementation examples for any of these scenarios?
 
-export async function storefrontQuery(query, variables = {}) {
-const response = await fetch(storefrontApiUrl, {
-method: 'POST',
-headers: {
-'Content-Type': 'application/json',
-'X-Shopify-Storefront-Access-Token': SHOPIFY_CONFIG.storefrontAccessToken,
-},
-body: JSON.stringify({ query, variables })
-});
-
-const { data, errors } = await response.json();
-
-if (errors) {
-console.error('Storefront API errors:', errors);
-throw new Error(errors[0].message);
-}
-
-return data;
-}
-Example Usage - Fetch Products:
-// services/products.js
-import { storefrontQuery } from '../utils/storefrontApi';
-
-export async function getProducts(limit = 10) {
-const query = `     query GetProducts($limit: Int!) {
-      products(first: $limit) {
-        edges {
-          node {
-            id
-            title
-            handle
-            description
-            availableForSale
-            priceRange {
-              minVariantPrice {
-                amount
-                currencyCode
-              }
-            }
-            images(first: 1) {
-              edges {
-                node {
-                  url
-                  altText
-                }
-              }
-            }
-            variants(first: 10) {
-              edges {
-                node {
-                  id
-                  title
-                  availableForSale
-                  quantityAvailable
-                  priceV2 {
-                    amount
-                    currencyCode
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  `;
-
-return storefrontQuery(query, { limit });
-}
-Example Usage - Create Cart:
-// services/cart.js
-import { storefrontQuery } from '../utils/storefrontApi';
-
-export async function createCart(merchandiseId, quantity = 1) {
-const mutation = `     mutation CreateCart($merchandiseId: ID!, $quantity: Int!) {
-      cartCreate(
-        input: {
-          lines: [
-            {
-              merchandiseId: $merchandiseId
-              quantity: $quantity
-            }
-          ]
-        }
-      ) {
-        cart {
-          id
-          checkoutUrl
-          lines(first: 10) {
-            edges {
-              node {
-                id
-                quantity
-                merchandise {
-                  ... on ProductVariant {
-                    id
-                    title
-                    priceV2 {
-                      amount
-                      currencyCode
-                    }
-                    product {
-                      title
-                    }
-                  }
-                }
-              }
-            }
-          }
-          cost {
-            totalAmount {
-              amount
-              currencyCode
-            }
-          }
-        }
-        userErrors {
-          field
-          message
-        }
-      }
-    }
-  `;
-
-return storefrontQuery(mutation, { merchandiseId, quantity });
-}
-
-export async function addToCart(cartId, merchandiseId, quantity = 1) {
-const mutation = `     mutation AddToCart($cartId: ID!, $merchandiseId: ID!, $quantity: Int!) {
-      cartLinesAdd(
-        cartId: $cartId
-        lines: [
-          {
-            merchandiseId: $merchandiseId
-            quantity: $quantity
-          }
-        ]
-      ) {
-        cart {
-          id
-          checkoutUrl
-          lines(first: 50) {
-            edges {
-              node {
-                id
-                quantity
-              }
-            }
-          }
-        }
-        userErrors {
-          field
-          message
-        }
-      }
-    }
-  `;
-
-return storefrontQuery(mutation, { cartId, merchandiseId, quantity });
-}
-Example Usage - Customer Authentication:
-// services/customer.js
-import { storefrontQuery } from '../utils/storefrontApi';
-
-export async function customerLogin(email, password) {
-const mutation = `     mutation CustomerLogin($email: String!, $password: String!) {
-      customerAccessTokenCreate(input: {
-        email: $email
-        password: $password
-      }) {
-        customerAccessToken {
-          accessToken
-          expiresAt
-        }
-        customerUserErrors {
-          code
-          field
-          message
-        }
-      }
-    }
-  `;
-
-return storefrontQuery(mutation, { email, password });
-}
-
-export async function getCustomerData(customerAccessToken) {
-const query = `     query GetCustomer($customerAccessToken: String!) {
-      customer(customerAccessToken: $customerAccessToken) {
-        id
-        email
-        firstName
-        lastName
-        phone
-        defaultAddress {
-          address1
-          city
-          province
-          country
-          zip
-        }
-        orders(first: 10) {
-          edges {
-            node {
-              id
-              orderNumber
-              totalPriceV2 {
-                amount
-                currencyCode
-              }
-              processedAt
-            }
-          }
-        }
-      }
-    }
-  `;
-
-return storefrontQuery(query, { customerAccessToken });
-} 2. Admin API Private Access Token (Backend Only)
-Purpose: Administrative operations on your backend server
-⚠️ NEVER use in: Client-side code or expose in frontend
-Use cases:
-Order management and fulfillment
-Inventory updates from your backend
-Webhook processing
-Creating draft orders
-Advanced product management
-Analytics and reporting
-Implementation (Node.js/Express Backend):
-// backend/config/shopify.js
-require('dotenv').config();
-
-export const ADMIN_CONFIG = {
-domain: process.env.SHOPIFY_DOMAIN,
-adminAccessToken: process.env.SHOPIFY_ADMIN_TOKEN, // Keep in .env file!
-apiVersion: '2024-01'
-};
-
-// backend/utils/adminApi.js
-import { ADMIN_CONFIG } from '../config/shopify';
-
-const adminApiUrl = `https://${ADMIN_CONFIG.domain}/admin/api/${ADMIN_CONFIG.apiVersion}/graphql.json`;
-
-export async function adminQuery(query, variables = {}) {
-const response = await fetch(adminApiUrl, {
-method: 'POST',
-headers: {
-'Content-Type': 'application/json',
-'X-Shopify-Access-Token': ADMIN_CONFIG.adminAccessToken,
-},
-body: JSON.stringify({ query, variables })
-});
-
-const { data, errors } = await response.json();
-
-if (errors) {
-console.error('Admin API errors:', errors);
-throw new Error(errors[0].message);
-}
-
-return data;
-}
-Example Usage - Get Order Details (Backend):
-// backend/services/orders.js
-import { adminQuery } from '../utils/adminApi';
-
-export async function getOrderById(orderId) {
-const query = `     query GetOrder($id: ID!) {
-      order(id: $id) {
-        id
-        name
-        email
-        createdAt
-        totalPriceSet {
-          shopMoney {
-            amount
-            currencyCode
-          }
-        }
-        lineItems(first: 50) {
-          edges {
-            node {
-              title
-              quantity
-              variant {
-                id
-                title
-              }
-            }
-          }
-        }
-        shippingAddress {
-          address1
-          city
-          province
-          country
-          zip
-        }
-      }
-    }
-  `;
-
-return adminQuery(query, { id: orderId });
-} 3. Environment Variables Setup
-Frontend (.env):
-REACT_APP_SHOPIFY_DOMAIN=kz9z4f-2a.myshopify.com
-REACT_APP_STOREFRONT_TOKEN=your_public_storefront_token_here
-REACT_APP_API_VERSION=2024-01
-Backend (.env):
-SHOPIFY_DOMAIN=kz9z4f-2a.myshopify.com
-SHOPIFY_ADMIN_TOKEN=your_private_admin_token_here
-SHOPIFY_API_VERSION=2024-01
-PORT=3001 4. Security Best Practices
-✅ DO:
-Use Storefront API token in your React frontend
-Store Admin API token only in backend environment variables
-Add .env to .gitignore
-Use HTTPS for all API requests
-Validate and sanitize all user inputs
-Implement rate limiting on your backend
-❌ DON'T:
-Never commit tokens to version control
-Never expose Admin API token in frontend code
-Never hardcode tokens in your source code
-Don't share tokens publicly 5. Token Management
-Where to find your tokens:
-Storefront API: Settings > Apps and sales channels > Develop apps > [Your App] > API credentials
-Admin API: Same location, different section
-Rotating tokens: If a token is compromised, regenerate it immediately in your Shopify admin and update your environment variables. 6. Complete React Component Example
-// components/ProductList.jsx
-import { useState, useEffect } from 'react';
-import { getProducts } from '../services/products';
-import { createCart } from '../services/cart';
-
-export default function ProductList() {
-const [products, setProducts] = useState([]);
-const [loading, setLoading] = useState(true);
-
-useEffect(() => {
-async function fetchProducts() {
-try {
-const data = await getProducts(10);
-setProducts(data.products.edges);
-} catch (error) {
-console.error('Error fetching products:', error);
-} finally {
-setLoading(false);
-}
-}
-
-    fetchProducts();
-
-}, []);
-
-const handleAddToCart = async (variantId) => {
-try {
-const { cartCreate } = await createCart(variantId, 1);
-
-      if (cartCreate.userErrors.length > 0) {
-        console.error('Cart errors:', cartCreate.userErrors);
-        return;
-      }
-
-      // Store cart ID in localStorage
-      localStorage.setItem('cartId', cartCreate.cart.id);
-
-      // Redirect to checkout
-      window.location.href = cartCreate.cart.checkoutUrl;
-    } catch (error) {
-      console.error('Error adding to cart:', error);
-    }
-
-};
-
-if (loading) return <div>Loading products...</div>;
-
-return (
-
-<div className="product-grid">
-{products.map(({ node: product }) => (
-<div key={product.id} className="product-card">
-<h3>{product.title}</h3>
-<p>{product.description}</p>
-<p className="price">
-{product.priceRange.minVariantPrice.currencyCode}{' '}
-{product.priceRange.minVariantPrice.amount}
-</p>
-<button
-onClick={() => handleAddToCart(product.variants.edges[0].node.id)}
-disabled={!product.availableForSale} >
-{product.availableForSale ? 'Add to Cart' : 'Out of Stock'}
-</button>
-</div>
-))}
-</div>
-);
-}
-Summary
-Token Type Use In Purpose Security Level
-Storefront API (Public) React Frontend Customer operations, cart, checkout Public (safe in browser)
-Admin API (Private) Backend Server Only Admin operations, order management Private (never expose)
-Your headless storefront architecture:
-Frontend (React) → Storefront API → Products, Cart, Checkout - /Users/samarthvyas/Library/Mobile Documents/com~apple~CloudDocs/Vibe Station/Create organizational components
-Backend (Node.js) → Admin API → Orders, Inventory, Webhooks - /Users/samarthvyas/Library/Mobile Documents/com~apple~CloudDocs/Vibe Station/VS Backend/shopify-api-backend
-Checkout → Shopify Hosted Checkout → Payment Processing
+So does that mean I do not need to integrate admin apis in my headless
+Not exactly - it depends on what functionality you need in your headless storefront.
+You DON'T need Admin API in frontend, but you WILL need it in your backend for:
+Essential Operations (likely needed):
+✅ Inventory sync
+If you're using 3PL (Shiprocket), you need Admin API to update stock levels
+✅ Order webhooks
+Processing order events (created, fulfilled, cancelled) on your backend
+✅ Product imports/updates
+Bulk product management, syncing from external systems
+✅ Metafields
+If you're storing custom data (specs, badges, custom attributes) that Storefront API needs to read
+✅ Multi-location inventory
+Managing stock across warehouses/locations
+✅ Fulfillment automation
+Auto-fulfilling orders, creating shipping labels
+Optional Operations (depends on your needs):
+⚠️ Custom analytics
+If Shopify's built-in analytics aren't enough
+⚠️ Discount automation
+Creating dynamic discounts based on business logic
+⚠️ Customer segmentation
+Advanced customer tagging/grouping
+⚠️ Pre-order logic
+Managing pre-order inventory states
+Your Headless Architecture Should Be:
+┌─────────────────────────────────────────┐
+│ FRONTEND (Azure/React) │
+│ - Storefront API (public token) │
+│ - Customer Account API (OAuth) │
+│ - NO Admin API │
+└─────────────────────────────────────────┘
+↓
+┌─────────────────────────────────────────┐
+│ BACKEND (Node/Express) │
+│ - Admin API (for operations) │
+│ - Storefront API (private token) │
+│ - Webhook handlers │
+│ - 3PL integrations │
+└─────────────────────────────────────────┘
+↓
+┌─────────────────────────────────────────┐
+│ SHOPIFY (checkout-vibestation) │
+│ - Checkout infrastructure │
+│ - Order processing │
+│ - Payment handling │
+└─────────────────────────────────────────┘
+Based on Your Profile, You NEED Admin API for:
+3PL Integration (Shiprocket)
+Sync inventory, update fulfillment status
+Multi-location inventory
+Track stock across India/US warehouses
+Metafields
+Store custom product data (guitar specs, premium attributes)
+Webhooks
+Process order events, inventory changes
+Bulk operations
+Product imports, inventory updates
+What You Can Skip:
+❌ Admin API in your frontend code (React/Azure)
+❌ Admin API for customer-facing operations
+❌ Direct Admin API calls from browser/mobile
+Minimal Setup:
+If you only want basic e-commerce:
+Frontend: Storefront API only ✅
+Backend: Minimal (just for webhooks if needed)
+For your premium guitar store with 3PL:
+Frontend: Storefront API ✅
+Backend: Admin API + Storefront API ✅ (you need this)
+Bottom line: Your frontend doesn't need Admin API, but your backend does for inventory management, 3PL sync, and operational automation. The Admin API stays server-side only for security.

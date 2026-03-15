@@ -13,7 +13,7 @@ import {
   setCartId,
   updateCartBuyerIdentity,
   type Cart as ShopifyCart
-} from '../../lib/shopify';
+} from '../../lib/shopify-storefront';
 import {
   useCartCreate,
   useCartLinesAdd,

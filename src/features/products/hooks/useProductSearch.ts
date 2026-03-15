@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { predictiveSearch } from '../../../lib/shopify';
+import { predictiveSearch } from '../../../lib/shopify-storefront';
 import type { ProductSearchConfig } from '../types';
 
 const SEARCH_CONFIG: ProductSearchConfig = {

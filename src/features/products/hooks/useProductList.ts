@@ -3,7 +3,7 @@ import {
   getProducts,
   resolveProductThumbnail,
   type Product as ShopifyProduct
-} from '../../../lib/shopify';
+} from '../../../lib/shopify-storefront';
 import type { Product } from '../types';
 import { toCategoryFilterId } from '../utils/categoryFilters';
 

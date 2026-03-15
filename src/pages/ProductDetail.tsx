@@ -9,8 +9,62 @@ import { Reviews } from "../features/product_details/components/Reviews";
 import { Faq } from "../features/product_details/components/Faq";
 import { RelatedProducts } from "../features/product_details/components/RelatedProducts";
 import { Container } from "../components/layout/Container";
+import { ProductDetailPageSkeleton } from "../components/ui/PageSkeleton";
+import { useProductDetailMockData } from "../features/product_details/hooks/useProductDetailMockData";
 
 export function ProductDetail() {
+  const { hasProduct, isLoading } = useProductDetailMockData();
+
+  if (isLoading) {
+    return <ProductDetailPageSkeleton />;
+  }
+
+  if (!hasProduct) {
+    return (
+      <section
+        style={{
+          paddingTop: "64px",
+          paddingBottom: "80px",
+          backgroundColor: "var(--card)",
+        }}
+      >
+        <Container>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "12px",
+              maxWidth: "560px",
+            }}
+          >
+            <h1
+              style={{
+                margin: 0,
+                fontFamily: "Inter, system-ui, sans-serif",
+                fontSize: "32px",
+                lineHeight: "38px",
+                color: "var(--foreground)",
+              }}
+            >
+              Product unavailable
+            </h1>
+            <p
+              style={{
+                margin: 0,
+                fontFamily: "Inter, system-ui, sans-serif",
+                fontSize: "16px",
+                lineHeight: "24px",
+                color: "var(--muted-foreground)",
+              }}
+            >
+              This product could not be loaded for the requested handle.
+            </p>
+          </div>
+        </Container>
+      </section>
+    );
+  }
+
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       {/* Hero Section - Title + Product Main combined */}

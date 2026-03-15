@@ -4,7 +4,7 @@ import {
   createCart,
   removeCartLines,
   updateCartLines
-} from '../../../lib/shopify';
+} from '../../../lib/shopify-storefront';
 
 type CartCreateLines = Parameters<typeof createCart>[0];
 type CartLinesAddLines = Parameters<typeof addCartLines>[1];

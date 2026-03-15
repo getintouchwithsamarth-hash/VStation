@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import {
   getProductByHandle,
-  getProductWithShopifyMetafields,
   getProductsByCategories,
-  getProducts,
   resolveProductThumbnail,
-  type Product,
-  type ShopifyNamespaceMetafield
-} from '../../../lib/shopify';
+  type Product
+} from '../../../lib/shopify-storefront';
+import {
+  getPublicAdminProductMetadata,
+  type PublicAdminProductMetadata
+} from '../../../lib/shopify-admin';
 
 const IS_DEV = import.meta.env.DEV;
 const SHAREABLE_STORE_ORIGIN = (
@@ -44,73 +45,73 @@ type ReviewBreakdown = {
   label: string;
 };
 
-const DEFAULT_PRODUCT_DETAIL_DATA = {
+const EMPTY_PRODUCT_DETAIL_DATA = {
   productHeader: {
-    badge: 'Curated pick',
-    title: 'Product',
-    vendor: 'Vibe Station',
-    sku: '—',
+    badge: '',
+    title: '',
+    vendor: '',
+    sku: '',
     shareUrl: '',
-    shareLabel: 'Shareable short URL'
+    shareLabel: ''
   },
   productMain: {
     gallery: {
       images: [] as Array<{ id: string; url: string; altText: string }>,
-      zoomLabel: 'Zoom',
-      prevLabel: 'Prev',
-      nextLabel: 'Next'
+      zoomLabel: '',
+      prevLabel: '',
+      nextLabel: ''
     },
     buyBox: {
       variantId: null as string | null,
-      badge: 'Curated pick',
-      name: 'Product',
-      descriptor: 'Curated by Vibe Station',
-      price: '₹—',
+      badge: '',
+      name: '',
+      descriptor: '',
+      price: '',
       compareAtPrice: null as string | null,
-      stock: 'Checking availability',
+      stock: '',
       isInStock: false,
       features: [] as string[],
       reassurancePoints: [] as string[],
-      primaryCta: 'Add to cart',
-      secondaryCta: 'Buy now',
-      microLine: 'Ships fast · Clear returns · Responsive support',
-      inBoxTitle: "What's in the box",
-      inBoxLine: 'Details available in product info'
+      primaryCta: '',
+      secondaryCta: '',
+      microLine: '',
+      inBoxTitle: '',
+      inBoxLine: ''
     }
   },
   keyBenefits: {
-    title: 'Why it feels different',
+    title: '',
     cards: [] as ProductDetailCard[]
   },
   featureDeepDive: {
-    overviewTitle: 'Product overview',
+    overviewTitle: '',
     overviewHtml: '',
-    storyTitle: 'Why this made the cut',
+    storyTitle: '',
     storyHtml: '',
-    buyingGuideTitle: 'Buying guide',
+    buyingGuideTitle: '',
     buyingGuideHtml: '',
     curatedFor: '' as string,
     notFor: '' as string
   },
   deliveryAndReturns: [] as ProductDetailCard[],
   reviews: {
-    title: 'Reviews',
-    supporting: 'Focused on daily use, clarity, and durability.',
-    averageLabel: '— avg',
-    averageValue: '—',
-    totalReviewsLabel: '0 reviews',
-    verifiedLabel: 'Verified',
-    useCasePrefix: 'Use case:',
-    writeReviewLabel: 'Write a review',
-    loadMoreLabel: 'Load more',
+    title: '',
+    supporting: '',
+    averageLabel: '',
+    averageValue: '',
+    totalReviewsLabel: '',
+    verifiedLabel: '',
+    useCasePrefix: '',
+    writeReviewLabel: '',
+    loadMoreLabel: '',
     breakdown: [] as ReviewBreakdown[],
     tags: [] as string[],
     items: [] as ProductDetailReview[]
   },
   relatedProducts: {
-    title: 'Complete your setup',
-    viewAllLabel: 'View all',
-    addToCartLabel: 'Add to cart',
+    title: '',
+    viewAllLabel: '',
+    addToCartLabel: '',
     items: [] as Array<{
       id: string;
       variantId: string | null;
@@ -124,29 +125,29 @@ const DEFAULT_PRODUCT_DETAIL_DATA = {
     }>
   },
   specsAndInBox: {
-    specificationsTitle: 'Specifications',
+    specificationsTitle: '',
     specifications: [] as Array<{ label: string; value: string }>,
-    inBoxTitle: 'In the box',
+    inBoxTitle: '',
     inBoxItems: [] as string[],
-    inBoxBadge: 'No extras required',
-    productDetailsTitle: 'Product details',
+    inBoxBadge: '',
+    productDetailsTitle: '',
     productDetails: [] as Array<{ label: string; value: string }>
   },
   faq: {
-    title: 'FAQ',
+    title: '',
     items: [] as ProductDetailFaq[]
   },
   stickyCtaRail: {
     variantId: null as string | null,
-    name: 'Product',
-    price: '₹—',
-    stockLabel: 'Checking availability',
+    name: '',
+    price: '',
+    stockLabel: '',
     isInStock: false,
-    shippingLabel: 'Shipping calculated at checkout',
+    shippingLabel: '',
     reassurancePoints: [] as string[],
-    addToCartLabel: 'Add to cart',
-    shareLabel: 'Share',
-    helpLabel: 'Need help?'
+    addToCartLabel: '',
+    shareLabel: '',
+    helpLabel: ''
   }
 };
 
@@ -174,10 +175,11 @@ const getDefaultVariantId = (product: Product): string | null => {
 
 const getPrimaryVariant = (product: Product) => product.variants?.edges[0]?.node ?? null;
 
-let productDetailCache = DEFAULT_PRODUCT_DETAIL_DATA;
+let productDetailCache = EMPTY_PRODUCT_DETAIL_DATA;
 let productDetailResolved = false;
 let productDetailPromise: Promise<void> | null = null;
 let productDetailHandle: string | null = null;
+let productDetailFound = false;
 
 const formatPrice = (amount?: string, currencyCode?: string): string => {
   if (!amount || !currencyCode) {
@@ -236,6 +238,89 @@ const toReadableLabel = (value: string): string =>
     .replace(/\s+/g, ' ')
     .trim()
     .replace(/\b\w/g, (char) => char.toUpperCase());
+
+const isTaxonomyReferenceField = (key: string): boolean => /taxonomy\s*reference/i.test(key);
+
+const getLeafCategoryLabel = (value: string): string =>
+  value
+    .split('>')
+    .map((segment) => segment.trim())
+    .filter(Boolean)
+    .at(-1) || value.trim();
+
+const formatReferenceFieldValue = (key: string, value: string): string => {
+  const normalizedValue = normalizeShopifyText(value)
+    .replace(/\s*\n+\s*/g, ' ')
+    .replace(/\[*"?gid:\/\/shopify\/TaxonomyValue\/\d+"?\]*/gi, '')
+    .replace(/\s*,\s*,+/g, ', ')
+    .replace(/\(\s*,/g, '(')
+    .replace(/,\s*\)/g, ')')
+    .replace(/\s{2,}/g, ' ')
+    .replace(/^,\s*|\s*,\s*$/g, '')
+    .trim();
+  if (!normalizedValue) {
+    return '';
+  }
+
+  if (/^label$/i.test(key)) {
+    return normalizedValue;
+  }
+
+  if (/^color$/i.test(key)) {
+    return `(${normalizedValue})`;
+  }
+
+  return normalizedValue;
+};
+
+const sanitizeRenderedSpecValue = (value: string): string =>
+  value
+    .replace(/\[*"?gid:\/\/shopify\/TaxonomyValue\/\d+"?\]*/gi, '')
+    .replace(/\s*\|\s*/g, ' | ')
+    .replace(/\s*,\s*\|/g, ' |')
+    .replace(/\|\s*,\s*/g, '| ')
+    .replace(/\s*,\s*,+/g, ', ')
+    .replace(/\(\s*,/g, '(')
+    .replace(/,\s*\)/g, ')')
+    .replace(/\s{2,}/g, ' ')
+    .replace(/^,\s*|\s*,\s*$/g, '')
+    .trim();
+
+const formatMetaobjectReference = (reference: NonNullable<PublicAdminProductMetadata['shopifyMetafields'][number]['reference']>) => {
+  const meaningfulFields = reference.fields.filter(
+    (field) => field.value && field.value.trim().length > 0 && !isTaxonomyReferenceField(field.key)
+  );
+
+  if (meaningfulFields.length === 0) {
+    return reference.displayName?.trim() || '';
+  }
+
+  const labelField = meaningfulFields.find((field) => /^label$/i.test(field.key));
+  const colorField = meaningfulFields.find((field) => /^color$/i.test(field.key));
+  const otherFields = meaningfulFields.filter((field) => !/^label$/i.test(field.key) && !/^color$/i.test(field.key));
+
+  if (labelField) {
+    const parts = [
+      formatReferenceFieldValue(labelField.key, labelField.value ?? ''),
+      ...(colorField ? [formatReferenceFieldValue(colorField.key, colorField.value ?? '')] : [])
+    ].filter(Boolean);
+
+    if (otherFields.length === 0 && parts.length > 0) {
+      return parts.join(' ');
+    }
+
+    const extras = otherFields
+      .map((field) => formatReferenceFieldValue(field.key, field.value ?? ''))
+      .filter(Boolean);
+
+    return [...parts, ...extras].join(', ');
+  }
+
+  return meaningfulFields
+    .map((field) => formatReferenceFieldValue(field.key, field.value ?? ''))
+    .filter(Boolean)
+    .join(', ');
+};
 
 const splitNormalizedLines = (value?: string): string[] =>
   normalizeShopifyText(value)
@@ -672,40 +757,40 @@ const parseCategoryMetafield = (value?: string): string[] => {
 };
 
 const buildShopifyMetafieldSpecifications = (
-  metafields?: Array<{ node: ShopifyNamespaceMetafield }>
+  metafields?: PublicAdminProductMetadata['shopifyMetafields']
 ): Array<{ label: string; value: string }> =>
-  (metafields ?? [])
-    .map((edge) => edge.node)
-    .flatMap((metafield) => {
-      const label = toReadableLabel(metafield.key);
-      const referenceValues =
-        metafield.references?.edges
-          .map((edge) => edge.node)
-          .filter(Boolean)
-          .map((reference) =>
-            reference.fields
-              .map((field) => {
-                const value = normalizeShopifyText(field.value ?? '').replace(/\s*\n+\s*/g, ' ').trim();
-                return value.length > 0 ? `${toReadableLabel(field.key)}: ${value}` : '';
-              })
-              .filter(Boolean)
-              .join(', ')
-          )
-          .filter(Boolean) ?? [];
-      const fallbackValue = normalizeShopifyText(metafield.value).replace(/\s*\n+\s*/g, ' ').trim();
-      const value = referenceValues.length > 0 ? referenceValues.join(' | ') : fallbackValue;
+  (metafields ?? []).flatMap((metafield) => {
+    const label = toReadableLabel(metafield.key);
+    const singularReference = metafield.reference ? [metafield.reference] : [];
+    const pluralReferences = Array.isArray(metafield.references) ? metafield.references : [];
+    const referenceValues = [...singularReference, ...pluralReferences]
+      .map((reference) => formatMetaobjectReference(reference))
+      .filter(Boolean);
+    const fallbackValue = sanitizeRenderedSpecValue(
+      normalizeShopifyText(metafield.value).replace(/\s*\n+\s*/g, ' ').trim()
+    );
+    const value = sanitizeRenderedSpecValue(referenceValues.length > 0 ? referenceValues.join(' | ') : fallbackValue);
 
-      return value.length > 0 ? [{ label, value }] : [];
-    });
+    return value.length > 0 ? [{ label, value }] : [];
+  });
 
 const buildSpecifications = (
   product: Product,
-  shopifyMetafields?: Array<{ node: ShopifyNamespaceMetafield }>
+  adminMetadata?: PublicAdminProductMetadata | null
 ): Array<{ label: string; value: string }> => {
   const specificationRows = parseObjectMetafield(product.specifications?.value);
   const categories = parseCategoryMetafield(product.categories?.value);
-  const categoryRows = categories.length > 0 ? [{ label: 'Category', value: categories.join(', ') }] : [];
-  const shopifyRows = buildShopifyMetafieldSpecifications(shopifyMetafields);
+  const adminCategory =
+    adminMetadata?.category?.fullName || adminMetadata?.category?.name || '';
+  const combinedCategories = Array.from(
+    new Set(
+      [...categories, ...(adminCategory ? [adminCategory] : [])]
+        .map((category) => getLeafCategoryLabel(category))
+        .filter(Boolean)
+    )
+  );
+  const categoryRows = combinedCategories.length > 0 ? [{ label: 'Category', value: combinedCategories.join(', ') }] : [];
+  const shopifyRows = buildShopifyMetafieldSpecifications(adminMetadata?.shopifyMetafields);
 
   return [...categoryRows, ...shopifyRows, ...specificationRows].filter((item, index, rows) => {
     const key = `${item.label.toLowerCase()}::${item.value.toLowerCase()}`;
@@ -722,23 +807,26 @@ const loadProductDetailFromShopify = async (requestedHandle?: string | null) => 
 
   productDetailPromise = (async () => {
     try {
-      let handle = currentHandle;
+      const handle = currentHandle;
       if (!handle) {
-        const list = await getProducts({ first: 1 });
-        handle = list.edges[0]?.node.handle ?? null;
-      }
-      if (!handle) {
+        productDetailCache = EMPTY_PRODUCT_DETAIL_DATA;
+        productDetailFound = false;
         productDetailResolved = true;
         productDetailHandle = null;
         return;
       }
 
       productDetailHandle = handle;
-      const [product, productWithShopifyMetafields] = await Promise.all([
+      const [product, adminMetadata] = await Promise.all([
         getProductByHandle(handle),
-        getProductWithShopifyMetafields(handle).catch(() => null)
+        getPublicAdminProductMetadata(handle).catch((error) => {
+          console.error('Failed to load public admin product metadata', error);
+          return null;
+        })
       ]);
       if (!product) {
+        productDetailCache = EMPTY_PRODUCT_DETAIL_DATA;
+        productDetailFound = false;
         productDetailResolved = true;
         return;
       }
@@ -752,7 +840,7 @@ const loadProductDetailFromShopify = async (requestedHandle?: string | null) => 
         parseRichTextMetafieldToHtml(product.description) ||
         product.descriptionHtml ||
         `<p>${escapeHtml(product.description)}</p>`;
-      const specifications = buildSpecifications(product, productWithShopifyMetafields?.shopifyMetafields.edges);
+      const specifications = buildSpecifications(product, adminMetadata);
       const inBoxItems = parseArrayMetafield(product.whatsInBox?.value);
       const features = parseArrayMetafield(product.bulletFeatures?.value);
       const keyBenefitCards = mapProductCards(product);
@@ -858,7 +946,7 @@ const loadProductDetailFromShopify = async (requestedHandle?: string | null) => 
           }
         ].filter((card) => card.description.trim().length > 0 || card.footer.trim().length > 0),
         reviews: {
-          ...DEFAULT_PRODUCT_DETAIL_DATA.reviews,
+          ...EMPTY_PRODUCT_DETAIL_DATA.reviews,
           supporting: product.reviewSummary?.value
             ? 'Real review summary pulled from Shopify metafields.'
             : 'Add custom.reviews in Shopify to populate rating, review count, tags, and breakdown.',
@@ -870,7 +958,7 @@ const loadProductDetailFromShopify = async (requestedHandle?: string | null) => 
           items: reviewData.items
         },
         relatedProducts: {
-          ...DEFAULT_PRODUCT_DETAIL_DATA.relatedProducts,
+          ...EMPTY_PRODUCT_DETAIL_DATA.relatedProducts,
           title: getCrossSellTitle(product),
           items: relatedProducts
             .filter((item) => item.id !== product.id && item.handle !== product.handle)
@@ -920,7 +1008,10 @@ const loadProductDetailFromShopify = async (requestedHandle?: string | null) => 
           helpLabel: 'Need help?'
         }
       };
+      productDetailFound = true;
     } catch (error) {
+      productDetailCache = EMPTY_PRODUCT_DETAIL_DATA;
+      productDetailFound = false;
       console.error('Failed to load product detail from Shopify', error);
     } finally {
       productDetailResolved = true;
@@ -934,7 +1025,7 @@ const loadProductDetailFromShopify = async (requestedHandle?: string | null) => 
 export function useProductDetailMockData() {
   const handle = getHandleFromUrl();
   const [data, setData] = useState(productDetailCache);
-  const [isLoading, setIsLoading] = useState(IS_DEV || !productDetailResolved);
+  const [isLoading, setIsLoading] = useState(!productDetailResolved || productDetailHandle !== handle);
 
   useEffect(() => {
     let cancelled = false;
@@ -963,6 +1054,7 @@ export function useProductDetailMockData() {
 
   return {
     ...data,
+    hasProduct: productDetailFound,
     isLoading
   };
 }
