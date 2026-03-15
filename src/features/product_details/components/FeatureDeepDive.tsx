@@ -7,176 +7,248 @@ export function FeatureDeepDive() {
   const { featureDeepDive } = useProductDetailMockData();
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
-      {/* Title */}
-      <div style={{ textAlign: "center" }}>
-        <h3
-          style={{
-            fontFamily: "Inter, system-ui, sans-serif",
-            color: "var(--foreground)",
-            margin: 0,
-          }}
-        >
-          Product Deep Dive
-        </h3>
-      </div>
+    <>
+      <style>{`
+        .feature-deep-dive-container {
+          display: flex;
+          flex-direction: column;
+          gap: 32px;
+        }
 
-      {/* Main Content Grid */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 380px",
-          gap: "24px",
-        }}
-      >
-        {/* Left Column - Main Content */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-          {/* Overview Card */}
-          <CardInstance variant="elevated" padding="lg">
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "16px" }}
-            >
-              <div
-                style={{ display: "flex", alignItems: "center", gap: "10px" }}
-              >
-                <Info size={20} style={{ color: "var(--primary)" }} />
-                <h4
-                  style={{
-                    fontFamily: "Inter, system-ui, sans-serif",
-                    fontSize: "18px",
-                    lineHeight: "24px",
-                    fontWeight: "600",
-                    color: "var(--foreground)",
-                    margin: 0,
-                  }}
-                >
-                  {featureDeepDive.overviewTitle}
-                </h4>
-              </div>
-              <div
-                style={{
-                  fontFamily: "Inter, system-ui, sans-serif",
-                  fontSize: "15px",
-                  lineHeight: "24px",
-                  color: "var(--muted-foreground)",
-                }}
-                dangerouslySetInnerHTML={{
-                  __html: featureDeepDive.overviewHtml,
-                }}
-              />
-            </div>
-          </CardInstance>
+        .feature-deep-dive-title-wrapper {
+          text-align: center;
+        }
 
-          {/* Buying Guide Card */}
-          <CardInstance variant="elevated" padding="lg">
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "16px" }}
-            >
-              <h4
-                style={{
-                  fontFamily: "Inter, system-ui, sans-serif",
-                  fontSize: "18px",
-                  lineHeight: "24px",
-                  fontWeight: "600",
-                  color: "var(--foreground)",
-                  margin: 0,
-                }}
-              >
-                {featureDeepDive.buyingGuideTitle}
-              </h4>
-              <div
-                style={{
-                  fontFamily: "Inter, system-ui, sans-serif",
-                  fontSize: "15px",
-                  lineHeight: "24px",
-                  color: "var(--muted-foreground)",
-                }}
-                dangerouslySetInnerHTML={{
-                  __html: featureDeepDive.buyingGuideHtml,
-                }}
-              />
-            </div>
-          </CardInstance>
+        .feature-deep-dive-title {
+          font-family: Inter, system-ui, sans-serif;
+          color: var(--foreground);
+          margin: 0;
+        }
 
-          {/* Why This Made The Cut */}
-          {featureDeepDive.storyHtml ? (
-            <CardInstance variant="subtle" padding="lg">
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "12px",
-                }}
-              >
-                <div
-                  style={{
-                    display: "inline-flex",
-                    padding: "6px 12px",
-                    backgroundColor: "color-mix(in srgb, var(--primary) 10%, transparent)",
-                    borderRadius: "8px",
-                    alignSelf: "flex-start",
-                  }}
-                >
-                  <h4
-                    style={{
-                      fontFamily: "Inter, system-ui, sans-serif",
-                      fontSize: "14px",
-                      lineHeight: "20px",
-                      fontWeight: "600",
-                      color: "var(--primary)",
-                      margin: 0,
-                    }}
-                  >
-                    {featureDeepDive.storyTitle}
+        .feature-deep-dive-grid {
+          display: grid;
+          grid-template-columns: 1fr 380px;
+          gap: 24px;
+        }
+
+        .feature-deep-dive-main {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+        }
+
+        .feature-deep-dive-sidebar {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+
+        .feature-card-content {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+
+        .feature-card-header {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .feature-card-title {
+          font-family: Inter, system-ui, sans-serif;
+          font-size: 18px;
+          line-height: 24px;
+          font-weight: 600;
+          color: var(--foreground);
+          margin: 0;
+        }
+
+        .feature-card-html {
+          font-family: Inter, system-ui, sans-serif;
+          font-size: 15px;
+          line-height: 24px;
+          color: var(--muted-foreground);
+        }
+
+        .feature-story-badge {
+          display: inline-flex;
+          padding: 6px 12px;
+          background-color: color-mix(in srgb, var(--primary) 10%, transparent);
+          border-radius: 8px;
+          align-self: flex-start;
+        }
+
+        .feature-story-title {
+          font-family: Inter, system-ui, sans-serif;
+          font-size: 14px;
+          line-height: 20px;
+          font-weight: 600;
+          color: var(--primary);
+          margin: 0;
+        }
+
+        .feature-story-html {
+          font-family: Inter, system-ui, sans-serif;
+          font-size: 15px;
+          line-height: 24px;
+          font-weight: 500;
+          color: var(--foreground);
+        }
+
+        .feature-perfect-for {
+          font-family: Inter, system-ui, sans-serif;
+          font-size: 16px;
+          line-height: 24px;
+          font-weight: 600;
+          color: var(--foreground);
+        }
+
+        .feature-not-for {
+          font-family: Inter, system-ui, sans-serif;
+          font-size: 14px;
+          line-height: 22px;
+          font-weight: 400;
+          color: var(--muted-foreground);
+        }
+
+        .quick-info-title {
+          font-family: Inter, system-ui, sans-serif;
+          font-size: 13px;
+          line-height: 18px;
+          font-weight: 600;
+          color: var(--foreground);
+        }
+
+        .quick-info-label {
+          font-family: Inter, system-ui, sans-serif;
+          font-size: 11px;
+          line-height: 16px;
+          font-weight: 600;
+          color: var(--muted-foreground);
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+
+        .quick-info-value {
+          font-family: Inter, system-ui, sans-serif;
+          font-size: 13px;
+          line-height: 18px;
+          font-weight: 500;
+          color: var(--foreground);
+        }
+
+        @media (max-width: 1024px) {
+          .feature-deep-dive-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+          }
+
+          .feature-deep-dive-sidebar {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .feature-deep-dive-container {
+            gap: 24px;
+          }
+
+          .feature-deep-dive-sidebar {
+            grid-template-columns: 1fr;
+            gap: 14px;
+          }
+
+          .feature-card-title {
+            font-size: 16px;
+            line-height: 22px;
+          }
+
+          .feature-card-html {
+            font-size: 14px;
+            line-height: 22px;
+          }
+
+          .feature-perfect-for {
+            font-size: 15px;
+            line-height: 22px;
+          }
+
+          .feature-not-for {
+            font-size: 13px;
+            line-height: 20px;
+          }
+        }
+      `}</style>
+      <div className="feature-deep-dive-container">
+        {/* Title */}
+        <div className="feature-deep-dive-title-wrapper">
+          <h3 className="feature-deep-dive-title">Product Deep Dive</h3>
+        </div>
+
+        {/* Main Content Grid */}
+        <div className="feature-deep-dive-grid">
+          {/* Left Column - Main Content */}
+          <div className="feature-deep-dive-main">
+            {/* Overview Card */}
+            <CardInstance variant="elevated" padding="lg">
+              <div className="feature-card-content">
+                <div className="feature-card-header">
+                  <Info size={20} style={{ color: "var(--primary)" }} />
+                  <h4 className="feature-card-title">
+                    {featureDeepDive.overviewTitle}
                   </h4>
                 </div>
                 <div
-                  style={{
-                    fontFamily: "Inter, system-ui, sans-serif",
-                    fontSize: "15px",
-                    lineHeight: "24px",
-                    fontWeight: "500",
-                    color: "var(--foreground)",
-                  }}
+                  className="feature-card-html"
                   dangerouslySetInnerHTML={{
-                    __html: featureDeepDive.storyHtml,
+                    __html: featureDeepDive.overviewHtml,
                   }}
                 />
               </div>
             </CardInstance>
-          ) : null}
-        </div>
 
-        {/* Right Column - Highlights */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-          {/* Perfect For */}
-          <CardInstance variant="elevated" padding="lg">
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "12px" }}
-            >
-              <div
-                style={{ display: "flex", alignItems: "center", gap: "8px" }}
-              >
-                <CheckCircle2 size={18} style={{ color: "var(--success-foreground)" }} />
-                <BadgeInstance label="Perfect for" variant="accent" size="sm" />
+            {/* Buying Guide Card */}
+            <CardInstance variant="elevated" padding="lg">
+              <div className="feature-card-content">
+                <h4 className="feature-card-title">
+                  {featureDeepDive.buyingGuideTitle}
+                </h4>
+                <div
+                  className="feature-card-html"
+                  dangerouslySetInnerHTML={{
+                    __html: featureDeepDive.buyingGuideHtml,
+                  }}
+                />
               </div>
-              <div
-                style={{
-                  fontFamily: "Inter, system-ui, sans-serif",
-                  fontSize: "16px",
-                  lineHeight: "24px",
-                  fontWeight: "600",
-                  color: "var(--foreground)",
-                }}
-              >
-                {featureDeepDive.curatedFor}
-              </div>
-            </div>
-          </CardInstance>
+            </CardInstance>
 
-          {/* Not Ideal For */}
-          {featureDeepDive.notFor ? (
-            <CardInstance variant="subtle" padding="lg">
+            {/* Why This Made The Cut */}
+            {featureDeepDive.storyHtml ? (
+              <CardInstance variant="subtle" padding="lg">
+                <div className="feature-card-content" style={{ gap: "12px" }}>
+                  <div className="feature-story-badge">
+                    <h4 className="feature-story-title">
+                      {featureDeepDive.storyTitle}
+                    </h4>
+                  </div>
+                  <div
+                    className="feature-story-html"
+                    dangerouslySetInnerHTML={{
+                      __html: featureDeepDive.storyHtml,
+                    }}
+                  />
+                </div>
+              </CardInstance>
+            ) : null}
+          </div>
+
+          {/* Right Column - Highlights */}
+          <div className="feature-deep-dive-sidebar">
+            {/* Perfect For */}
+            <CardInstance variant="elevated" padding="lg">
               <div
                 style={{
                   display: "flex",
@@ -184,148 +256,102 @@ export function FeatureDeepDive() {
                   gap: "12px",
                 }}
               >
-                <BadgeInstance
-                  label="Not ideal for"
-                  variant="neutral"
-                  size="sm"
-                />
                 <div
-                  style={{
-                    fontFamily: "Inter, system-ui, sans-serif",
-                    fontSize: "14px",
-                    lineHeight: "22px",
-                    fontWeight: "400",
-                    color: "var(--muted-foreground)",
-                  }}
+                  style={{ display: "flex", alignItems: "center", gap: "8px" }}
                 >
-                  {featureDeepDive.notFor}
+                  <CheckCircle2
+                    size={18}
+                    style={{ color: "var(--success-foreground)" }}
+                  />
+                  <BadgeInstance
+                    label="Perfect for"
+                    variant="accent"
+                    size="sm"
+                  />
+                </div>
+                <div className="feature-perfect-for">
+                  {featureDeepDive.curatedFor}
                 </div>
               </div>
             </CardInstance>
-          ) : null}
 
-          {/* Quick Info Card */}
-          <CardInstance variant="subtle" padding="md">
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "12px" }}
-            >
-              <div
-                style={{ display: "flex", alignItems: "center", gap: "8px" }}
-              >
-                <Package size={16} style={{ color: "var(--primary)" }} />
+            {/* Not Ideal For */}
+            {featureDeepDive.notFor ? (
+              <CardInstance variant="subtle" padding="lg">
                 <div
                   style={{
-                    fontFamily: "Inter, system-ui, sans-serif",
-                    fontSize: "13px",
-                    lineHeight: "18px",
-                    fontWeight: "600",
-                    color: "var(--foreground)",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "12px",
                   }}
                 >
-                  Quick Info
+                  <BadgeInstance
+                    label="Not ideal for"
+                    variant="neutral"
+                    size="sm"
+                  />
+                  <div className="feature-not-for">
+                    {featureDeepDive.notFor}
+                  </div>
                 </div>
-              </div>
+              </CardInstance>
+            ) : null}
+
+            {/* Quick Info Card */}
+            <CardInstance variant="subtle" padding="md">
               <div
                 style={{
                   display: "flex",
                   flexDirection: "column",
-                  gap: "8px",
-                  paddingTop: "4px",
+                  gap: "12px",
                 }}
               >
-                <div>
-                  <div
-                    style={{
-                      fontFamily: "Inter, system-ui, sans-serif",
-                      fontSize: "11px",
-                      lineHeight: "16px",
-                      fontWeight: "600",
-                      color: "var(--muted-foreground)",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.05em",
-                    }}
-                  >
-                    Protection Level
-                  </div>
-                  <div
-                    style={{
-                      fontFamily: "Inter, system-ui, sans-serif",
-                      fontSize: "13px",
-                      lineHeight: "18px",
-                      fontWeight: "500",
-                      color: "var(--foreground)",
-                    }}
-                  >
-                    10mm Padding
-                  </div>
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "8px" }}
+                >
+                  <Package size={16} style={{ color: "var(--primary)" }} />
+                  <div className="quick-info-title">Quick Info</div>
                 </div>
                 <div
                   style={{
-                    borderTop: "1px solid var(--border)",
-                    paddingTop: "8px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "8px",
+                    paddingTop: "4px",
                   }}
                 >
-                  <div
-                    style={{
-                      fontFamily: "Inter, system-ui, sans-serif",
-                      fontSize: "11px",
-                      lineHeight: "16px",
-                      fontWeight: "600",
-                      color: "var(--muted-foreground)",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.05em",
-                    }}
-                  >
-                    Water Resistant
+                  <div>
+                    <div className="quick-info-label">Protection Level</div>
+                    <div className="quick-info-value">10mm Padding</div>
                   </div>
                   <div
                     style={{
-                      fontFamily: "Inter, system-ui, sans-serif",
-                      fontSize: "13px",
-                      lineHeight: "18px",
-                      fontWeight: "500",
-                      color: "var(--foreground)",
+                      borderTop: "1px solid var(--border)",
+                      paddingTop: "8px",
                     }}
                   >
-                    Light rain protection
-                  </div>
-                </div>
-                <div
-                  style={{
-                    borderTop: "1px solid var(--border)",
-                    paddingTop: "8px",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontFamily: "Inter, system-ui, sans-serif",
-                      fontSize: "11px",
-                      lineHeight: "16px",
-                      fontWeight: "600",
-                      color: "var(--muted-foreground)",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.05em",
-                    }}
-                  >
-                    Compatibility
+                    <div className="quick-info-label">Water Resistant</div>
+                    <div className="quick-info-value">
+                      Light rain protection
+                    </div>
                   </div>
                   <div
                     style={{
-                      fontFamily: "Inter, system-ui, sans-serif",
-                      fontSize: "13px",
-                      lineHeight: "18px",
-                      fontWeight: "500",
-                      color: "var(--foreground)",
+                      borderTop: "1px solid var(--border)",
+                      paddingTop: "8px",
                     }}
                   >
-                    Most acoustic & electric
+                    <div className="quick-info-label">Compatibility</div>
+                    <div className="quick-info-value">
+                      Most acoustic & electric
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </CardInstance>
+            </CardInstance>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

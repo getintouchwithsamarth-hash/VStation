@@ -4,6 +4,9 @@ import { useHomeMockData } from '../hooks/useHomeMockData';
 
 export function Hero() {
   const { hero } = useHomeMockData();
+  if (!hero) {
+    return null;
+  }
 
   return (
     <Section contain={false} paddingTop="56px" paddingBottom="48px" background="var(--card)">

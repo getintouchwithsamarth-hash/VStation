@@ -88,29 +88,29 @@
 }
 
 .dark {
-  --surface-canvas: var(--neutral-0);
-  --surface-subtle: var(--neutral-25);
-  --surface-muted: var(--neutral-50);
-  --surface-elevated: var(--neutral-0);
+  --surface-canvas: oklch(0.18 0 0);
+  --surface-subtle: oklch(0.205 0 0);
+  --surface-muted: oklch(0.24 0 0);
+  --surface-elevated: oklch(0.18 0 0);
   --surface-inverse: var(--neutral-900);
-  --text-primary: var(--neutral-900);
-  --text-secondary: var(--neutral-700);
-  --text-muted: var(--neutral-500);
+  --text-primary: oklch(0.985 0 0);
+  --text-secondary: oklch(0.92 0 0);
+  --text-muted: oklch(0.708 0 0);
   --text-inverse: var(--neutral-0);
-  --text-link: var(--accent-600);
-  --border-subtle: var(--neutral-200);
-  --border-default: var(--neutral-300);
-  --border-strong: var(--neutral-400);
+  --text-link: oklch(0.78 0.16 264);
+  --border-subtle: oklch(0.28 0 0);
+  --border-default: oklch(0.36 0 0);
+  --border-strong: oklch(0.48 0 0);
   --border-focus: var(--accent-500);
   --shadow-0: none;
-  --shadow-1: 0 1px 2px 0 #1018280a, 0 1px 3px 0 #1018280f;
-  --shadow-2: 0 4px 10px -2px #1018280a, 0 2px 6px -2px #10182814;
-  --shadow-3: 0 12px 24px -4px #1018280f, 0 6px 12px -4px #10182814;
+  --shadow-1: 0 1px 2px 0 rgb(0 0 0 / 0.28), 0 1px 3px 0 rgb(0 0 0 / 0.38);
+  --shadow-2: 0 4px 10px -2px rgb(0 0 0 / 0.32), 0 2px 6px -2px rgb(0 0 0 / 0.42);
+  --shadow-3: 0 12px 24px -4px rgb(0 0 0 / 0.34), 0 6px 12px -4px rgb(0 0 0 / 0.44);
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
-  --card: oklch(0.145 0 0);
+  --card: oklch(0.18 0 0);
   --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.145 0 0);
+  --popover: oklch(0.18 0 0);
   --popover-foreground: oklch(0.985 0 0);
   --primary: oklch(0.985 0 0);
   --primary-foreground: oklch(0.205 0 0);
@@ -124,6 +124,8 @@
   --destructive-foreground: oklch(0.637 0.237 25.331);
   --border: oklch(0.36 0 0);
   --input: oklch(0.269 0 0);
+  --input-background: oklch(0.24 0 0);
+  --switch-background: oklch(0.34 0 0);
   --ring: oklch(0.439 0 0);
   --font-weight-medium: 500;
   --font-weight-normal: 400;
@@ -142,6 +144,9 @@
   --sidebar-ring: oklch(0.439 0 0);
   --success-background: oklch(0.3 0.08 157);
   --success-foreground: oklch(0.95 0.02 157);
+  --success-50: oklch(0.3 0.08 157);
+  --success-600: oklch(0.9 0.04 157);
+  --error-600: oklch(0.78 0.13 24);
   --skeleton-base: oklch(0.26 0.01 247);
   --skeleton-highlight: oklch(0.32 0.01 247);
 }
@@ -203,6 +208,11 @@
 
   html {
     font-size: var(--font-size);
+    color-scheme: light;
+  }
+
+  .dark {
+    color-scheme: dark;
   }
 
   h1 {

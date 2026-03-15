@@ -6,41 +6,64 @@ import { useCart } from "../../cart/CartContext";
 
 export function ProductList({ products }: { products: Product[] }) {
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "16px",
-      }}
-    >
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "16px",
-        }}
-      >
-        {products.length > 0 ? (
-          products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))
-        ) : (
-          <div
-            style={{
-              gridColumn: "1 / -1",
-              border: "1px solid var(--border)",
-              borderRadius: "16px",
-              backgroundColor: "var(--card)",
-              padding: "24px",
-              fontFamily: "Inter, system-ui, sans-serif",
-              color: "var(--muted-foreground)",
-            }}
-          >
-            No products matched your search.
-          </div>
-        )}
+    <>
+      <style>{`
+        .product-list-container {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+
+        .product-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 16px;
+        }
+
+        .no-products-message {
+          grid-column: 1 / -1;
+          border: 1px solid var(--border);
+          border-radius: 16px;
+          background-color: var(--card);
+          padding: 24px;
+          font-family: Inter, system-ui, sans-serif;
+          color: var(--muted-foreground);
+          text-align: center;
+        }
+
+        @media (max-width: 1024px) {
+          .product-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .product-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+          }
+
+          .no-products-message {
+            padding: 20px;
+            font-size: 14px;
+          }
+        }
+      `}</style>
+      <div className="product-list-container">
+        <div className="product-grid">
+          {products.length > 0 ? (
+            products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))
+          ) : (
+            <div className="no-products-message">
+              No products matched your search.
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

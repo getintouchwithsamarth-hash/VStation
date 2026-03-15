@@ -119,359 +119,401 @@ export function Reviews() {
   }, [filter, sortBy, reviews.items]);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "40px",
-      }}
-    >
-      {/* Header */}
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "12px",
-          textAlign: "center",
-        }}
-      >
-        <h3
-          style={{
-            fontFamily: "Inter, system-ui, sans-serif",
-            color: "var(--foreground)",
-            margin: 0,
-          }}
-        >
-          {reviews.title}
-        </h3>
-        <div
-          style={{
-            fontFamily: "Inter, system-ui, sans-serif",
-            fontSize: "14px",
-            lineHeight: "20px",
-            fontWeight: "400",
-            color: "var(--muted-foreground)",
-          }}
-        >
-          {hasFallbackReviews
-            ? "Sample customer feedback shown until product-specific reviews are available."
-            : reviews.supporting}
-        </div>
-      </div>
+    <>
+      <style>{`
+        .reviews-container {
+          display: flex;
+          flex-direction: column;
+          gap: 40px;
+        }
 
-      {/* Rating Summary Section */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "340px 1fr",
-          gap: "32px",
-          alignItems: "start",
-        }}
-      >
-        {/* Left: Overall Rating Card */}
-        <CardInstance variant="elevated" padding="lg">
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "20px",
-              alignItems: "center",
-              textAlign: "center",
-            }}
-          >
+        .reviews-header {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          text-align: center;
+        }
+
+        .reviews-title {
+          font-family: Inter, system-ui, sans-serif;
+          color: var(--foreground);
+          margin: 0;
+        }
+
+        .reviews-supporting {
+          font-family: Inter, system-ui, sans-serif;
+          font-size: 14px;
+          line-height: 20px;
+          font-weight: 400;
+          color: var(--muted-foreground);
+        }
+
+        .reviews-summary-grid {
+          display: grid;
+          grid-template-columns: 340px 1fr;
+          gap: 32px;
+          align-items: start;
+        }
+
+        .reviews-breakdown-title {
+          font-family: Inter, system-ui, sans-serif;
+          font-size: 14px;
+          line-height: 20px;
+          font-weight: 600;
+          color: var(--foreground);
+          margin-bottom: 4px;
+        }
+
+        .reviews-filters-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding-bottom: 8px;
+          border-bottom: 1px solid var(--border);
+          gap: 16px;
+        }
+
+        .reviews-filter-title {
+          font-family: Inter, system-ui, sans-serif;
+          font-size: 14px;
+          line-height: 20px;
+          font-weight: 600;
+          color: var(--foreground);
+        }
+
+        .reviews-filter-count {
+          font-weight: 400;
+          color: var(--muted-foreground);
+          margin-left: 8px;
+        }
+
+        .reviews-list {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+        }
+
+        @media (max-width: 1024px) {
+          .reviews-summary-grid {
+            grid-template-columns: 280px 1fr;
+            gap: 24px;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .reviews-container {
+            gap: 28px;
+          }
+
+          .reviews-supporting {
+            font-size: 13px;
+            line-height: 19px;
+          }
+
+          .reviews-summary-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+          }
+
+          .reviews-filters-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+          }
+
+          .reviews-filter-title {
+            font-size: 13px;
+          }
+        }
+      `}</style>
+      <div className="reviews-container">
+        {/* Header */}
+        <div className="reviews-header">
+          <h3 className="reviews-title">{reviews.title}</h3>
+          <div className="reviews-supporting">
+            {hasFallbackReviews
+              ? "Sample customer feedback shown until product-specific reviews are available."
+              : reviews.supporting}
+          </div>
+        </div>
+
+        {/* Rating Summary Section */}
+        <div className="reviews-summary-grid">
+          {/* Left: Overall Rating Card */}
+          <CardInstance variant="elevated" padding="lg">
             <div
               style={{
                 display: "flex",
                 flexDirection: "column",
-                gap: "12px",
+                gap: "20px",
                 alignItems: "center",
+                textAlign: "center",
               }}
             >
               <div
                 style={{
-                  fontFamily: "Inter, system-ui, sans-serif",
-                  fontSize: "56px",
-                  lineHeight: "1",
-                  fontWeight: "800",
-                  color: "var(--foreground)",
-                  letterSpacing: "-0.02em",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "12px",
+                  alignItems: "center",
                 }}
               >
-                {averageLabel}
-              </div>
-              <StarRating rating={Math.round(Number(averageLabel) || 0)} size={24} />
-              <div
-                style={{
-                  fontFamily: "Inter, system-ui, sans-serif",
-                  fontSize: "14px",
-                  lineHeight: "20px",
-                  fontWeight: "500",
-                  color: "var(--muted-foreground)",
-                }}
-              >
-                Based on {totalReviews.toLocaleString()} reviews
-              </div>
-            </div>
-
-            <div
-              style={{
-                width: "100%",
-                paddingTop: "12px",
-                borderTop: "1px solid var(--border)",
-              }}
-            >
-              <ButtonInstance
-                variant="primary"
-                size="md"
-                label={reviews.writeReviewLabel}
-                onClick={() => console.log("Write review")}
-              />
-            </div>
-          </div>
-        </CardInstance>
-
-        {/* Right: Rating Breakdown */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-          <div
-            style={{
-              fontFamily: "Inter, system-ui, sans-serif",
-              fontSize: "14px",
-              lineHeight: "20px",
-              fontWeight: "600",
-              color: "var(--foreground)",
-              marginBottom: "4px",
-            }}
-          >
-            Rating Breakdown
-          </div>
-
-          <div
-            style={{ display: "flex", flexDirection: "column", gap: "12px" }}
-          >
-            {reviewBreakdown.map((entry) => {
-              const percentage = Math.round((entry.count / totalReviews) * 100);
-
-              return (
-                <button
-                  key={entry.stars}
-                  onClick={() =>
-                    setFilter(
-                      filter === entry.stars
-                        ? "all"
-                        : (entry.stars as 5 | 4 | 3 | 2 | 1),
-                    )
-                  }
+                <div
                   style={{
-                    display: "grid",
-                    gridTemplateColumns: "80px 1fr 60px 48px",
-                    gap: "12px",
-                    alignItems: "center",
-                    background: "none",
-                    border: "none",
-                    padding: "8px 12px",
-                    borderRadius: "8px",
-                    cursor: "pointer",
-                    backgroundColor:
-                      filter === entry.stars
-                        ? "color-mix(in srgb, var(--primary) 5%, transparent)"
-                        : "transparent",
-                    transition: "background-color 0.15s ease",
-                  }}
-                  onMouseEnter={(e) => {
-                    if (filter !== entry.stars) {
-                      e.currentTarget.style.backgroundColor = "var(--muted)";
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (filter !== entry.stars) {
-                      e.currentTarget.style.backgroundColor = "transparent";
-                    }
+                    fontFamily: "Inter, system-ui, sans-serif",
+                    fontSize: "56px",
+                    lineHeight: "1",
+                    fontWeight: "800",
+                    color: "var(--foreground)",
+                    letterSpacing: "-0.02em",
                   }}
                 >
-                  <StarRating rating={entry.stars} size={14} />
+                  {averageLabel}
+                </div>
+                <StarRating
+                  rating={Math.round(Number(averageLabel) || 0)}
+                  size={24}
+                />
+                <div
+                  style={{
+                    fontFamily: "Inter, system-ui, sans-serif",
+                    fontSize: "14px",
+                    lineHeight: "20px",
+                    fontWeight: "500",
+                    color: "var(--muted-foreground)",
+                  }}
+                >
+                  Based on {totalReviews.toLocaleString()} reviews
+                </div>
+              </div>
 
-                  <div
-                    style={{
-                      height: "10px",
-                      borderRadius: "999px",
-                      backgroundColor: "var(--muted)",
-                      overflow: "hidden",
-                      position: "relative",
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: `${percentage}%`,
-                        height: "100%",
-                        backgroundColor: "var(--primary)",
-                        borderRadius: "999px",
-                        transition: "width 0.3s ease",
-                      }}
-                    />
-                  </div>
-
-                  <div
-                    style={{
-                      fontFamily: "Inter, system-ui, sans-serif",
-                      fontSize: "13px",
-                      lineHeight: "18px",
-                      fontWeight: "500",
-                      color: "var(--muted-foreground)",
-                      textAlign: "right",
-                    }}
-                  >
-                    {percentage}%
-                  </div>
-
-                  <div
-                    style={{
-                      fontFamily: "Inter, system-ui, sans-serif",
-                      fontSize: "13px",
-                      lineHeight: "18px",
-                      fontWeight: "600",
-                      color: "var(--foreground)",
-                      textAlign: "right",
-                    }}
-                  >
-                    {entry.count}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Tags */}
-          {reviewTags.length > 0 ? (
-            <div style={{ paddingTop: "8px" }}>
               <div
                 style={{
-                  fontFamily: "Inter, system-ui, sans-serif",
-                  fontSize: "13px",
-                  lineHeight: "18px",
-                  fontWeight: "600",
-                  color: "var(--muted-foreground)",
-                  marginBottom: "10px",
+                  width: "100%",
+                  paddingTop: "12px",
+                  borderTop: "1px solid var(--border)",
                 }}
               >
-                Most mentioned
-              </div>
-              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-                {reviewTags.map((tag) => (
-                  <BadgeInstance
-                    key={tag}
-                    label={tag}
-                    variant="neutral"
-                    size="sm"
-                  />
-                ))}
+                <ButtonInstance
+                  variant="primary"
+                  size="md"
+                  label={reviews.writeReviewLabel}
+                  onClick={() => console.log("Write review")}
+                />
               </div>
             </div>
-          ) : null}
-        </div>
-      </div>
+          </CardInstance>
 
-      {/* Filters and Sort */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          paddingBottom: "8px",
-          borderBottom: "1px solid var(--border)",
-        }}
-      >
-        <div
-          style={{
-            fontFamily: "Inter, system-ui, sans-serif",
-            fontSize: "14px",
-            lineHeight: "20px",
-            fontWeight: "600",
-            color: "var(--foreground)",
-          }}
-        >
-          {filter === "all" ? "All Reviews" : `${filter} Star Reviews`}
-          <span
+          {/* Right: Rating Breakdown */}
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "16px" }}
+          >
+            <div className="reviews-breakdown-title">Rating Breakdown</div>
+
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "12px" }}
+            >
+              {reviewBreakdown.map((entry) => {
+                const percentage = Math.round(
+                  (entry.count / totalReviews) * 100,
+                );
+
+                return (
+                  <button
+                    key={entry.stars}
+                    onClick={() =>
+                      setFilter(
+                        filter === entry.stars
+                          ? "all"
+                          : (entry.stars as 5 | 4 | 3 | 2 | 1),
+                      )
+                    }
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "80px 1fr 60px 48px",
+                      gap: "12px",
+                      alignItems: "center",
+                      background: "none",
+                      border: "none",
+                      padding: "8px 12px",
+                      borderRadius: "8px",
+                      cursor: "pointer",
+                      backgroundColor:
+                        filter === entry.stars
+                          ? "color-mix(in srgb, var(--primary) 5%, transparent)"
+                          : "transparent",
+                      transition: "background-color 0.15s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      if (filter !== entry.stars) {
+                        e.currentTarget.style.backgroundColor = "var(--muted)";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (filter !== entry.stars) {
+                        e.currentTarget.style.backgroundColor = "transparent";
+                      }
+                    }}
+                  >
+                    <StarRating rating={entry.stars} size={14} />
+
+                    <div
+                      style={{
+                        height: "10px",
+                        borderRadius: "999px",
+                        backgroundColor: "var(--muted)",
+                        overflow: "hidden",
+                        position: "relative",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: `${percentage}%`,
+                          height: "100%",
+                          backgroundColor: "var(--primary)",
+                          borderRadius: "999px",
+                          transition: "width 0.3s ease",
+                        }}
+                      />
+                    </div>
+
+                    <div
+                      style={{
+                        fontFamily: "Inter, system-ui, sans-serif",
+                        fontSize: "13px",
+                        lineHeight: "18px",
+                        fontWeight: "500",
+                        color: "var(--muted-foreground)",
+                        textAlign: "right",
+                      }}
+                    >
+                      {percentage}%
+                    </div>
+
+                    <div
+                      style={{
+                        fontFamily: "Inter, system-ui, sans-serif",
+                        fontSize: "13px",
+                        lineHeight: "18px",
+                        fontWeight: "600",
+                        color: "var(--foreground)",
+                        textAlign: "right",
+                      }}
+                    >
+                      {entry.count}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Tags */}
+            {reviewTags.length > 0 ? (
+              <div style={{ paddingTop: "8px" }}>
+                <div
+                  style={{
+                    fontFamily: "Inter, system-ui, sans-serif",
+                    fontSize: "13px",
+                    lineHeight: "18px",
+                    fontWeight: "600",
+                    color: "var(--muted-foreground)",
+                    marginBottom: "10px",
+                  }}
+                >
+                  Most mentioned
+                </div>
+                <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                  {reviewTags.map((tag) => (
+                    <BadgeInstance
+                      key={tag}
+                      label={tag}
+                      variant="neutral"
+                      size="sm"
+                    />
+                  ))}
+                </div>
+              </div>
+            ) : null}
+          </div>
+        </div>
+
+        {/* Filters and Sort */}
+        <div className="reviews-filters-header">
+          <div className="reviews-filter-title">
+            {filter === "all" ? "All Reviews" : `${filter} Star Reviews`}
+            <span className="reviews-filter-count">
+              ({sortedReviews.length})
+            </span>
+          </div>
+
+          <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+            <select
+              value={sortBy}
+              onChange={(e) =>
+                setSortBy(e.target.value as "recent" | "helpful")
+              }
+              style={{
+                fontFamily: "Inter, system-ui, sans-serif",
+                fontSize: "13px",
+                lineHeight: "18px",
+                fontWeight: "500",
+                color: "var(--foreground)",
+                backgroundColor: "var(--card)",
+                border: "1px solid var(--border)",
+                borderRadius: "8px",
+                padding: "6px 12px",
+                cursor: "pointer",
+                appearance: "none",
+                paddingRight: "32px",
+                backgroundImage: `url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 12 12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3 5L6 8L9 5' stroke='%23666' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")`,
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "right 10px center",
+              }}
+            >
+              <option value="recent">Most Recent</option>
+              <option value="helpful">Most Helpful</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Review Cards */}
+        <div className="reviews-list">
+          {visibleReviews.map((review) => (
+            <ReviewCard
+              key={review.id}
+              review={review}
+              verifiedLabel={reviews.verifiedLabel}
+              useCasePrefix={reviews.useCasePrefix}
+            />
+          ))}
+        </div>
+
+        {/* Load More */}
+        {hasMoreReviews ? (
+          <div
             style={{
-              fontWeight: "400",
-              color: "var(--muted-foreground)",
-              marginLeft: "8px",
+              display: "flex",
+              justifyContent: "center",
+              paddingTop: "8px",
             }}
           >
-            ({sortedReviews.length})
-          </span>
-        </div>
-
-        <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as "recent" | "helpful")}
-            style={{
-              fontFamily: "Inter, system-ui, sans-serif",
-              fontSize: "13px",
-              lineHeight: "18px",
-              fontWeight: "500",
-              color: "var(--foreground)",
-              backgroundColor: "var(--card)",
-              border: "1px solid var(--border)",
-              borderRadius: "8px",
-              padding: "6px 12px",
-              cursor: "pointer",
-              appearance: "none",
-              paddingRight: "32px",
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 12 12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3 5L6 8L9 5' stroke='%23666' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")`,
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "right 10px center",
-            }}
-          >
-            <option value="recent">Most Recent</option>
-            <option value="helpful">Most Helpful</option>
-          </select>
-        </div>
+            <ButtonInstance
+              variant="secondary"
+              size="lg"
+              label={reviews.loadMoreLabel}
+              onClick={() =>
+                setVisibleReviewCount((current) =>
+                  Math.min(
+                    current + LOAD_MORE_REVIEWS_COUNT,
+                    sortedReviews.length,
+                  ),
+                )
+              }
+            />
+          </div>
+        ) : null}
       </div>
-
-      {/* Review Cards */}
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "20px",
-        }}
-      >
-        {visibleReviews.map((review) => (
-          <ReviewCard
-            key={review.id}
-            review={review}
-            verifiedLabel={reviews.verifiedLabel}
-            useCasePrefix={reviews.useCasePrefix}
-          />
-        ))}
-      </div>
-
-      {/* Load More */}
-      {hasMoreReviews ? (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            paddingTop: "8px",
-          }}
-        >
-          <ButtonInstance
-            variant="secondary"
-            size="lg"
-            label={reviews.loadMoreLabel}
-            onClick={() =>
-              setVisibleReviewCount((current) =>
-                Math.min(
-                  current + LOAD_MORE_REVIEWS_COUNT,
-                  sortedReviews.length,
-                ),
-              )
-            }
-          />
-        </div>
-      ) : null}
-    </div>
+    </>
   );
 }
 
@@ -516,8 +558,10 @@ function ReviewCard({
                 width: "48px",
                 height: "48px",
                 borderRadius: "50%",
-                backgroundColor: "color-mix(in srgb, var(--primary) 10%, transparent)",
-                border: "2px solid color-mix(in srgb, var(--primary) 20%, transparent)",
+                backgroundColor:
+                  "color-mix(in srgb, var(--primary) 10%, transparent)",
+                border:
+                  "2px solid color-mix(in srgb, var(--primary) 20%, transparent)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -715,9 +759,7 @@ function ReviewCard({
                 style={{
                   fontWeight: "600",
                   color:
-                    helpful === true
-                      ? "var(--primary)"
-                      : "var(--foreground)",
+                    helpful === true ? "var(--primary)" : "var(--foreground)",
                 }}
               >
                 ({helpfulCount})

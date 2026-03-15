@@ -5,6 +5,9 @@ import { useHomeMockData } from '../hooks/useHomeMockData';
 
 export function FeaturedDrop() {
   const { featuredDrop } = useHomeMockData();
+  if (!featuredDrop) {
+    return null;
+  }
 
   return (
     <Section paddingTop="56px" paddingBottom="56px" background="var(--background)">

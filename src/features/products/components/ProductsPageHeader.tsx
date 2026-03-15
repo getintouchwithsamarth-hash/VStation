@@ -1,53 +1,80 @@
 export function ProductsPageHeader() {
   return (
-    <div style={{ marginBottom: '24px' }}>
-      {/* Eyebrow + Title Block */}
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '8px',
-          marginBottom: '12px'
-        }}
-      >
-        {/* Eyebrow */}
-        <div
-          style={{
-            fontFamily: 'Inter, system-ui, sans-serif',
-            fontSize: '12px',
-            lineHeight: '18px',
-            fontWeight: '400',
-            color: "var(--muted-foreground)"
-          }}
-        >
-          Curated gear
+    <>
+      <style>{`
+        .products-page-header {
+          margin-bottom: 24px;
+        }
+
+        .products-page-header-content {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          margin-bottom: 12px;
+        }
+
+        .products-page-eyebrow {
+          font-family: Inter, system-ui, sans-serif;
+          font-size: 12px;
+          line-height: 18px;
+          font-weight: 400;
+          color: var(--muted-foreground);
+        }
+
+        .products-page-title {
+          font-family: Inter, system-ui, sans-serif;
+          color: var(--foreground);
+          margin: 0;
+        }
+
+        .products-page-description {
+          font-family: Inter, system-ui, sans-serif;
+          font-size: 16px;
+          line-height: 24px;
+          font-weight: 400;
+          color: var(--muted-foreground);
+          max-width: 640px;
+        }
+
+        @media (max-width: 1024px) {
+          .products-page-description {
+            font-size: 15px;
+            line-height: 22px;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .products-page-header {
+            margin-bottom: 20px;
+          }
+
+          .products-page-eyebrow {
+            font-size: 11px;
+            line-height: 16px;
+          }
+
+          .products-page-description {
+            font-size: 14px;
+            line-height: 21px;
+          }
+        }
+      `}</style>
+      <div className="products-page-header">
+        {/* Eyebrow + Title Block */}
+        <div className="products-page-header-content">
+          {/* Eyebrow */}
+          <div className="products-page-eyebrow">Curated gear</div>
+
+          {/* Title */}
+          <h1 className="products-page-title">Products</h1>
         </div>
 
-        {/* Title */}
-        <h1
-          style={{
-            fontFamily: 'Inter, system-ui, sans-serif',
-            color: "var(--foreground)",
-            margin: 0
-          }}
-        >
-          Products
-        </h1>
+        {/* Supporting Copy */}
+        <div className="products-page-description">
+          Best-in-class essentials chosen for durability, clarity, and real
+          daily use.
+        </div>
       </div>
-
-      {/* Supporting Copy */}
-      <div
-        style={{
-          fontFamily: 'Inter, system-ui, sans-serif',
-          fontSize: '16px',
-          lineHeight: '24px',
-          fontWeight: '400',
-          color: "var(--muted-foreground)",
-          maxWidth: '640px'
-        }}
-      >
-        Best-in-class essentials chosen for durability, clarity, and real daily use.
-      </div>
-    </div>
+    </>
   );
 }

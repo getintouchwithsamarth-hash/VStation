@@ -6,6 +6,9 @@ import { useHomeMockData } from '../hooks/useHomeMockData';
 
 export function HeroMetaSlot() {
   const { heroMetaBadges } = useHomeMockData();
+  if (heroMetaBadges.length === 0) {
+    return null;
+  }
 
   return (
     <Section contain={false} paddingTop="24px" paddingBottom="24px" background="var(--card)">

@@ -5,6 +5,9 @@ import { useHomeMockData } from '../hooks/useHomeMockData';
 
 export function SocialProof() {
   const { socialProof } = useHomeMockData();
+  if (!socialProof) {
+    return null;
+  }
 
   return (
     <Section paddingTop="56px" paddingBottom="56px" background="var(--card)">
