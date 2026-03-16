@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { getShiprocketDeliveryEstimate, type ShiprocketDeliveryEstimate } from '../../../lib/shiprocket';
 
 type UseDeliveryEstimateParams = {
-  pickupPostcode: string | null;
+  pickupPostcode?: string | null;
   weightKg: number | null;
   cod: boolean;
 };
@@ -21,15 +21,6 @@ export function useDeliveryEstimate({ pickupPostcode, weightKg, cod }: UseDelive
   });
 
   const checkDelivery = async (deliveryPostcode: string) => {
-    if (!pickupPostcode) {
-      setState({
-        estimate: null,
-        error: 'Delivery estimate is unavailable because the pickup pincode is not configured.',
-        isLoading: false
-      });
-      return;
-    }
-
     if (typeof weightKg !== 'number' || !Number.isFinite(weightKg)) {
       setState({
         estimate: null,
@@ -47,7 +38,7 @@ export function useDeliveryEstimate({ pickupPostcode, weightKg, cod }: UseDelive
 
     try {
       const estimate = await getShiprocketDeliveryEstimate({
-        pickupPostcode,
+        pickupPostcode: pickupPostcode || undefined,
         deliveryPostcode,
         weight: weightKg,
         cod

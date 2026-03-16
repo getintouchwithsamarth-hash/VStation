@@ -5,7 +5,6 @@ import { DeliveryAndReturns } from "../features/product_details/components/Deliv
 import { FeatureDeepDive } from "../features/product_details/components/FeatureDeepDive";
 import { KeyBenefits } from "../features/product_details/components/KeyBenefits";
 import { SpecsAndInBox } from "../features/product_details/components/SpecsAndInBox";
-import { Reviews } from "../features/product_details/components/Reviews";
 import { Faq } from "../features/product_details/components/Faq";
 import { RelatedProducts } from "../features/product_details/components/RelatedProducts";
 import { Container } from "../components/layout/Container";
@@ -131,19 +130,6 @@ export function ProductDetail() {
       >
         <Container>
           <FeatureDeepDive />
-        </Container>
-      </section>
-
-      {/* Reviews */}
-      <section
-        style={{
-          paddingTop: "40px",
-          paddingBottom: "40px",
-          backgroundColor: "var(--card)",
-        }}
-      >
-        <Container>
-          <Reviews />
         </Container>
       </section>
 

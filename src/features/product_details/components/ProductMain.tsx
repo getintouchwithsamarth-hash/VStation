@@ -149,7 +149,6 @@ function BuyBox() {
           </div>
 
           <PincodeEstimator
-            pickupPostcode={productMain.buyBox.serviceability.pickupPostcode}
             weightKg={productMain.buyBox.serviceability.defaultWeightKg}
             cod={productMain.buyBox.serviceability.cod}
           />

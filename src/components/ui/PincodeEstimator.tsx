@@ -5,18 +5,16 @@ import { isShiprocketConfigured } from '../../lib/shiprocket';
 import { useDeliveryEstimate } from '../../features/product_details/hooks/useDeliveryEstimate';
 
 type PincodeEstimatorProps = {
-  pickupPostcode: string | null;
   weightKg: number | null;
   cod: boolean;
 };
 
 const PINCODE_REGEX = /^\d{6}$/;
 
-export function PincodeEstimator({ pickupPostcode, weightKg, cod }: PincodeEstimatorProps) {
+export function PincodeEstimator({ weightKg, cod }: PincodeEstimatorProps) {
   const [pincode, setPincode] = useState('');
   const [validationError, setValidationError] = useState<string | null>(null);
   const { estimate, error, isLoading, checkDelivery } = useDeliveryEstimate({
-    pickupPostcode,
     weightKg,
     cod
   });

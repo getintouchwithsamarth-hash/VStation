@@ -1,5 +1,7 @@
 const SHIPROCKET_BASE_URL = (import.meta.env.VITE_SHIPROCKET_BASE_URL || 'https://apiv2.shiprocket.in').replace(/\/+$/, '');
-const SHIPROCKET_PROXY_ENDPOINT = import.meta.env.VITE_SHIPROCKET_SERVICEABILITY_PROXY_ENDPOINT || '';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
+const SHIPROCKET_SERVICEABILITY_ENDPOINT =
+  import.meta.env.VITE_SHIPROCKET_SERVICEABILITY_ENDPOINT || '/api/shiprocket/serviceability';
 const SHIPROCKET_EMAIL = import.meta.env.VITE_SHIPROCKET_EMAIL || '';
 const SHIPROCKET_PASSWORD = import.meta.env.VITE_SHIPROCKET_PASSWORD || '';
 
@@ -26,7 +28,7 @@ type ShiprocketServiceabilityResponse = {
 };
 
 export type ShiprocketServiceabilityParams = {
-  pickupPostcode: string;
+  pickupPostcode?: string;
   deliveryPostcode: string;
   orderId?: string;
   weight?: number;
@@ -76,6 +78,17 @@ const getTokenExpiry = (token: string): number | null => {
 };
 
 const buildShiprocketUrl = (path: string): string => `${SHIPROCKET_BASE_URL}/${path.replace(/^\/+/, '')}`;
+
+const buildServiceabilityUrl = (): string => {
+  if (
+    SHIPROCKET_SERVICEABILITY_ENDPOINT.startsWith('http://') ||
+    SHIPROCKET_SERVICEABILITY_ENDPOINT.startsWith('https://')
+  ) {
+    return SHIPROCKET_SERVICEABILITY_ENDPOINT;
+  }
+
+  return `${BACKEND_URL.replace(/\/+$/, '')}/${SHIPROCKET_SERVICEABILITY_ENDPOINT.replace(/^\/+/, '')}`;
+};
 
 const getAvailableCouriers = (payload: ShiprocketServiceabilityResponse): ShiprocketCourierCompany[] =>
   payload.data?.available_courier_companies || payload.available_courier_companies || [];
@@ -128,7 +141,7 @@ const getDirectAuthToken = async (): Promise<string> => {
 
   if (!SHIPROCKET_EMAIL || !SHIPROCKET_PASSWORD) {
     throw new Error(
-      'Shiprocket credentials are missing. Configure VITE_SHIPROCKET_SERVICEABILITY_PROXY_ENDPOINT or direct Shiprocket credentials.'
+      'Shiprocket credentials are missing. Configure VITE_SHIPROCKET_SERVICEABILITY_ENDPOINT or direct Shiprocket credentials.'
     );
   }
 
@@ -161,25 +174,54 @@ const getDirectAuthToken = async (): Promise<string> => {
 };
 
 const fetchViaProxy = async (params: ShiprocketServiceabilityParams): Promise<ShiprocketDeliveryEstimate> => {
-  const response = await fetch(SHIPROCKET_PROXY_ENDPOINT, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    credentials: 'include',
-    body: JSON.stringify(params)
-  });
+  const url = new URL(buildServiceabilityUrl());
+  url.searchParams.set('delivery_postcode', params.deliveryPostcode);
 
-  if (!response.ok) {
-    throw new Error(`Shiprocket proxy failed with HTTP ${response.status}.`);
+  if (params.pickupPostcode) {
+    url.searchParams.set('pickup_postcode', params.pickupPostcode);
   }
 
-  const payload = (await response.json()) as ShiprocketServiceabilityResponse | ShiprocketDeliveryEstimate;
+  if (params.orderId) {
+    url.searchParams.set('order_id', params.orderId);
+  }
+
+  if (typeof params.weight === 'number' && Number.isFinite(params.weight)) {
+    url.searchParams.set('weight', String(params.weight));
+  }
+
+  if (typeof params.cod === 'boolean') {
+    url.searchParams.set('cod', params.cod ? '1' : '0');
+  }
+
+  if (params.mode) {
+    url.searchParams.set('mode', params.mode);
+  }
+
+  const response = await fetch(url.toString(), {
+    method: 'GET',
+    credentials: 'include'
+  });
+
+  const raw = await response.text();
+  let payload: ShiprocketServiceabilityResponse | ShiprocketDeliveryEstimate | { error?: string; details?: unknown } = {};
+  try {
+    payload = raw ? JSON.parse(raw) : {};
+  } catch {
+    payload = { error: raw || 'Shiprocket proxy returned a non-JSON response.' };
+  }
+
+  if (!response.ok) {
+    const message =
+      (typeof payload === 'object' && payload && 'error' in payload && typeof payload.error === 'string' && payload.error) ||
+      `Shiprocket proxy failed with HTTP ${response.status}.`;
+    throw new Error(message);
+  }
+
   if ('available' in payload && 'courierCount' in payload) {
     return payload;
   }
 
-  return normalizeEstimate(payload);
+  return normalizeEstimate(payload as ShiprocketServiceabilityResponse);
 };
 
 const fetchDirect = async (params: ShiprocketServiceabilityParams): Promise<ShiprocketDeliveryEstimate> => {
@@ -218,17 +260,13 @@ const fetchDirect = async (params: ShiprocketServiceabilityParams): Promise<Ship
 };
 
 export const isShiprocketConfigured = (): boolean =>
-  Boolean(SHIPROCKET_PROXY_ENDPOINT || (SHIPROCKET_EMAIL && SHIPROCKET_PASSWORD));
+  Boolean(SHIPROCKET_SERVICEABILITY_ENDPOINT || (SHIPROCKET_EMAIL && SHIPROCKET_PASSWORD));
 
 export async function getShiprocketDeliveryEstimate(
   params: ShiprocketServiceabilityParams
 ): Promise<ShiprocketDeliveryEstimate> {
-  const pickupPostcode = normalizePostcode(params.pickupPostcode);
   const deliveryPostcode = normalizePostcode(params.deliveryPostcode);
-
-  if (pickupPostcode.length !== 6) {
-    throw new Error('A valid 6-digit pickup pincode is required.');
-  }
+  const pickupPostcode = params.pickupPostcode ? normalizePostcode(params.pickupPostcode) : '';
 
   if (deliveryPostcode.length !== 6) {
     throw new Error('A valid 6-digit delivery pincode is required.');
@@ -236,13 +274,22 @@ export async function getShiprocketDeliveryEstimate(
 
   const normalizedParams: ShiprocketServiceabilityParams = {
     ...params,
-    pickupPostcode,
     deliveryPostcode
   };
 
-  if (SHIPROCKET_PROXY_ENDPOINT) {
+  if (pickupPostcode) {
+    normalizedParams.pickupPostcode = pickupPostcode;
+  }
+
+  if (SHIPROCKET_SERVICEABILITY_ENDPOINT) {
     return fetchViaProxy(normalizedParams);
   }
+
+  if (pickupPostcode.length !== 6) {
+    throw new Error('A valid 6-digit pickup pincode is required.');
+  }
+
+  normalizedParams.pickupPostcode = pickupPostcode;
 
   return fetchDirect(normalizedParams);
 }
