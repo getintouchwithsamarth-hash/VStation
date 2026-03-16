@@ -1,8 +1,8 @@
-import { Container } from './Container';
+import { Container } from "./Container";
 
-type SectionPaddingPreset = 'standard' | 'dense';
-type SectionVariantPreset = 'canvas' | 'subtle' | 'inverse';
-type ContainerWidthPreset = 'wide' | 'standard' | 'narrow';
+type SectionPaddingPreset = "standard" | "dense";
+type SectionVariantPreset = "canvas" | "subtle" | "inverse";
+type ContainerWidthPreset = "wide" | "standard" | "narrow";
 
 type SectionProps = {
   children: React.ReactNode;
@@ -37,26 +37,30 @@ type SectionComponent = ((props: SectionProps) => JSX.Element) & {
   VariantInverse: (props: SectionVariantPresetProps) => JSX.Element;
 };
 
-const paddingByPreset: Record<SectionPaddingPreset, { top: string; bottom: string }> = {
-  standard: { top: '56px', bottom: '56px' },
-  dense: { top: '32px', bottom: '32px' }
+const paddingByPreset: Record<
+  SectionPaddingPreset,
+  { top: string; bottom: string }
+> = {
+  standard: { top: "56px", bottom: "56px" },
+  dense: { top: "32px", bottom: "32px" },
 };
 
-const variantStylesByPreset: Record<SectionVariantPreset, React.CSSProperties> = {
-  canvas: {
-    backgroundColor: 'var(--surface-canvas, #FFFFFF)'
-  },
-  subtle: {
-    backgroundColor: 'var(--surface-subtle, #FCFCFD)'
-  },
-  inverse: {
-    backgroundColor: 'var(--surface-inverse, #101828)',
-    color: 'var(--text-inverse, #FFFFFF)'
-  }
-};
+const variantStylesByPreset: Record<SectionVariantPreset, React.CSSProperties> =
+  {
+    canvas: {
+      backgroundColor: "var(--surface-canvas, #FFFFFF)",
+    },
+    subtle: {
+      backgroundColor: "var(--surface-subtle, #FCFCFD)",
+    },
+    inverse: {
+      backgroundColor: "var(--surface-inverse, #101828)",
+      color: "var(--text-inverse, #FFFFFF)",
+    },
+  };
 
 function isContainerElement(element: React.ReactNode) {
-  if (!element || typeof element !== 'object' || !('type' in element)) {
+  if (!element || typeof element !== "object" || !("type" in element)) {
     return false;
   }
 
@@ -78,8 +82,8 @@ function PaddingStandard({ children }: SectionPaddingPresetProps) {
   return (
     <div
       style={{
-        paddingTop: '56px',
-        paddingBottom: '56px'
+        paddingTop: "56px",
+        paddingBottom: "56px",
       }}
     >
       {children}
@@ -91,8 +95,8 @@ function PaddingDense({ children }: SectionPaddingPresetProps) {
   return (
     <div
       style={{
-        paddingTop: '32px',
-        paddingBottom: '32px'
+        paddingTop: "32px",
+        paddingBottom: "32px",
       }}
     >
       {children}
@@ -116,13 +120,13 @@ function VariantInverse({ children }: SectionVariantPresetProps) {
 function SectionRoot({
   children,
   className,
-  padding = 'standard',
-  variant = 'canvas',
-  containerWidth = 'standard',
+  padding = "standard",
+  variant = "canvas",
+  containerWidth = "standard",
   contain = true,
   paddingTop,
   paddingBottom,
-  background
+  background,
 }: SectionProps) {
   const presetPadding = paddingByPreset[padding];
 
@@ -131,28 +135,49 @@ function SectionRoot({
 
   const variantStyle: React.CSSProperties = {
     ...variantStylesByPreset[variant],
-    backgroundColor: background ?? variantStylesByPreset[variant].backgroundColor
+    backgroundColor:
+      background ?? variantStylesByPreset[variant].backgroundColor,
   };
 
   const shouldAutoSlot = contain && !isContainerElement(children);
 
   return (
-    <section
-      className={className}
-      style={{
-        ...variantStyle,
-        paddingTop: computedPaddingTop,
-        paddingBottom: computedPaddingBottom
-      }}
-    >
-      <SectionContainerSlot>
-        {shouldAutoSlot ? (
-          <Container width={containerWidth}>{children}</Container>
-        ) : (
-          children
-        )}
-      </SectionContainerSlot>
-    </section>
+    <>
+      <style>{`
+        .section-responsive {
+          padding-top: ${computedPaddingTop};
+          padding-bottom: ${computedPaddingBottom};
+        }
+
+        /* Tablet breakpoint */
+        @media (max-width: 1024px) {
+          .section-responsive {
+            padding-top: calc(${computedPaddingTop} * 0.75);
+            padding-bottom: calc(${computedPaddingBottom} * 0.75);
+          }
+        }
+
+        /* Mobile breakpoint */
+        @media (max-width: 640px) {
+          .section-responsive {
+            padding-top: calc(${computedPaddingTop} * 0.5);
+            padding-bottom: calc(${computedPaddingBottom} * 0.5);
+          }
+        }
+      `}</style>
+      <section
+        className={`section-responsive ${className || ""}`}
+        style={variantStyle}
+      >
+        <SectionContainerSlot>
+          {shouldAutoSlot ? (
+            <Container width={containerWidth}>{children}</Container>
+          ) : (
+            children
+          )}
+        </SectionContainerSlot>
+      </section>
+    </>
   );
 }
 
@@ -169,5 +194,5 @@ export const Section = Object.assign(SectionRoot, {
   PaddingDense,
   VariantCanvas,
   VariantSubtle,
-  VariantInverse
+  VariantInverse,
 }) as SectionComponent;
