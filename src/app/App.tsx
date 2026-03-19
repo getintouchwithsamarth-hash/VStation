@@ -59,14 +59,10 @@ export default function App() {
   const path = window.location.pathname.replace(/\/+$/, '') || '/';
   const isAccountRoute = path === '/account' || path.startsWith('/account/');
 
-  if (isAccountRoute) {
-    return <>{resolveRoute()}</>;
-  }
-
   return (
     <Shell>
       {resolveRoute()}
-      {isDrawerOpen ? <PresentationDrawer /> : null}
+      {!isAccountRoute && isDrawerOpen ? <PresentationDrawer /> : null}
     </Shell>
   );
 }
