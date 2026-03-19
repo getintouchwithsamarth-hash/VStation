@@ -128,11 +128,6 @@ export interface PasswordResetRequestResult {
   submitted: true;
 }
 
-export interface PasswordResetUrlParts {
-  id: string;
-  resetToken: string;
-}
-
 const CUSTOMER_TOKEN_STORAGE_KEY = 'customer_token';
 const CUSTOMER_TOKEN_EXPIRES_AT_STORAGE_KEY = 'token_expires_at';
 
@@ -271,6 +266,9 @@ const getUserErrorMessage = (error: CustomerUserError): string => {
       return `The email address domain is invalid${fieldLabel}.`;
     case 'TOKEN_INVALID':
       return 'The customer session is invalid. Please sign in again.';
+    case 'CUSTOMER_RESET_TOKEN_INVALID':
+    case 'TOKEN_EXPIRED':
+      return 'This link has expired. Please request a new one.';
     default:
       return error.message;
   }
@@ -323,7 +321,7 @@ const assertCustomerUserErrors = (errors: CustomerUserError[], code: string): vo
   }
 
   const firstError = errors[0];
-  throw new StorefrontAPIError(getUserErrorMessage(firstError), code, firstError.field);
+  throw new StorefrontAPIError(getUserErrorMessage(firstError), firstError.code || code, firstError.field);
 };
 
 const requireValidCustomerToken = (): CustomerResult<string> => {
@@ -360,30 +358,6 @@ const executeCustomerOperation = async <T>(
     return successResult(await run());
   } catch (error) {
     return errorResult(toCustomerOperationError(error, fallbackCode, fallbackMessage));
-  }
-};
-
-const extractResetUrlParts = (resetUrl: string): PasswordResetUrlParts | null => {
-  try {
-    const url = new URL(resetUrl);
-    const id = url.searchParams.get('id');
-    const resetToken = url.searchParams.get('token') || url.searchParams.get('reset_token');
-
-    if (id && resetToken) {
-      return { id, resetToken };
-    }
-
-    const match = url.pathname.match(/\/account\/reset\/([^/]+)\/([^/?#]+)/);
-    if (match) {
-      return {
-        id: decodeURIComponent(match[1]),
-        resetToken: decodeURIComponent(match[2])
-      };
-    }
-
-    return null;
-  } catch {
-    return null;
   }
 };
 
@@ -502,9 +476,9 @@ export const customerRecover = `
   }
 `;
 
-export const customerReset = `
-  mutation customerReset($id: ID!, $input: CustomerResetInput!) {
-    customerReset(id: $id, input: $input) {
+export const customerResetByUrl = `
+  mutation customerResetByUrl($resetUrl: URL!, $password: String!) {
+    customerResetByUrl(resetUrl: $resetUrl, password: $password) {
       customer {
         id
         email
@@ -757,39 +731,27 @@ export async function resetPassword(
   resetUrl: string,
   password: string
 ): Promise<CustomerResult<CustomerAccessToken>> {
-  const resetUrlParts = extractResetUrlParts(resetUrl);
-  if (!resetUrlParts) {
-    return errorResult({
-      type: 'validation',
-      message: 'The password reset URL is invalid or missing the required token.',
-      code: 'CUSTOMER_RESET_URL_INVALID'
-    });
-  }
-
   return executeCustomerOperation(async () => {
     const data = await storefrontFetch<{
-      customerReset: {
+      customerResetByUrl: {
         customerAccessToken: CustomerAccessToken | null;
         customerUserErrors: CustomerUserError[];
       };
-    }>(customerReset, {
-      id: resetUrlParts.id,
-      input: {
-        password,
-        resetToken: resetUrlParts.resetToken
-      }
+    }>(customerResetByUrl, {
+      resetUrl,
+      password
     });
 
-    assertCustomerUserErrors(data.customerReset.customerUserErrors, 'CUSTOMER_RESET_ERROR');
-    if (!data.customerReset.customerAccessToken) {
+    assertCustomerUserErrors(data.customerResetByUrl.customerUserErrors, 'CUSTOMER_RESET_ERROR');
+    if (!data.customerResetByUrl.customerAccessToken) {
       throw new StorefrontAPIError(
         'Customer password reset did not return a new access token',
         'MISSING_CUSTOMER_TOKEN'
       );
     }
 
-    saveCustomerSession(data.customerReset.customerAccessToken);
-    return data.customerReset.customerAccessToken;
+    saveCustomerSession(data.customerResetByUrl.customerAccessToken);
+    return data.customerResetByUrl.customerAccessToken;
   }, 'CUSTOMER_RESET_ERROR', 'Unable to reset the customer password.');
 }
 

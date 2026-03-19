@@ -23,6 +23,10 @@ function resolveRoute() {
     return <ProductDetail />;
   }
 
+  if (/^\/account\/reset\/[^/]+\/[^/]+$/.test(path)) {
+    return <PasswordResetPage />;
+  }
+
   switch (path) {
     case '/':
       return <Home />;
@@ -41,6 +45,7 @@ function resolveRoute() {
     case '/account/register':
       return <RegisterPage />;
     case '/account/password-reset':
+    case '/account/forgot-password':
       return <PasswordResetRequestPage />;
     case '/account/password-reset/confirm':
       return <PasswordResetPage />;

@@ -185,7 +185,9 @@ export function useCustomerAccount() {
   const resetPassword = async (resetUrl: string, password: string) => {
     const result = await resetCustomerPassword(resetUrl, password);
     if (!result.ok) {
-      throw new Error(result.error.message || 'Unable to reset the password.');
+      const error = new Error(result.error.message || 'Unable to reset the password.');
+      (error as Error & { code?: string }).code = result.error.code;
+      throw error;
     }
   };
 
