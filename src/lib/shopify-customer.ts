@@ -254,12 +254,20 @@ const getUserErrorMessage = (error: CustomerUserError): string => {
   const fieldLabel = error.field?.length ? ` for ${error.field.join('.')}` : '';
 
   switch (error.code) {
+    case 'ALREADY_ENABLED':
+      return 'An account with this email already exists.';
+    case 'BLANK':
+      return `A required value is missing${fieldLabel}.`;
     case 'TAKEN':
       return `A customer already exists${fieldLabel}.`;
     case 'INVALID':
       return `Shopify rejected the value${fieldLabel}. ${error.message}`;
+    case 'TOO_LONG':
+      return `The value is too long${fieldLabel}.`;
     case 'UNIDENTIFIED_CUSTOMER':
       return 'The email or password is incorrect.';
+    case 'TOO_MANY_FAILED_ATTEMPTS':
+      return 'Too many failed attempts. Please wait and try again.';
     case 'CUSTOMER_DISABLED':
       return 'This customer account is disabled.';
     case 'BAD_DOMAIN':
@@ -269,6 +277,12 @@ const getUserErrorMessage = (error: CustomerUserError): string => {
     case 'CUSTOMER_RESET_TOKEN_INVALID':
     case 'TOKEN_EXPIRED':
       return 'This link has expired. Please request a new one.';
+    case 'PASSWORD_STARTS_OR_ENDS_WITH_WHITESPACE':
+      return 'Password cannot start or end with whitespace.';
+    case 'PHONE_NUMBER_ALREADY_USED':
+      return 'That phone number is already in use.';
+    case 'CUSTOMER_ADDRESS_NOT_FOUND':
+      return 'The selected address could not be found.';
     default:
       return error.message;
   }
@@ -280,9 +294,18 @@ const toCustomerOperationError = (
   fallbackMessage: string
 ): CustomerOperationError => {
   if (error instanceof StorefrontAPIError) {
+    const message =
+      error.code === 'RATE_LIMIT'
+        ? 'Too many requests. Please try again in a moment.'
+        : error.code === 'HTTP_ERROR'
+          ? 'Shopify could not be reached. Please try again.'
+          : error.code === 'GRAPHQL_ERROR'
+            ? 'Shopify returned an unexpected error. Please try again.'
+            : error.message || fallbackMessage;
+
     return {
       type: error.code === 'HTTP_ERROR' || error.code === 'RATE_LIMIT' ? 'network' : 'api',
-      message: error.message || fallbackMessage,
+      message,
       code: error.code || fallbackCode,
       field: error.field
     };

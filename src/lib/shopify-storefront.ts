@@ -228,6 +228,7 @@ type CartLineInput = {
 };
 
 type CartUserError = {
+  code?: string;
   field?: string[];
   message: string;
 };
@@ -892,6 +893,7 @@ export const CART_CREATE_MUTATION = `
         ${CART_FIELDS}
       }
       userErrors {
+        code
         field
         message
       }
@@ -906,6 +908,7 @@ export const CART_LINES_ADD_MUTATION = `
         ${CART_FIELDS}
       }
       userErrors {
+        code
         field
         message
       }
@@ -920,6 +923,7 @@ export const CART_LINES_UPDATE_MUTATION = `
         ${CART_FIELDS}
       }
       userErrors {
+        code
         field
         message
       }
@@ -934,6 +938,7 @@ export const CART_LINES_REMOVE_MUTATION = `
         ${CART_FIELDS}
       }
       userErrors {
+        code
         field
         message
       }
@@ -956,12 +961,45 @@ export const CART_BUYER_IDENTITY_UPDATE_MUTATION = `
         ${CART_FIELDS}
       }
       userErrors {
+        code
         field
         message
       }
     }
   }
 `;
+
+const getCartUserErrorMessage = (error: CartUserError): string => {
+  const fieldLabel = error.field?.length ? ` for ${error.field.join('.')}` : '';
+
+  switch (error.code) {
+    case 'INVALID':
+      return `Shopify rejected the cart update${fieldLabel}. ${error.message}`;
+    case 'LESS_THAN':
+      return 'Quantity is below the minimum allowed.';
+    case 'GREATER_THAN':
+      return 'Quantity exceeds the maximum allowed.';
+    case 'INVALID_MERCHANDISE_LINE':
+      return 'This product variant is unavailable.';
+    case 'MISSING_DISCOUNT_CODE':
+    case 'DISCOUNT_NOT_FOUND':
+      return 'That discount code could not be found.';
+    case 'CART_DOES_NOT_MEET_DISCOUNT_REQUIREMENTS_NOTICE':
+      return 'This cart does not meet the discount requirements.';
+    case 'RELEASE_PHASE_NOT_STARTED':
+      return 'This product is not available yet.';
+    case 'TOO_MANY_LINE_ITEMS':
+      return 'Your cart has reached the item limit.';
+    case 'INVALID_DELIVERY_GROUP':
+      return 'Delivery details for this cart are invalid. Please try again.';
+    case 'BLANK':
+      return `A required cart value is missing${fieldLabel}.`;
+    case 'NOT_ENOUGH_IN_STOCK':
+      return 'There is not enough stock available for that quantity.';
+    default:
+      return error.message;
+  }
+};
 
 const extractCartFromMutation = <T extends CartMutationResponseKey>(
   payload: { [K in T]: { cart: Cart | null; userErrors: CartUserError[] } },
@@ -970,7 +1008,11 @@ const extractCartFromMutation = <T extends CartMutationResponseKey>(
   const result = payload[key];
   if (result.userErrors.length > 0) {
     const firstError = result.userErrors[0];
-    throw new StorefrontAPIError(firstError.message, 'CART_USER_ERROR', firstError.field);
+    throw new StorefrontAPIError(
+      getCartUserErrorMessage(firstError),
+      firstError.code || 'CART_USER_ERROR',
+      firstError.field
+    );
   }
 
   if (!result.cart) {
@@ -1342,7 +1384,11 @@ export async function updateCartBuyerIdentity(
   const result = data.cartBuyerIdentityUpdate;
   if (result.userErrors.length > 0) {
     const firstError = result.userErrors[0];
-    throw new StorefrontAPIError(firstError.message, 'CART_USER_ERROR', firstError.field);
+    throw new StorefrontAPIError(
+      getCartUserErrorMessage(firstError),
+      firstError.code || 'CART_USER_ERROR',
+      firstError.field
+    );
   }
 
   if (!result.cart) {

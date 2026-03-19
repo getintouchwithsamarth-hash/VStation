@@ -34,7 +34,7 @@ export function OverviewSection({ customer }: OverviewSectionProps) {
       setIsEditing(false);
       setTimeout(() => setSuccessMessage(''), 3000);
     } catch (error) {
-      setErrorMessage('Failed to update profile');
+      setErrorMessage(error instanceof Error ? error.message : 'Failed to update profile');
     } finally {
       setIsLoading(false);
     }

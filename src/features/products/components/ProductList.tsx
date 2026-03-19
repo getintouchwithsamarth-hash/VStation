@@ -297,10 +297,10 @@ function ProductCard({
               return;
             }
 
-            const added = await addItem(product.variantId);
-            if (!added) {
+            const result = await addItem(product.variantId);
+            if (!result.ok) {
               toast.error("Unable to add item", {
-                description: "Please try again.",
+                description: result.error || "Please try again.",
                 duration: 5000,
               });
               return;

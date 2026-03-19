@@ -39,7 +39,9 @@ type CartContextValue = {
   subtotal: number;
   total: number;
   checkoutUrl: string | null;
-  addItem: (variantId: string) => Promise<boolean>;
+  cartError: string | null;
+  clearCartError: () => void;
+  addItem: (variantId: string) => Promise<{ ok: boolean; error?: string }>;
   checkout: () => Promise<void>;
   openCartDrawer: () => void;
   closeCartDrawer: () => void;
@@ -79,6 +81,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [activeCartId, setActiveCartId] = useState<string | null>(null);
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
+  const [cartError, setCartError] = useState<string | null>(null);
   const cartCreate = useCartCreate();
   const cartLinesAdd = useCartLinesAdd();
   const cartLinesUpdate = useCartLinesUpdate();
@@ -138,8 +141,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
     subtotal,
     total: subtotal,
     checkoutUrl,
+    cartError,
+    clearCartError: () => setCartError(null),
     addItem: async (variantId) => {
       try {
+        setCartError(null);
         let cartId = activeCartId;
         if (!cartId) {
           const newCart = await cartCreate();
@@ -154,14 +160,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
         syncCart(updatedCart);
         setIsDrawerOpen(true);
-        return true;
+        return { ok: true };
       } catch (error) {
         console.error('Failed to add item to cart', error);
-        return false;
+        const message = error instanceof Error ? error.message : 'Unable to add item to cart.';
+        setCartError(message);
+        return { ok: false, error: message };
       }
     },
     checkout: async () => {
       try {
+        setCartError(null);
         let cartId = activeCartId;
         let latestCheckoutUrl = checkoutUrl;
         if (!cartId) {
@@ -178,6 +187,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         window.location.href = updatedCart.checkoutUrl;
       } catch (error) {
         console.error('Failed to update buyer identity before checkout', error);
+        setCartError(error instanceof Error ? error.message : 'Unable to continue to checkout.');
         window.location.href = latestCheckoutUrl || '/cart';
       }
     },
@@ -193,9 +203,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
         return;
       }
       void cartLinesUpdate(activeCartId, [{ id: item.id, quantity: item.quantity + 1 }])
-        .then(syncCart)
+        .then((cart) => {
+          setCartError(null);
+          syncCart(cart);
+        })
         .catch((error) => {
           console.error('Failed to increment cart line', error);
+          setCartError(error instanceof Error ? error.message : 'Unable to update cart quantity.');
         });
     },
     decrementItem: (id) => {
@@ -208,17 +222,25 @@ export function CartProvider({ children }: { children: ReactNode }) {
       }
       if (item.quantity <= 1) {
         void cartLinesRemove(activeCartId, [item.id])
-          .then(syncCart)
+          .then((cart) => {
+            setCartError(null);
+            syncCart(cart);
+          })
           .catch((error) => {
             console.error('Failed to decrement cart line', error);
+            setCartError(error instanceof Error ? error.message : 'Unable to update cart quantity.');
           });
         return;
       }
 
       void cartLinesUpdate(activeCartId, [{ id: item.id, quantity: item.quantity - 1 }])
-        .then(syncCart)
+        .then((cart) => {
+          setCartError(null);
+          syncCart(cart);
+        })
         .catch((error) => {
           console.error('Failed to decrement cart line', error);
+          setCartError(error instanceof Error ? error.message : 'Unable to update cart quantity.');
         });
     },
     removeItem: (id) => {
@@ -226,9 +248,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
         return;
       }
       void cartLinesRemove(activeCartId, [id])
-        .then(syncCart)
+        .then((cart) => {
+          setCartError(null);
+          syncCart(cart);
+        })
         .catch((error) => {
           console.error('Failed to remove cart line', error);
+          setCartError(error instanceof Error ? error.message : 'Unable to remove item from cart.');
         });
     }
   };

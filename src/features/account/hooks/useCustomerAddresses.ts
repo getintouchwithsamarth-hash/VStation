@@ -11,6 +11,12 @@ import type { CustomerAddress } from '../types';
 import { useAuth } from '../AuthContext';
 import { mapAddressFormToShopifyInput, mapCustomerProfileToAddresses } from './mappers';
 
+function buildOperationError(message: string, code?: string): Error & { code?: string } {
+  const error = new Error(message) as Error & { code?: string };
+  error.code = code;
+  return error;
+}
+
 export function useCustomerAddresses() {
   const { accessToken, isAuthenticated } = useAuth();
   const [addresses, setAddresses] = useState<CustomerAddress[]>([]);
@@ -33,7 +39,10 @@ export function useCustomerAddresses() {
     try {
       const profileResult = await getCustomerData(resolvedAccessToken);
       if (!profileResult.ok || !profileResult.data) {
-        throw new Error(profileResult.error?.message || 'Unable to load addresses.');
+        throw buildOperationError(
+          profileResult.error?.message || 'Unable to load addresses.',
+          profileResult.error?.code
+        );
       }
 
       setAddresses(mapCustomerProfileToAddresses(profileResult.data));
@@ -78,7 +87,7 @@ export function useCustomerAddresses() {
       await runMutation(async () => {
         const result = await createCustomerAddress(resolvedAccessToken, mapAddressFormToShopifyInput(address));
         if (!result.ok) {
-          throw new Error(result.error.message || 'Unable to create address.');
+          throw buildOperationError(result.error.message || 'Unable to create address.', result.error.code);
         }
       });
     },
@@ -94,7 +103,7 @@ export function useCustomerAddresses() {
           mapAddressFormToShopifyInput(address)
         );
         if (!result.ok) {
-          throw new Error(result.error.message || 'Unable to update address.');
+          throw buildOperationError(result.error.message || 'Unable to update address.', result.error.code);
         }
       });
     },
@@ -106,7 +115,7 @@ export function useCustomerAddresses() {
       await runMutation(async () => {
         const result = await deleteCustomerAddress(resolvedAccessToken, addressId);
         if (!result.ok) {
-          throw new Error(result.error.message || 'Unable to delete address.');
+          throw buildOperationError(result.error.message || 'Unable to delete address.', result.error.code);
         }
       });
     },
@@ -118,7 +127,10 @@ export function useCustomerAddresses() {
       await runMutation(async () => {
         const result = await setDefaultAddress(resolvedAccessToken, addressId);
         if (!result.ok) {
-          throw new Error(result.error.message || 'Unable to set the default address.');
+          throw buildOperationError(
+            result.error.message || 'Unable to set the default address.',
+            result.error.code
+          );
         }
       });
     }

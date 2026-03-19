@@ -13,6 +13,12 @@ import {
 import type { Customer, RegisterData } from '../types';
 import { mapCustomerProfileToAccountCustomer } from './mappers';
 
+function buildOperationError(message: string, code?: string): Error & { code?: string } {
+  const error = new Error(message) as Error & { code?: string };
+  error.code = code;
+  return error;
+}
+
 export function useCustomerAccount() {
   const [customer, setCustomer] = useState<Customer | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -102,12 +108,15 @@ export function useCustomerAccount() {
     try {
       const loginResult = await loginCustomer(email, password);
       if (!loginResult.ok) {
-        throw new Error(loginResult.error.message || 'Unable to sign in.');
+        throw buildOperationError(loginResult.error.message || 'Unable to sign in.', loginResult.error.code);
       }
 
       const customerResult = await getCustomerData(loginResult.data.accessToken);
       if (!customerResult.ok || !customerResult.data) {
-        throw new Error(customerResult.error.message || 'Unable to load customer data.');
+        throw buildOperationError(
+          customerResult.error.message || 'Unable to load customer data.',
+          customerResult.error.code
+        );
       }
 
       setCustomer(mapCustomerProfileToAccountCustomer(customerResult.data));
@@ -122,17 +131,26 @@ export function useCustomerAccount() {
     try {
       const registerResult = await registerCustomer(data);
       if (!registerResult.ok) {
-        throw new Error(registerResult.error.message || 'Unable to create the account.');
+        throw buildOperationError(
+          registerResult.error.message || 'Unable to create the account.',
+          registerResult.error.code
+        );
       }
 
       const loginResult = await loginCustomer(data.email, data.password);
       if (!loginResult.ok) {
-        throw new Error(loginResult.error.message || 'Account created but sign-in failed.');
+        throw buildOperationError(
+          loginResult.error.message || 'Account created but sign-in failed.',
+          loginResult.error.code
+        );
       }
 
       const customerResult = await getCustomerData(loginResult.data.accessToken);
       if (!customerResult.ok || !customerResult.data) {
-        throw new Error(customerResult.error.message || 'Unable to load customer data.');
+        throw buildOperationError(
+          customerResult.error.message || 'Unable to load customer data.',
+          customerResult.error.code
+        );
       }
 
       setCustomer(mapCustomerProfileToAccountCustomer(customerResult.data, new Date().toISOString()));
@@ -164,7 +182,10 @@ export function useCustomerAccount() {
     try {
       const updateResult = await updateCustomerProfile(token, data);
       if (!updateResult.ok) {
-        throw new Error(updateResult.error.message || 'Unable to update the profile.');
+        throw buildOperationError(
+          updateResult.error.message || 'Unable to update the profile.',
+          updateResult.error.code
+        );
       }
 
       setCustomer((currentCustomer) =>
@@ -178,16 +199,24 @@ export function useCustomerAccount() {
   const requestPasswordReset = async (email: string) => {
     const result = await requestCustomerPasswordReset(email);
     if (!result.ok) {
-      throw new Error(result.error.message || 'Unable to send the password reset email.');
+      if (result.error.code === 'UNIDENTIFIED_CUSTOMER') {
+        return;
+      }
+
+      throw buildOperationError(
+        result.error.message || 'Unable to send the password reset email.',
+        result.error.code
+      );
     }
   };
 
   const resetPassword = async (resetUrl: string, password: string) => {
     const result = await resetCustomerPassword(resetUrl, password);
     if (!result.ok) {
-      const error = new Error(result.error.message || 'Unable to reset the password.');
-      (error as Error & { code?: string }).code = result.error.code;
-      throw error;
+      throw buildOperationError(
+        result.error.message || 'Unable to reset the password.',
+        result.error.code
+      );
     }
   };
 

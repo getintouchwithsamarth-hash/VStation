@@ -4,6 +4,7 @@ import { CartItemCard } from './CartItemCard';
 import { OrderSummaryCard } from './OrderSummaryCard';
 import { useCart } from '../CartContext';
 import { useCartMockData } from '../hooks/useCartMockData';
+import { FormAlert } from '../../account/components/FormAlert';
 
 export function PresentationDrawer() {
   const {
@@ -11,6 +12,8 @@ export function PresentationDrawer() {
     cartCount,
     subtotal,
     total,
+    cartError,
+    clearCartError,
     closeCartDrawer,
     incrementItem,
     decrementItem,
@@ -100,6 +103,12 @@ export function PresentationDrawer() {
             gap: '24px'
           }}
         >
+          {cartError ? (
+            <div onClick={clearCartError}>
+              <FormAlert type="error">{cartError}</FormAlert>
+            </div>
+          ) : null}
+
           {/* Cart items stack */}
           {items.length ? (
             <div
