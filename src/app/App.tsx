@@ -8,6 +8,13 @@ import { Products } from '../pages/Products';
 import Cart from '../pages/Cart';
 import { PresentationDrawer } from '../features/cart/components/PresentationDrawer';
 import { useCart } from '../features/cart/CartContext';
+import {
+  AccountDashboard,
+  LoginPage,
+  PasswordResetPage,
+  PasswordResetRequestPage,
+  RegisterPage
+} from '../features/account';
 
 function resolveRoute() {
   const path = window.location.pathname.replace(/\/+$/, '') || '/';
@@ -27,6 +34,16 @@ function resolveRoute() {
       return <Community />;
     case '/cart':
       return <Cart />;
+    case '/account':
+      return <AccountDashboard />;
+    case '/account/login':
+      return <LoginPage />;
+    case '/account/register':
+      return <RegisterPage />;
+    case '/account/password-reset':
+      return <PasswordResetRequestPage />;
+    case '/account/password-reset/confirm':
+      return <PasswordResetPage />;
     default:
       return <NotFound />;
   }
@@ -34,6 +51,12 @@ function resolveRoute() {
 
 export default function App() {
   const { isDrawerOpen } = useCart();
+  const path = window.location.pathname.replace(/\/+$/, '') || '/';
+  const isAccountRoute = path === '/account' || path.startsWith('/account/');
+
+  if (isAccountRoute) {
+    return <>{resolveRoute()}</>;
+  }
 
   return (
     <Shell>

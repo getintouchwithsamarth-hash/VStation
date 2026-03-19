@@ -2,15 +2,19 @@ import { BadgeInstance } from "../ui/Badge";
 import { ButtonInstance } from "../ui/Button";
 import { Logo } from "../ui/Logo";
 import { Container } from "./Container";
+import { useAuth } from "../../features/account";
 import { useCart } from "../../features/cart/CartContext";
 import { useTheme } from "next-themes";
 import { Moon, Sun, Menu, X } from "lucide-react";
 import { useState } from "react";
 
 export function Header() {
+  const { customer, isAuthenticated } = useAuth();
   const { resolvedTheme, setTheme } = useTheme();
   const isDark = resolvedTheme === "dark";
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const accountLabel = isAuthenticated ? customer?.firstName || "Account" : "Sign in";
+  const accountHref = isAuthenticated ? "/account" : "/account/login";
 
   return (
     <>
@@ -175,6 +179,8 @@ export function Header() {
             <HeaderLeftSlot isDark={isDark} />
             <HeaderCenterSlot />
             <HeaderRightSlot
+              accountHref={accountHref}
+              accountLabel={accountLabel}
               isDark={isDark}
               onToggleTheme={() => setTheme(isDark ? "light" : "dark")}
             />
@@ -212,7 +218,14 @@ export function Header() {
             </a>
           </nav>
           <div className="header-mobile-actions">
-            <button className="header-mobile-account-btn">Account</button>
+            <a
+              href={accountHref}
+              className="header-mobile-account-btn"
+              onClick={() => setMobileMenuOpen(false)}
+              style={{ textDecoration: "none" }}
+            >
+              {accountLabel}
+            </a>
             <button
               className="header-mobile-account-btn"
               onClick={() => setTheme(isDark ? "light" : "dark")}
@@ -240,16 +253,20 @@ function HeaderCenterSlot() {
 }
 
 function HeaderRightSlot({
+  accountHref,
+  accountLabel,
   isDark,
   onToggleTheme,
 }: {
+  accountHref: string;
+  accountLabel: string;
   isDark: boolean;
   onToggleTheme: () => void;
 }) {
   return (
     <div className="header-right">
       <ThemeToggleSlot isDark={isDark} onToggleTheme={onToggleTheme} />
-      <AccountSlot />
+      <AccountSlot href={accountHref} label={accountLabel} />
       <CartSlot />
     </div>
   );
@@ -311,9 +328,10 @@ function PrimaryNavSlot() {
   );
 }
 
-function AccountSlot() {
+function AccountSlot({ href, label }: { href: string; label: string }) {
   return (
-    <button
+    <a
+      href={href}
       className="header-account-btn"
       style={{
         height: "36px",
@@ -329,10 +347,11 @@ function AccountSlot() {
         display: "inline-flex",
         alignItems: "center",
         cursor: "pointer",
+        textDecoration: "none",
       }}
     >
-      Account
-    </button>
+      {label}
+    </a>
   );
 }
 
