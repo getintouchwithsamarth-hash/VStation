@@ -38,16 +38,16 @@ export const mapCustomerProfileToAddresses = (profile: ShopifyCustomerProfile): 
     .filter((address): address is NonNullable<typeof address> => Boolean(address?.id))
     .map((address) => ({
       id: address.id,
-      firstName: '',
-      lastName: '',
-      company: undefined,
+      firstName: address.firstName || '',
+      lastName: address.lastName || '',
+      company: address.company || undefined,
       address1: address.address1 || '',
       address2: address.address2 || undefined,
       city: address.city || '',
       province: address.province || '',
       zip: address.zip || '',
       country: address.country || '',
-      phone: undefined,
+      phone: address.phone || undefined,
       isDefault: address.id === defaultAddressId
     }));
 };

@@ -35,9 +35,13 @@ export interface CustomerAddressInput {
 
 export interface CustomerAddress {
   id: string;
+  firstName: string | null;
+  lastName: string | null;
+  company: string | null;
   address1: string | null;
   address2: string | null;
   city: string | null;
+  phone: string | null;
   province: string | null;
   country: string | null;
   zip: string | null;
@@ -84,9 +88,13 @@ export interface CustomerProfile {
   phone: string | null;
   defaultAddress: {
     id?: string;
+    firstName?: string;
+    lastName?: string;
+    company?: string;
     address1?: string;
     address2?: string;
     city?: string;
+    phone?: string;
     province?: string;
     country?: string;
     zip?: string;
@@ -139,9 +147,13 @@ const CUSTOMER_PROFILE_FIELDS = `
   phone
   defaultAddress {
     id
+    firstName
+    lastName
+    company
     address1
     address2
     city
+    phone
     province
     country
     zip
@@ -150,9 +162,13 @@ const CUSTOMER_PROFILE_FIELDS = `
     edges {
       node {
         id
+        firstName
+        lastName
+        company
         address1
         address2
         city
+        phone
         province
         country
         zip

@@ -826,6 +826,12 @@ const PRODUCT_CUSTOM_METAFIELDS_QUERY = `
 const CART_FIELDS = `
   id
   checkoutUrl
+  buyerIdentity {
+    customer {
+      id
+      email
+    }
+  }
   totalQuantity
   cost {
     subtotalAmount {
@@ -1292,14 +1298,18 @@ export async function getProductCollections(productId: string): Promise<Array<{ 
 /**
  * Creates a cart with optional initial lines.
  */
-export async function createCart(lines: CartLineInput[] = []): Promise<Cart> {
+export async function createCart(
+  lines: CartLineInput[] = [],
+  customerAccessToken?: string
+): Promise<Cart> {
   const data = await storefrontFetch<{
     cartCreate: { cart: Cart | null; userErrors: CartUserError[] };
   }>(CART_CREATE_MUTATION, {
     input: {
       lines,
       buyerIdentity: {
-        countryCode: SHOPIFY_COUNTRY_CODE
+        countryCode: SHOPIFY_COUNTRY_CODE,
+        ...(customerAccessToken ? { customerAccessToken } : {})
       }
     },
     country: SHOPIFY_COUNTRY_CODE,
