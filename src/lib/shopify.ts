@@ -7,12 +7,12 @@
  * Usage:
  * import { getProduct } from '@/lib/shopify';
  * import { getProductWithTaxonomy } from '@/lib/shopify';
- * import { redirectToLogin } from '@/lib/shopify';
+ * import { loginCustomer } from '@/lib/shopify';
  *
  * Or import from specific files:
  * import { getProduct } from '@/lib/shopify-storefront';
  * import { getProductWithTaxonomy } from '@/lib/shopify-admin';
- * import { redirectToLogin } from '@/lib/shopify-customer';
+ * import { loginCustomer } from '@/lib/shopify-customer';
  *
  * API USAGE GUIDE
  *
@@ -28,9 +28,9 @@
  * - `getProductCategory(handle)` - taxonomy category only
  *
  * CUSTOMER API (`shopify-customer.ts`)
- * - `redirectToLogin()` - customer login
- * - `redirectToRegister()` - customer registration
- * - `redirectToAccount()` - customer account
+ * - `loginCustomer()` - customer login
+ * - `refreshCustomerToken()` - session renewal
+ * - `requestPasswordReset()` - password recovery email
  * - `logout()` - customer logout
  * - `isCustomerLoggedIn()` - login status
  *

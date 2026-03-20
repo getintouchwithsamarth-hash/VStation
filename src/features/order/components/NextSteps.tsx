@@ -1,6 +1,10 @@
 import { ButtonInstance } from '../../../components/ui/Button';
 
 export function NextSteps() {
+  const handleContinueShopping = () => {
+    window.location.href = 'https://thevibestation.com';
+  };
+
   return (
     <div
       style={{
@@ -78,7 +82,12 @@ export function NextSteps() {
           gap: '8px'
         }}
       >
-        <ButtonInstance variant="primary" size="md" label="Continue shopping" />
+        <ButtonInstance
+          variant="primary"
+          size="md"
+          label="Continue shopping"
+          onClick={handleContinueShopping}
+        />
         <ButtonInstance variant="secondary" size="md" label="View order" />
       </div>
     </div>

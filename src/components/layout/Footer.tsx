@@ -1,108 +1,174 @@
-import { Container } from './Container';
-import { Stack } from './Stack';
-import { Logo } from '../ui/Logo';
-import { useTheme } from 'next-themes';
+import { Container } from "./Container";
+import { Stack } from "./Stack";
+import { Logo } from "../ui/Logo";
+import { useTheme } from "next-themes";
 
 export function Footer() {
   const { resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === 'dark';
+  const isDark = resolvedTheme === "dark";
 
   return (
-    <footer 
-      style={{
-        backgroundColor: 'var(--card)',
-        borderTop: '1px solid var(--border)',
-        paddingTop: '32px',
-        paddingBottom: '24px'
-      }}
-    >
-      <Container>
-        <Stack gap="24px">
-          <FooterTopSlot />
-          <FooterBottomSlot isDark={isDark} />
-        </Stack>
-      </Container>
-    </footer>
-  );
-}
+    <>
+      <style>{`
+        .footer-container {
+          background-color: var(--card);
+          border-top: 1px solid var(--border);
+          padding-top: 32px;
+          padding-bottom: 24px;
+        }
 
-function FooterTopSlot() {
-  return (
-    <div 
-      style={{
-        display: 'flex',
-        alignItems: 'flex-start',
-        justifyContent: 'space-between',
-        gap: '32px'
-      }}
-    >
-      <FooterNavSlot />
-      <FooterTrustSlot />
-    </div>
-  );
-}
+        .footer-top {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 32px;
+        }
 
-function FooterBottomSlot({ isDark }: { isDark: boolean }) {
-  return (
-    <div 
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-      }}
-    >
-      <FooterLegalSlot isDark={isDark} />
-      <FooterSocialSlot />
-    </div>
+        .footer-bottom {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .footer-social {
+          display: flex;
+          gap: 16px;
+        }
+
+        .footer-social-btn {
+          height: 36px;
+          padding-left: 12px;
+          padding-right: 12px;
+          border-radius: 10px;
+          background-color: transparent;
+          color: var(--foreground);
+          font-size: 14px;
+          line-height: 20px;
+          font-weight: 600;
+          border: none;
+          display: inline-flex;
+          align-items: center;
+          cursor: pointer;
+          transition: background-color 0.15s ease;
+        }
+
+        .footer-social-btn:hover {
+          background-color: var(--accent);
+        }
+
+        /* Tablet breakpoint */
+        @media (max-width: 1024px) {
+          .footer-container {
+            padding-top: 28px;
+            padding-bottom: 20px;
+          }
+
+          .footer-top {
+            gap: 24px;
+          }
+
+          .footer-social {
+            gap: 12px;
+          }
+        }
+
+        /* Mobile breakpoint */
+        @media (max-width: 640px) {
+          .footer-container {
+            padding-top: 24px;
+            padding-bottom: 16px;
+          }
+
+          .footer-top {
+            flex-direction: column;
+            gap: 32px;
+          }
+
+          .footer-bottom {
+            flex-direction: column-reverse;
+            gap: 24px;
+            align-items: flex-start;
+          }
+
+          .footer-social {
+            flex-direction: column;
+            width: 100%;
+            gap: 12px;
+          }
+
+          .footer-social-btn {
+            width: 100%;
+            justify-content: center;
+            height: 44px;
+            font-size: 16px;
+            line-height: 24px;
+          }
+        }
+      `}</style>
+      <footer className="footer-container">
+        <Container>
+          <Stack gap="24px">
+            <div className="footer-top">
+              <FooterNavSlot />
+              <FooterTrustSlot />
+            </div>
+            <div className="footer-bottom">
+              <FooterLegalSlot isDark={isDark} />
+              <FooterSocialSlot />
+            </div>
+          </Stack>
+        </Container>
+      </footer>
+    </>
   );
 }
 
 function FooterNavSlot() {
   return (
     <Stack gap="10px">
-      <div 
+      <div
         style={{
-          fontSize: '12px',
-          lineHeight: '18px',
-          fontWeight: '600',
-          color: 'var(--muted-foreground)'
+          fontSize: "12px",
+          lineHeight: "18px",
+          fontWeight: "600",
+          color: "var(--muted-foreground)",
         }}
       >
         Explore
       </div>
       <Stack gap="10px">
-        <a 
+        <a
           href="#products"
           style={{
-            fontSize: '14px',
-            lineHeight: '20px',
-            fontWeight: '500',
-            color: 'var(--foreground)',
-            textDecoration: 'none'
+            fontSize: "14px",
+            lineHeight: "20px",
+            fontWeight: "500",
+            color: "var(--foreground)",
+            textDecoration: "none",
           }}
         >
           Products
         </a>
-        <a 
+        <a
           href="#philosophy"
           style={{
-            fontSize: '14px',
-            lineHeight: '20px',
-            fontWeight: '500',
-            color: 'var(--foreground)',
-            textDecoration: 'none'
+            fontSize: "14px",
+            lineHeight: "20px",
+            fontWeight: "500",
+            color: "var(--foreground)",
+            textDecoration: "none",
           }}
         >
           Philosophy
         </a>
-        <a 
+        <a
           href="#community"
           style={{
-            fontSize: '14px',
-            lineHeight: '20px',
-            fontWeight: '500',
-            color: 'var(--foreground)',
-            textDecoration: 'none'
+            fontSize: "14px",
+            lineHeight: "20px",
+            fontWeight: "500",
+            color: "var(--foreground)",
+            textDecoration: "none",
           }}
         >
           Community
@@ -110,11 +176,11 @@ function FooterNavSlot() {
         <a
           href="/privacy"
           style={{
-            fontSize: '14px',
-            lineHeight: '20px',
-            fontWeight: '500',
-            color: 'var(--foreground)',
-            textDecoration: 'none'
+            fontSize: "14px",
+            lineHeight: "20px",
+            fontWeight: "500",
+            color: "var(--foreground)",
+            textDecoration: "none",
           }}
         >
           Privacy Policy
@@ -127,43 +193,43 @@ function FooterNavSlot() {
 function FooterTrustSlot() {
   return (
     <Stack gap="10px">
-      <div 
+      <div
         style={{
-          fontSize: '12px',
-          lineHeight: '18px',
-          fontWeight: '600',
-          color: 'var(--muted-foreground)'
+          fontSize: "12px",
+          lineHeight: "18px",
+          fontWeight: "600",
+          color: "var(--muted-foreground)",
         }}
       >
         Standards
       </div>
       <Stack gap="10px">
-        <div 
+        <div
           style={{
-            fontSize: '14px',
-            lineHeight: '20px',
-            fontWeight: '500',
-            color: 'var(--foreground)'
+            fontSize: "14px",
+            lineHeight: "20px",
+            fontWeight: "500",
+            color: "var(--foreground)",
           }}
         >
           Curated for durability
         </div>
-        <div 
+        <div
           style={{
-            fontSize: '14px',
-            lineHeight: '20px',
-            fontWeight: '500',
-            color: 'var(--foreground)'
+            fontSize: "14px",
+            lineHeight: "20px",
+            fontWeight: "500",
+            color: "var(--foreground)",
           }}
         >
           Reliable support
         </div>
-        <div 
+        <div
           style={{
-            fontSize: '14px',
-            lineHeight: '20px',
-            fontWeight: '500',
-            color: 'var(--foreground)'
+            fontSize: "14px",
+            lineHeight: "20px",
+            fontWeight: "500",
+            color: "var(--foreground)",
           }}
         >
           Clear policies
@@ -175,13 +241,18 @@ function FooterTrustSlot() {
 
 function FooterLegalSlot({ isDark }: { isDark: boolean }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-      <Logo size={24} variant={isDark ? 'light' : 'dark'} showText={false} href="/" />
+    <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+      <Logo
+        size={24}
+        variant={isDark ? "light" : "dark"}
+        showText={false}
+        href="/"
+      />
       <div
         style={{
-          fontSize: '14px',
-          lineHeight: '20px',
-          color: 'var(--muted-foreground)'
+          fontSize: "14px",
+          lineHeight: "20px",
+          color: "var(--muted-foreground)",
         }}
       >
         © VIBE STATION
@@ -192,64 +263,10 @@ function FooterLegalSlot({ isDark }: { isDark: boolean }) {
 
 function FooterSocialSlot() {
   return (
-    <div style={{ display: 'flex', gap: '16px' }}>
-      <button
-        style={{
-          height: '36px',
-          paddingLeft: '12px',
-          paddingRight: '12px',
-          borderRadius: '10px',
-          backgroundColor: 'transparent',
-          color: 'var(--foreground)',
-          fontSize: '14px',
-          lineHeight: '20px',
-          fontWeight: '600',
-          border: 'none',
-          display: 'inline-flex',
-          alignItems: 'center',
-          cursor: 'pointer'
-        }}
-      >
-        Instagram
-      </button>
-      <button
-        style={{
-          height: '36px',
-          paddingLeft: '12px',
-          paddingRight: '12px',
-          borderRadius: '10px',
-          backgroundColor: 'transparent',
-          color: 'var(--foreground)',
-          fontSize: '14px',
-          lineHeight: '20px',
-          fontWeight: '600',
-          border: 'none',
-          display: 'inline-flex',
-          alignItems: 'center',
-          cursor: 'pointer'
-        }}
-      >
-        YouTube
-      </button>
-      <button
-        style={{
-          height: '36px',
-          paddingLeft: '12px',
-          paddingRight: '12px',
-          borderRadius: '10px',
-          backgroundColor: 'transparent',
-          color: 'var(--foreground)',
-          fontSize: '14px',
-          lineHeight: '20px',
-          fontWeight: '600',
-          border: 'none',
-          display: 'inline-flex',
-          alignItems: 'center',
-          cursor: 'pointer'
-        }}
-      >
-        Email
-      </button>
+    <div className="footer-social">
+      <button className="footer-social-btn">Instagram</button>
+      <button className="footer-social-btn">YouTube</button>
+      <button className="footer-social-btn">Email</button>
     </div>
   );
 }

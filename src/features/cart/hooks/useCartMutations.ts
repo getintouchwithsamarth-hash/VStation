@@ -7,12 +7,17 @@ import {
 } from '../../../lib/shopify-storefront';
 
 type CartCreateLines = Parameters<typeof createCart>[0];
+type CartCreateCustomerAccessToken = Parameters<typeof createCart>[1];
 type CartLinesAddLines = Parameters<typeof addCartLines>[1];
 type CartLinesUpdateLines = Parameters<typeof updateCartLines>[1];
 type CartLinesRemoveLineIds = Parameters<typeof removeCartLines>[1];
 
 export function useCartCreate() {
-  return useCallback((lines: CartCreateLines = []) => createCart(lines), []);
+  return useCallback(
+    (lines: CartCreateLines = [], customerAccessToken?: CartCreateCustomerAccessToken) =>
+      createCart(lines, customerAccessToken),
+    []
+  );
 }
 
 export function useCartLinesAdd() {

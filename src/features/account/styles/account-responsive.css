@@ -1,0 +1,79 @@
+/* Account UI Responsive Styles */
+
+/* Mobile: < 640px */
+@media (max-width: 639px) {
+  /* Form inputs stack on mobile */
+  .account-form-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Address cards stack on mobile */
+  .addresses-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Modal takes full width with padding on mobile */
+  .account-modal {
+    margin: 16px;
+    max-width: calc(100% - 32px);
+  }
+
+  /* Reduce padding on cards for mobile */
+  .account-card {
+    padding: 16px !important;
+  }
+
+  /* Navigation becomes horizontal scroll on mobile */
+  .account-nav-mobile {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Smaller typography on mobile */
+  .account-page-title {
+    font-size: 22px !important;
+    line-height: 30px !important;
+  }
+
+  .account-section-title {
+    font-size: 18px !important;
+    line-height: 28px !important;
+  }
+}
+
+/* Tablet: 640px - 1024px */
+@media (min-width: 640px) and (max-width: 1024px) {
+  /* Two column grid for addresses on tablet */
+  .addresses-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Dashboard uses smaller sidebar on tablet */
+  .account-dashboard-grid {
+    grid-template-columns: 200px 1fr !important;
+    gap: 24px !important;
+  }
+}
+
+/* Desktop: > 1024px */
+@media (min-width: 1025px) {
+  /* Three column grid for addresses on desktop when space allows */
+  .addresses-grid {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)) !important;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) {
+  /* Increase tap targets on touch devices */
+  button,
+  a {
+    min-height: 44px;
+  }
+
+  /* Remove hover states on touch devices */
+  button:hover,
+  a:hover {
+    background-color: inherit !important;
+  }
+}

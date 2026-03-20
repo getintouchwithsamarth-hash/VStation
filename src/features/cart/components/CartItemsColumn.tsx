@@ -3,9 +3,10 @@ import { ButtonInstance } from '../../../components/ui/Button';
 import { CartItemCard } from './CartItemCard';
 import { useCart, formatINR } from '../CartContext';
 import { useCartMockData } from '../hooks/useCartMockData';
+import { FormAlert } from '../../account/components/FormAlert';
 
 export function CartItemsColumn() {
-  const { items, incrementItem, decrementItem, removeItem } = useCart();
+  const { items, cartError, clearCartError, incrementItem, decrementItem, removeItem } = useCart();
   const { addOns, copy } = useCartMockData();
 
   return (
@@ -30,6 +31,12 @@ export function CartItemsColumn() {
       >
         {copy.yourCartTitle}
       </h2>
+
+      {cartError ? (
+        <div onClick={clearCartError}>
+          <FormAlert type="error">{cartError}</FormAlert>
+        </div>
+      ) : null}
 
       {/* Cart items stack */}
       <div

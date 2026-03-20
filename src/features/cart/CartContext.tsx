@@ -4,9 +4,14 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode
 } from 'react';
+import {
+  getCustomerAccessTokenExpiry,
+  refreshCustomerToken,
+} from '../../lib/shopify-customer';
 import {
   getCart,
   getCartId,
@@ -14,6 +19,7 @@ import {
   updateCartBuyerIdentity,
   type Cart as ShopifyCart
 } from '../../lib/shopify-storefront';
+import { useAuth } from '../account';
 import {
   useCartCreate,
   useCartLinesAdd,
@@ -39,7 +45,9 @@ type CartContextValue = {
   subtotal: number;
   total: number;
   checkoutUrl: string | null;
-  addItem: (variantId: string) => Promise<boolean>;
+  cartError: string | null;
+  clearCartError: () => void;
+  addItem: (variantId: string) => Promise<{ ok: boolean; error?: string }>;
   checkout: () => Promise<void>;
   openCartDrawer: () => void;
   closeCartDrawer: () => void;
@@ -51,6 +59,7 @@ type CartContextValue = {
 
 const CartContext = createContext<CartContextValue | null>(null);
 const SHOPIFY_COUNTRY_CODE = (import.meta.env.VITE_SHOPIFY_COUNTRY_CODE || 'IN').toUpperCase();
+const CUSTOMER_TOKEN_REFRESH_THRESHOLD_MS = 5 * 60 * 1000;
 
 const mapCartItems = (cart: ShopifyCart): CartItem[] => {
   return cart.lines.edges.map((edge) => {
@@ -75,10 +84,13 @@ const mapCartItems = (cart: ShopifyCart): CartItem[] => {
 };
 
 export function CartProvider({ children }: { children: ReactNode }) {
+  const { accessToken, isAuthenticated, refreshCustomerData, logout } = useAuth();
   const [items, setItems] = useState<CartItem[]>([]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [activeCartId, setActiveCartId] = useState<string | null>(null);
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
+  const [cartError, setCartError] = useState<string | null>(null);
+  const previousAccessTokenRef = useRef<string | null>(null);
   const cartCreate = useCartCreate();
   const cartLinesAdd = useCartLinesAdd();
   const cartLinesUpdate = useCartLinesUpdate();
@@ -90,6 +102,26 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setCheckoutUrl(cart.checkoutUrl);
     setCartId(cart.id);
   }, []);
+
+  const syncCartBuyerIdentity = useCallback(
+    async (cartId: string, customerToken: string | null) => {
+      try {
+        const updatedCart = await updateCartBuyerIdentity(
+          cartId,
+          customerToken
+            ? {
+                countryCode: SHOPIFY_COUNTRY_CODE,
+                customerAccessToken: customerToken
+              }
+            : {}
+        );
+        syncCart(updatedCart);
+      } catch (error) {
+        console.warn('Failed to sync cart buyer identity', error);
+      }
+    },
+    [syncCart]
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -104,7 +136,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
           }
         }
 
-        const newCart = await cartCreate();
+        const newCart = await cartCreate([], accessToken || undefined);
         if (!cancelled) {
           syncCart(newCart);
         }
@@ -119,7 +151,23 @@ export function CartProvider({ children }: { children: ReactNode }) {
     return () => {
       cancelled = true;
     };
-  }, [cartCreate, syncCart]);
+  }, [accessToken, cartCreate, syncCart]);
+
+  useEffect(() => {
+    if (!activeCartId) {
+      previousAccessTokenRef.current = accessToken;
+      return;
+    }
+
+    const tokenChanged = previousAccessTokenRef.current !== accessToken;
+    previousAccessTokenRef.current = accessToken;
+
+    if (!tokenChanged) {
+      return;
+    }
+
+    void syncCartBuyerIdentity(activeCartId, accessToken);
+  }, [activeCartId, accessToken, syncCartBuyerIdentity]);
 
   const cartCount = useMemo(
     () => items.reduce((count, item) => count + item.quantity, 0),
@@ -138,11 +186,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
     subtotal,
     total: subtotal,
     checkoutUrl,
+    cartError,
+    clearCartError: () => setCartError(null),
     addItem: async (variantId) => {
       try {
+        setCartError(null);
         let cartId = activeCartId;
         if (!cartId) {
-          const newCart = await cartCreate();
+          const newCart = await cartCreate([], accessToken || undefined);
           syncCart(newCart);
           cartId = newCart.id;
         }
@@ -154,31 +205,76 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
         syncCart(updatedCart);
         setIsDrawerOpen(true);
-        return true;
+        return { ok: true };
       } catch (error) {
         console.error('Failed to add item to cart', error);
-        return false;
+        const message = error instanceof Error ? error.message : 'Unable to add item to cart.';
+        setCartError(message);
+        return { ok: false, error: message };
       }
     },
     checkout: async () => {
       try {
+        setCartError(null);
         let cartId = activeCartId;
-        let latestCheckoutUrl = checkoutUrl;
         if (!cartId) {
-          const newCart = await cartCreate();
+          const newCart = await cartCreate([], accessToken || undefined);
           syncCart(newCart);
           cartId = newCart.id;
-          latestCheckoutUrl = newCart.checkoutUrl;
         }
 
-        const updatedCart = await updateCartBuyerIdentity(cartId, {
-          countryCode: SHOPIFY_COUNTRY_CODE
-        });
-        syncCart(updatedCart);
-        window.location.href = updatedCart.checkoutUrl;
+        let checkoutTarget = checkoutUrl;
+        let tokenForCheckout = accessToken;
+
+        if (isAuthenticated) {
+          const session = getCustomerAccessTokenExpiry();
+
+          if (!session.accessToken || session.isExpired) {
+            logout();
+            tokenForCheckout = null;
+          } else {
+            const expiresAtTimestamp = Date.parse(session.expiresAt || '');
+            const isNearExpiry =
+              Number.isFinite(expiresAtTimestamp) &&
+              expiresAtTimestamp - Date.now() <= CUSTOMER_TOKEN_REFRESH_THRESHOLD_MS;
+
+            if (isNearExpiry) {
+              const renewedTokenResult = await refreshCustomerToken(session.accessToken);
+
+              if (renewedTokenResult.ok) {
+                tokenForCheckout = renewedTokenResult.data.accessToken;
+                await refreshCustomerData();
+              } else {
+                logout();
+                tokenForCheckout = null;
+              }
+            } else {
+              tokenForCheckout = session.accessToken;
+            }
+          }
+        }
+
+        try {
+          const updatedCart = await updateCartBuyerIdentity(
+            cartId,
+            tokenForCheckout
+              ? {
+                  countryCode: SHOPIFY_COUNTRY_CODE,
+                  customerAccessToken: tokenForCheckout
+                }
+              : {}
+          );
+          syncCart(updatedCart);
+          checkoutTarget = updatedCart.checkoutUrl;
+        } catch (error) {
+          console.warn('Failed to attach customer identity before checkout', error);
+        }
+
+        window.location.href = checkoutTarget || '/cart';
       } catch (error) {
-        console.error('Failed to update buyer identity before checkout', error);
-        window.location.href = latestCheckoutUrl || '/cart';
+        console.error('Failed to prepare checkout', error);
+        setCartError(error instanceof Error ? error.message : 'Unable to continue to checkout.');
+        window.location.href = checkoutUrl || '/cart';
       }
     },
     openCartDrawer: () => setIsDrawerOpen(true),
@@ -193,9 +289,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
         return;
       }
       void cartLinesUpdate(activeCartId, [{ id: item.id, quantity: item.quantity + 1 }])
-        .then(syncCart)
+        .then((cart) => {
+          setCartError(null);
+          syncCart(cart);
+        })
         .catch((error) => {
           console.error('Failed to increment cart line', error);
+          setCartError(error instanceof Error ? error.message : 'Unable to update cart quantity.');
         });
     },
     decrementItem: (id) => {
@@ -208,17 +308,25 @@ export function CartProvider({ children }: { children: ReactNode }) {
       }
       if (item.quantity <= 1) {
         void cartLinesRemove(activeCartId, [item.id])
-          .then(syncCart)
+          .then((cart) => {
+            setCartError(null);
+            syncCart(cart);
+          })
           .catch((error) => {
             console.error('Failed to decrement cart line', error);
+            setCartError(error instanceof Error ? error.message : 'Unable to update cart quantity.');
           });
         return;
       }
 
       void cartLinesUpdate(activeCartId, [{ id: item.id, quantity: item.quantity - 1 }])
-        .then(syncCart)
+        .then((cart) => {
+          setCartError(null);
+          syncCart(cart);
+        })
         .catch((error) => {
           console.error('Failed to decrement cart line', error);
+          setCartError(error instanceof Error ? error.message : 'Unable to update cart quantity.');
         });
     },
     removeItem: (id) => {
@@ -226,9 +334,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
         return;
       }
       void cartLinesRemove(activeCartId, [id])
-        .then(syncCart)
+        .then((cart) => {
+          setCartError(null);
+          syncCart(cart);
+        })
         .catch((error) => {
           console.error('Failed to remove cart line', error);
+          setCartError(error instanceof Error ? error.message : 'Unable to remove item from cart.');
         });
     }
   };
