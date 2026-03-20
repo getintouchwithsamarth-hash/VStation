@@ -4,6 +4,7 @@ import { ButtonInstance } from '../../../components/ui/Button';
 export function CartItemCard({ 
   id,
   name, 
+  productHandle,
   variant, 
   price, 
   quantity,
@@ -15,6 +16,7 @@ export function CartItemCard({
 }: { 
   id: string;
   name: string; 
+  productHandle: string;
   variant: string; 
   price: string; 
   quantity: number;
@@ -24,6 +26,8 @@ export function CartItemCard({
   onDecrement?: (id: string) => void;
   onRemove?: (id: string) => void;
 }) {
+  const productHref = `/products/${productHandle}`;
+
   return (
     <CardInstance variant="subtle" padding="md">
       <div
@@ -33,73 +37,87 @@ export function CartItemCard({
           alignItems: 'flex-start'
         }}
       >
-        <div
-          style={{
-            width: '72px',
-            height: '72px',
-            backgroundColor: "var(--muted)",
-            borderRadius: '12px',
-            flexShrink: 0,
-            overflow: 'hidden'
-          }}
-        >
-          {imageUrl ? (
-            <img
-              src={imageUrl}
-              alt={imageAlt || name}
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                display: 'block'
-              }}
-            />
-          ) : null}
-        </div>
-
-        {/* Middle section */}
-        <div
+        <a
+          href={productHref}
           style={{
             flex: 1,
             display: 'flex',
-            flexDirection: 'column',
-            gap: '6px'
+            gap: '12px',
+            alignItems: 'flex-start',
+            textDecoration: 'none',
+            color: 'inherit',
+            minWidth: 0
           }}
         >
           <div
             style={{
-              fontSize: '14px',
-              lineHeight: '20px',
-              fontWeight: '600',
-              color: "var(--foreground)",
-              fontFamily: 'Inter, system-ui, sans-serif'
+              width: '72px',
+              height: '72px',
+              backgroundColor: "var(--muted)",
+              borderRadius: '12px',
+              flexShrink: 0,
+              overflow: 'hidden'
             }}
           >
-            {name}
+            {imageUrl ? (
+              <img
+                src={imageUrl}
+                alt={imageAlt || name}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  display: 'block'
+                }}
+              />
+            ) : null}
           </div>
+
+          {/* Middle section */}
           <div
             style={{
-              fontSize: '12px',
-              lineHeight: '18px',
-              fontWeight: '400',
-              color: "var(--muted-foreground)",
-              fontFamily: 'Inter, system-ui, sans-serif'
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '6px',
+              minWidth: 0
             }}
           >
-            {variant}
+            <div
+              style={{
+                fontSize: '14px',
+                lineHeight: '20px',
+                fontWeight: '600',
+                color: "var(--foreground)",
+                fontFamily: 'Inter, system-ui, sans-serif'
+              }}
+            >
+              {name}
+            </div>
+            <div
+              style={{
+                fontSize: '12px',
+                lineHeight: '18px',
+                fontWeight: '400',
+                color: "var(--muted-foreground)",
+                fontFamily: 'Inter, system-ui, sans-serif'
+              }}
+            >
+              {variant}
+            </div>
+            <div
+              style={{
+                fontSize: '14px',
+                lineHeight: '20px',
+                fontWeight: '600',
+                color: "var(--foreground)",
+                fontFamily: 'Inter, system-ui, sans-serif'
+              }}
+            >
+              {price}
+            </div>
           </div>
-          <div
-            style={{
-              fontSize: '14px',
-              lineHeight: '20px',
-              fontWeight: '600',
-              color: "var(--foreground)",
-              fontFamily: 'Inter, system-ui, sans-serif'
-            }}
-          >
-            {price}
-          </div>
-        </div>
+        </a>
 
         {/* Right section - Controls */}
         <div

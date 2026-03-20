@@ -30,6 +30,7 @@ import {
 export type CartItem = {
   id: string;
   name: string;
+  productHandle: string;
   variant: string;
   price: number;
   quantity: number;
@@ -67,6 +68,7 @@ const mapCartItems = (cart: ShopifyCart): CartItem[] => {
     return {
       id: line.id,
       name: line.merchandise.product.title,
+      productHandle: line.merchandise.product.handle,
       variant:
         line.merchandise.selectedOptions
           ?.map((option) => `${option.name}: ${option.value}`)

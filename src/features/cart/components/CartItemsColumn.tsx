@@ -51,6 +51,7 @@ export function CartItemsColumn() {
             key={item.id}
             id={item.id}
             name={item.name}
+            productHandle={item.productHandle}
             variant={item.variant}
             price={formatINR(item.price)}
             quantity={item.quantity}
