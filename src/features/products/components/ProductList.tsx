@@ -311,7 +311,10 @@ function ProductCard({
               duration: Infinity,
               action: {
                 label: "View cart",
-                onClick: () => openCartDrawer(),
+                onClick: () => {
+                  closeCartDrawer();
+                  window.location.href = "/cart";
+                },
               },
               cancel: {
                 label: "Close",

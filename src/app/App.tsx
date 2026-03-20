@@ -58,11 +58,12 @@ export default function App() {
   const { isDrawerOpen } = useCart();
   const path = window.location.pathname.replace(/\/+$/, '') || '/';
   const isAccountRoute = path === '/account' || path.startsWith('/account/');
+  const isCartRoute = path === '/cart';
 
   return (
     <Shell>
       {resolveRoute()}
-      {!isAccountRoute && isDrawerOpen ? <PresentationDrawer /> : null}
+      {!isAccountRoute && !isCartRoute && isDrawerOpen ? <PresentationDrawer /> : null}
     </Shell>
   );
 }

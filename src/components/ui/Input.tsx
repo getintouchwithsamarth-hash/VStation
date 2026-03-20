@@ -104,15 +104,39 @@ function LeadingSlot() {
 function TextValue({
   placeholder,
   value,
+  onChange,
+  disabled,
+  inputMode,
+  maxLength,
+  autoComplete,
+  name,
 }: {
   placeholder?: string;
   value?: string;
+  onChange?: (value: string) => void;
+  disabled?: boolean;
+  inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
+  maxLength?: number;
+  autoComplete?: string;
+  name?: string;
 }) {
   return (
     <input
       type="text"
       placeholder={placeholder || "Enter text..."}
       value={value}
+      onChange={
+        onChange
+          ? (event) => {
+              onChange(event.target.value);
+            }
+          : undefined
+      }
+      disabled={disabled}
+      inputMode={inputMode}
+      maxLength={maxLength}
+      autoComplete={autoComplete}
+      name={name}
       style={{
         width: "100%",
         border: "none",
@@ -617,6 +641,12 @@ export function InputInstance({
   error,
   disabled,
   size = "md",
+  value,
+  onValueChange,
+  inputMode,
+  maxLength,
+  autoComplete,
+  name,
 }: {
   label?: string;
   placeholder?: string;
@@ -624,6 +654,12 @@ export function InputInstance({
   error?: boolean;
   disabled?: boolean;
   size?: "sm" | "md";
+  value?: string;
+  onValueChange?: (value: string) => void;
+  inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
+  maxLength?: number;
+  autoComplete?: string;
+  name?: string;
 }) {
   const height = size === "sm" ? "36px" : "44px";
   const paddingX = size === "sm" ? "12px" : "14px";
@@ -651,7 +687,16 @@ export function InputInstance({
             transition: "border-color 150ms ease",
           }}
         >
-          <TextValue placeholder={placeholder} />
+          <TextValue
+            placeholder={placeholder}
+            value={value}
+            onChange={onValueChange}
+            disabled={disabled}
+            inputMode={inputMode}
+            maxLength={maxLength}
+            autoComplete={autoComplete}
+            name={name}
+          />
         </div>
       </InputRow>
       {helperText && (
