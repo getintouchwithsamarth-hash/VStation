@@ -1,9 +1,0 @@
-{
-  "name": "web-pixel",
-  "private": true,
-  "version": "0.1.0",
-  "type": "module",
-  "dependencies": {
-    "@shopify/web-pixels-extension": "latest"
-  }
-}
