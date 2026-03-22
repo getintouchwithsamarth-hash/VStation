@@ -48,8 +48,10 @@ export function Footer() {
           border: none;
           display: inline-flex;
           align-items: center;
+          justify-content: center;
           cursor: pointer;
           transition: background-color 0.15s ease;
+          text-decoration: none;
         }
 
         .footer-social-btn:hover {
@@ -110,6 +112,7 @@ export function Footer() {
           <Stack gap="24px">
             <div className="footer-top">
               <FooterNavSlot />
+              <FooterPoliciesSlot />
               <FooterTrustSlot />
             </div>
             <div className="footer-bottom">
@@ -138,7 +141,7 @@ function FooterNavSlot() {
       </div>
       <Stack gap="10px">
         <a
-          href="#products"
+          href="/products"
           style={{
             fontSize: "14px",
             lineHeight: "20px",
@@ -150,7 +153,7 @@ function FooterNavSlot() {
           Products
         </a>
         <a
-          href="#philosophy"
+          href="/philosophy"
           style={{
             fontSize: "14px",
             lineHeight: "20px",
@@ -162,7 +165,7 @@ function FooterNavSlot() {
           Philosophy
         </a>
         <a
-          href="#community"
+          href="/community"
           style={{
             fontSize: "14px",
             lineHeight: "20px",
@@ -239,6 +242,55 @@ function FooterTrustSlot() {
   );
 }
 
+function FooterPoliciesSlot() {
+  return (
+    <Stack gap="10px">
+      <div
+        style={{
+          fontSize: "12px",
+          lineHeight: "18px",
+          fontWeight: "600",
+          color: "var(--muted-foreground)",
+        }}
+      >
+        Policies
+      </div>
+      <Stack gap="10px">
+        <a
+          href="/terms"
+          style={footerLinkStyle}
+        >
+          Terms of Service
+        </a>
+        <a
+          href="/privacy"
+          style={footerLinkStyle}
+        >
+          Privacy Policy
+        </a>
+        <a
+          href="/shipping-policy"
+          style={footerLinkStyle}
+        >
+          Shipping Policy
+        </a>
+        <a
+          href="/returns-refunds"
+          style={footerLinkStyle}
+        >
+          Return and Refund Policy
+        </a>
+        <a
+          href="/cookie-policy"
+          style={footerLinkStyle}
+        >
+          Cookie Policy
+        </a>
+      </Stack>
+    </Stack>
+  );
+}
+
 function FooterLegalSlot({ isDark }: { isDark: boolean }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
@@ -264,9 +316,36 @@ function FooterLegalSlot({ isDark }: { isDark: boolean }) {
 function FooterSocialSlot() {
   return (
     <div className="footer-social">
-      <button className="footer-social-btn">Instagram</button>
-      <button className="footer-social-btn">YouTube</button>
-      <button className="footer-social-btn">Email</button>
+      <a
+        className="footer-social-btn"
+        href="https://www.instagram.com/expressvibestation?igsh=amU0NmN6YXE0Mnl5&utm_source=qr"
+        target="_blank"
+        rel="noreferrer"
+      >
+        Instagram
+      </a>
+      <a
+        className="footer-social-btn"
+        href="https://www.youtube.com/channel/UC988AY2Heli187Kj3QuJvJA"
+        target="_blank"
+        rel="noreferrer"
+      >
+        YouTube
+      </a>
+      <a
+        className="footer-social-btn"
+        href="mailto:studio@thevibestation.com"
+      >
+        Email
+      </a>
     </div>
   );
 }
+
+const footerLinkStyle = {
+  fontSize: "14px",
+  lineHeight: "20px",
+  fontWeight: "500",
+  color: "var(--foreground)",
+  textDecoration: "none",
+} as const;

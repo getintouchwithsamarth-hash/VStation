@@ -55,7 +55,7 @@ export function AddressesSection() {
               fontSize: '22px',
               lineHeight: '30px',
               fontWeight: '600',
-              color: '#101828',
+              color: 'var(--account-title)',
               fontFamily: 'Inter, system-ui, sans-serif'
             }}
           >
@@ -66,7 +66,7 @@ export function AddressesSection() {
               fontSize: '14px',
               lineHeight: '20px',
               fontWeight: '400',
-              color: '#667085',
+              color: 'var(--account-subtext)',
               fontFamily: 'Inter, system-ui, sans-serif',
               marginTop: '4px'
             }}
@@ -96,11 +96,11 @@ export function AddressesSection() {
       {isLoading ? (
         <div
           style={{
-            backgroundColor: '#FFFFFF',
-            border: '1px solid #EAECF0',
+            backgroundColor: 'var(--account-card-bg)',
+            border: '1px solid var(--account-card-border)',
             borderRadius: '12px',
             padding: '32px',
-            boxShadow: '0 1px 2px 0 rgba(16, 24, 40, 0.04), 0 1px 3px 0 rgba(16, 24, 40, 0.06)'
+            boxShadow: 'var(--account-card-shadow)'
           }}
         >
           <p
@@ -108,7 +108,7 @@ export function AddressesSection() {
               fontSize: '14px',
               lineHeight: '20px',
               fontWeight: '400',
-              color: '#667085',
+              color: 'var(--account-subtext)',
               fontFamily: 'Inter, system-ui, sans-serif',
               margin: 0
             }}
@@ -137,10 +137,10 @@ export function AddressesSection() {
       ) : (
         <div
           style={{
-            backgroundColor: '#FFFFFF',
-            border: '1px solid #EAECF0',
+            backgroundColor: 'var(--account-card-bg)',
+            border: '1px solid var(--account-card-border)',
             borderRadius: '12px',
-            boxShadow: '0 1px 2px 0 rgba(16, 24, 40, 0.04), 0 1px 3px 0 rgba(16, 24, 40, 0.06)'
+            boxShadow: 'var(--account-card-shadow)'
           }}
         >
           <EmptyState

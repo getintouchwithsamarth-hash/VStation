@@ -50,7 +50,7 @@ export function LoginPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#FCFCFD', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--account-page-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
       <div style={{ width: '100%', maxWidth: '440px' }}>
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
@@ -59,7 +59,7 @@ export function LoginPage() {
               fontSize: '28px',
               lineHeight: '36px',
               fontWeight: '600',
-              color: '#101828',
+              color: 'var(--account-title)',
               fontFamily: 'Inter, system-ui, sans-serif',
               marginBottom: '8px'
             }}
@@ -71,7 +71,7 @@ export function LoginPage() {
               fontSize: '16px',
               lineHeight: '24px',
               fontWeight: '400',
-              color: '#667085',
+              color: 'var(--account-subtext)',
               fontFamily: 'Inter, system-ui, sans-serif'
             }}
           >
@@ -82,11 +82,11 @@ export function LoginPage() {
         {/* Form Card */}
         <div
           style={{
-            backgroundColor: '#FFFFFF',
-            border: '1px solid #EAECF0',
+            backgroundColor: 'var(--account-card-bg)',
+            border: '1px solid var(--account-card-border)',
             borderRadius: '16px',
             padding: '32px',
-            boxShadow: '0 1px 2px 0 rgba(16, 24, 40, 0.04), 0 1px 3px 0 rgba(16, 24, 40, 0.06)'
+            boxShadow: 'var(--account-card-shadow)'
           }}
         >
           {errors.general && (
@@ -135,7 +135,7 @@ export function LoginPage() {
                   fontSize: '14px',
                   lineHeight: '20px',
                   fontWeight: '600',
-                  color: '#4338CA',
+                  color: 'var(--account-link)',
                   fontFamily: 'Inter, system-ui, sans-serif',
                   cursor: isLoading ? 'not-allowed' : 'pointer',
                   textDecoration: 'none',
@@ -164,7 +164,7 @@ export function LoginPage() {
                 fontSize: '14px',
                 lineHeight: '20px',
                 fontWeight: '400',
-                color: '#667085',
+                color: 'var(--account-subtext)',
                 fontFamily: 'Inter, system-ui, sans-serif'
               }}
             >
@@ -180,7 +180,7 @@ export function LoginPage() {
                   fontSize: '14px',
                   lineHeight: '20px',
                   fontWeight: '600',
-                  color: '#4338CA',
+                  color: 'var(--account-link)',
                   fontFamily: 'Inter, system-ui, sans-serif',
                   cursor: isLoading ? 'not-allowed' : 'pointer',
                   textDecoration: 'none',
@@ -199,8 +199,8 @@ export function LoginPage() {
           style={{
             marginTop: '24px',
             padding: '16px',
-            backgroundColor: 'rgba(79, 70, 229, 0.06)',
-            border: '1px solid #4F46E5',
+            backgroundColor: 'var(--account-info-bg)',
+            border: '1px solid var(--account-info-border)',
             borderRadius: '12px',
             textAlign: 'center'
           }}
@@ -210,7 +210,7 @@ export function LoginPage() {
               fontSize: '14px',
               lineHeight: '20px',
               fontWeight: '400',
-              color: '#4338CA',
+              color: 'var(--account-info-text)',
               fontFamily: 'Inter, system-ui, sans-serif',
               margin: 0
             }}

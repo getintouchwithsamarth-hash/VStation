@@ -22,8 +22,8 @@ export function AccountNav({ activeSection, onSectionChange, onLogout, isMobile 
           gap: '8px',
           overflowX: 'auto',
           padding: '16px',
-          backgroundColor: '#FFFFFF',
-          borderBottom: '1px solid #EAECF0'
+          backgroundColor: 'var(--account-panel-bg)',
+          borderBottom: '1px solid var(--account-panel-border)'
         }}
       >
         {navItems.map((item) => {
@@ -39,13 +39,13 @@ export function AccountNav({ activeSection, onSectionChange, onLogout, isMobile 
                 alignItems: 'center',
                 gap: '8px',
                 padding: '8px 16px',
-                backgroundColor: isActive ? '#F9FAFB' : 'transparent',
-                border: `1px solid ${isActive ? '#D0D5DD' : 'transparent'}`,
+                backgroundColor: isActive ? 'var(--account-nav-active-bg)' : 'transparent',
+                border: `1px solid ${isActive ? 'var(--account-input-border)' : 'transparent'}`,
                 borderRadius: '10px',
                 fontSize: '14px',
                 lineHeight: '20px',
                 fontWeight: '600',
-                color: isActive ? '#101828' : '#667085',
+                color: isActive ? 'var(--account-title)' : 'var(--account-subtext)',
                 fontFamily: 'Inter, system-ui, sans-serif',
                 cursor: 'pointer',
                 whiteSpace: 'nowrap',
@@ -64,11 +64,11 @@ export function AccountNav({ activeSection, onSectionChange, onLogout, isMobile 
   return (
     <nav
       style={{
-        backgroundColor: '#FFFFFF',
-        border: '1px solid #EAECF0',
+        backgroundColor: 'var(--account-panel-bg)',
+        border: '1px solid var(--account-panel-border)',
         borderRadius: '12px',
         padding: '8px',
-        boxShadow: '0 1px 2px 0 rgba(16, 24, 40, 0.04), 0 1px 3px 0 rgba(16, 24, 40, 0.06)'
+        boxShadow: 'var(--account-card-shadow)'
       }}
     >
       {navItems.map((item) => {
@@ -85,13 +85,13 @@ export function AccountNav({ activeSection, onSectionChange, onLogout, isMobile 
               gap: '12px',
               width: '100%',
               padding: '12px 16px',
-              backgroundColor: isActive ? '#F9FAFB' : 'transparent',
+              backgroundColor: isActive ? 'var(--account-nav-active-bg)' : 'transparent',
               border: 'none',
               borderRadius: '8px',
               fontSize: '14px',
               lineHeight: '20px',
               fontWeight: isActive ? '600' : '400',
-              color: isActive ? '#101828' : '#667085',
+              color: isActive ? 'var(--account-title)' : 'var(--account-subtext)',
               fontFamily: 'Inter, system-ui, sans-serif',
               cursor: 'pointer',
               textAlign: 'left',
@@ -99,7 +99,7 @@ export function AccountNav({ activeSection, onSectionChange, onLogout, isMobile 
             }}
             onMouseEnter={(e) => {
               if (!isActive) {
-                e.currentTarget.style.backgroundColor = '#FCFCFD';
+                e.currentTarget.style.backgroundColor = 'var(--account-nav-hover-bg)';
               }
             }}
             onMouseLeave={(e) => {
@@ -114,7 +114,7 @@ export function AccountNav({ activeSection, onSectionChange, onLogout, isMobile 
         );
       })}
 
-      <div style={{ height: '1px', backgroundColor: '#EAECF0', margin: '8px 0' }} />
+      <div style={{ height: '1px', backgroundColor: 'var(--account-panel-border)', margin: '8px 0' }} />
 
       <button
         onClick={onLogout}
@@ -130,14 +130,14 @@ export function AccountNav({ activeSection, onSectionChange, onLogout, isMobile 
           fontSize: '14px',
           lineHeight: '20px',
           fontWeight: '400',
-          color: '#F04438',
+          color: 'var(--account-error-border)',
           fontFamily: 'Inter, system-ui, sans-serif',
           cursor: 'pointer',
           textAlign: 'left',
           transition: 'all 0.15s'
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = '#FEF3F2';
+          e.currentTarget.style.backgroundColor = 'var(--account-error-bg)';
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.backgroundColor = 'transparent';

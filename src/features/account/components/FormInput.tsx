@@ -31,7 +31,7 @@ export function FormInput({
           fontSize: '14px',
           lineHeight: '20px',
           fontWeight: '500',
-          color: '#344054',
+          color: 'var(--account-text)',
           marginBottom: '6px',
           fontFamily: 'Inter, system-ui, sans-serif'
         }}
@@ -61,16 +61,16 @@ export function FormInput({
             lineHeight: '24px',
             fontWeight: '400',
             fontFamily: 'Inter, system-ui, sans-serif',
-            color: disabled ? '#98A2B3' : '#101828',
-            backgroundColor: disabled ? '#F9FAFB' : '#FFFFFF',
+            color: disabled ? 'var(--account-input-disabled-text)' : 'var(--account-input-text)',
+            backgroundColor: disabled ? 'var(--account-input-disabled-bg)' : 'var(--account-input-bg)',
             border: `1px solid ${
-              error ? '#F04438' : 
-              isFocused ? '#4F46E5' : 
-              '#D0D5DD'
+              error ? 'var(--account-error-border)' : 
+              isFocused ? 'var(--border-focus)' : 
+              'var(--account-input-border)'
             }`,
             borderRadius: '10px',
             outline: 'none',
-            boxShadow: isFocused && !error ? '0 0 0 2px rgba(79, 70, 229, 0.06)' : 'none',
+            boxShadow: isFocused && !error ? '0 0 0 2px var(--account-focus-ring)' : 'none',
             cursor: disabled ? 'not-allowed' : 'text',
             transition: 'all 0.15s ease'
           }}
@@ -90,7 +90,7 @@ export function FormInput({
               border: 'none',
               padding: '4px',
               cursor: disabled ? 'not-allowed' : 'pointer',
-              color: '#667085',
+              color: 'var(--account-subtext)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -110,7 +110,7 @@ export function FormInput({
             fontSize: '14px',
             lineHeight: '20px',
             fontWeight: '400',
-            color: '#F04438',
+            color: 'var(--account-error-text)',
             fontFamily: 'Inter, system-ui, sans-serif'
           }}
         >
@@ -125,7 +125,7 @@ export function FormInput({
             fontSize: '14px',
             lineHeight: '20px',
             fontWeight: '400',
-            color: '#667085',
+            color: 'var(--account-subtext)',
             fontFamily: 'Inter, system-ui, sans-serif'
           }}
         >

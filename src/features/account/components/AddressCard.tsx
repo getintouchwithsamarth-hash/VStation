@@ -16,11 +16,11 @@ export function AddressCard({ address, onEdit, onDelete, onSetDefault }: Address
     <div
       style={{
         position: 'relative',
-        backgroundColor: '#FFFFFF',
-        border: '1px solid #EAECF0',
+        backgroundColor: 'var(--account-card-bg)',
+        border: '1px solid var(--account-card-border)',
         borderRadius: '12px',
         padding: '20px',
-        boxShadow: '0 1px 2px 0 rgba(16, 24, 40, 0.04), 0 1px 3px 0 rgba(16, 24, 40, 0.06)'
+        boxShadow: 'var(--account-card-shadow)'
       }}
     >
       {/* Default Badge */}
@@ -31,19 +31,19 @@ export function AddressCard({ address, onEdit, onDelete, onSetDefault }: Address
             alignItems: 'center',
             gap: '4px',
             padding: '2px 8px',
-            backgroundColor: '#ECFDF3',
-            border: '1px solid #12B76A',
+            backgroundColor: 'var(--account-success-bg)',
+            border: '1px solid var(--account-success-border)',
             borderRadius: '6px',
             marginBottom: '12px'
           }}
         >
-          <Check size={12} style={{ color: '#039855' }} />
+          <Check size={12} style={{ color: 'var(--account-success-text)' }} />
           <span
             style={{
               fontSize: '12px',
               lineHeight: '18px',
               fontWeight: '500',
-              color: '#039855',
+              color: 'var(--account-success-text)',
               fontFamily: 'Inter, system-ui, sans-serif'
             }}
           >
@@ -61,7 +61,7 @@ export function AddressCard({ address, onEdit, onDelete, onSetDefault }: Address
             border: 'none',
             padding: '4px',
             cursor: 'pointer',
-            color: '#667085',
+            color: 'var(--account-subtext)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -69,7 +69,7 @@ export function AddressCard({ address, onEdit, onDelete, onSetDefault }: Address
             transition: 'all 0.15s'
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = '#F9FAFB';
+            e.currentTarget.style.backgroundColor = 'var(--account-nav-hover-bg)';
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.backgroundColor = 'transparent';
@@ -97,10 +97,10 @@ export function AddressCard({ address, onEdit, onDelete, onSetDefault }: Address
                 top: '100%',
                 right: 0,
                 marginTop: '4px',
-                backgroundColor: '#FFFFFF',
-                border: '1px solid #EAECF0',
+                backgroundColor: 'var(--account-menu-bg)',
+                border: '1px solid var(--account-card-border)',
                 borderRadius: '10px',
-                boxShadow: '0 4px 10px -2px rgba(16, 24, 40, 0.04), 0 2px 6px -2px rgba(16, 24, 40, 0.08)',
+                boxShadow: 'var(--account-card-shadow-hover)',
                 padding: '4px',
                 minWidth: '160px',
                 zIndex: 20
@@ -120,14 +120,14 @@ export function AddressCard({ address, onEdit, onDelete, onSetDefault }: Address
                   fontSize: '14px',
                   lineHeight: '20px',
                   fontWeight: '400',
-                  color: '#344054',
+                  color: 'var(--account-text)',
                   fontFamily: 'Inter, system-ui, sans-serif',
                   cursor: 'pointer',
                   borderRadius: '6px',
                   transition: 'all 0.15s'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#F9FAFB';
+                  e.currentTarget.style.backgroundColor = 'var(--account-nav-hover-bg)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = 'transparent';
@@ -151,14 +151,14 @@ export function AddressCard({ address, onEdit, onDelete, onSetDefault }: Address
                     fontSize: '14px',
                     lineHeight: '20px',
                     fontWeight: '400',
-                    color: '#344054',
+                    color: 'var(--account-text)',
                     fontFamily: 'Inter, system-ui, sans-serif',
                     cursor: 'pointer',
                     borderRadius: '6px',
                     transition: 'all 0.15s'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#F9FAFB';
+                    e.currentTarget.style.backgroundColor = 'var(--account-nav-hover-bg)';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = 'transparent';
@@ -168,7 +168,7 @@ export function AddressCard({ address, onEdit, onDelete, onSetDefault }: Address
                 </button>
               )}
 
-              <div style={{ height: '1px', backgroundColor: '#EAECF0', margin: '4px 0' }} />
+              <div style={{ height: '1px', backgroundColor: 'var(--account-card-border)', margin: '4px 0' }} />
 
               <button
                 onClick={() => {
@@ -184,14 +184,14 @@ export function AddressCard({ address, onEdit, onDelete, onSetDefault }: Address
                   fontSize: '14px',
                   lineHeight: '20px',
                   fontWeight: '400',
-                  color: '#F04438',
+                  color: 'var(--account-error-border)',
                   fontFamily: 'Inter, system-ui, sans-serif',
                   cursor: 'pointer',
                   borderRadius: '6px',
                   transition: 'all 0.15s'
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#FEF3F2';
+                  e.currentTarget.style.backgroundColor = 'var(--account-error-bg)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = 'transparent';
@@ -214,11 +214,11 @@ export function AddressCard({ address, onEdit, onDelete, onSetDefault }: Address
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: '#F9FAFB',
+            backgroundColor: 'var(--account-icon-bg)',
             borderRadius: '8px'
           }}
         >
-          <MapPin size={20} style={{ color: '#667085' }} />
+          <MapPin size={20} style={{ color: 'var(--account-subtext)' }} />
         </div>
 
         <div style={{ flex: 1 }}>
@@ -227,7 +227,7 @@ export function AddressCard({ address, onEdit, onDelete, onSetDefault }: Address
               fontSize: '16px',
               lineHeight: '24px',
               fontWeight: '600',
-              color: '#101828',
+              color: 'var(--account-title)',
               fontFamily: 'Inter, system-ui, sans-serif',
               marginBottom: '4px'
             }}
@@ -240,7 +240,7 @@ export function AddressCard({ address, onEdit, onDelete, onSetDefault }: Address
               fontSize: '14px',
               lineHeight: '20px',
               fontWeight: '400',
-              color: '#667085',
+              color: 'var(--account-subtext)',
               fontFamily: 'Inter, system-ui, sans-serif'
             }}
           >

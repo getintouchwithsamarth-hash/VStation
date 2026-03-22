@@ -19,7 +19,7 @@ export function DeleteConfirmModal({ title, description, onConfirm, onCancel }: 
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.40)',
+          backgroundColor: 'var(--account-overlay)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -31,11 +31,12 @@ export function DeleteConfirmModal({ title, description, onConfirm, onCancel }: 
         {/* Modal */}
         <div
           style={{
-            backgroundColor: '#FFFFFF',
+            backgroundColor: 'var(--account-card-bg)',
             borderRadius: '16px',
             width: '100%',
             maxWidth: '440px',
-            boxShadow: '0 12px 24px -4px rgba(16, 24, 40, 0.06), 0 6px 12px -4px rgba(16, 24, 40, 0.08)'
+            border: '1px solid var(--account-card-border)',
+            boxShadow: 'var(--account-card-shadow-hover)'
           }}
           onClick={(e) => e.stopPropagation()}
         >
@@ -46,14 +47,14 @@ export function DeleteConfirmModal({ title, description, onConfirm, onCancel }: 
                 width: '48px',
                 height: '48px',
                 borderRadius: '12px',
-                backgroundColor: '#FEF3F2',
+                backgroundColor: 'var(--account-error-bg)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 marginBottom: '16px'
               }}
             >
-              <AlertTriangle size={24} style={{ color: '#F04438' }} />
+              <AlertTriangle size={24} style={{ color: 'var(--account-error-border)' }} />
             </div>
 
             {/* Content */}
@@ -62,7 +63,7 @@ export function DeleteConfirmModal({ title, description, onConfirm, onCancel }: 
                 fontSize: '18px',
                 lineHeight: '28px',
                 fontWeight: '600',
-                color: '#101828',
+                color: 'var(--account-title)',
                 fontFamily: 'Inter, system-ui, sans-serif',
                 marginBottom: '8px'
               }}
@@ -75,7 +76,7 @@ export function DeleteConfirmModal({ title, description, onConfirm, onCancel }: 
                 fontSize: '14px',
                 lineHeight: '20px',
                 fontWeight: '400',
-                color: '#667085',
+                color: 'var(--account-subtext)',
                 fontFamily: 'Inter, system-ui, sans-serif',
                 marginBottom: '24px'
               }}

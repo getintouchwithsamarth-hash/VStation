@@ -9,27 +9,27 @@ interface FormAlertProps {
 export function FormAlert({ type, children }: FormAlertProps) {
   const config = {
     success: {
-      backgroundColor: '#ECFDF3',
-      borderColor: '#12B76A',
-      textColor: '#039855',
+      backgroundColor: 'var(--account-success-bg)',
+      borderColor: 'var(--account-success-border)',
+      textColor: 'var(--account-success-text)',
       icon: CheckCircle
     },
     error: {
-      backgroundColor: '#FEF3F2',
-      borderColor: '#F04438',
-      textColor: '#D92D20',
+      backgroundColor: 'var(--account-error-bg)',
+      borderColor: 'var(--account-error-border)',
+      textColor: 'var(--account-error-text)',
       icon: XCircle
     },
     warning: {
-      backgroundColor: '#FFFAEB',
-      borderColor: '#F79009',
-      textColor: '#DC6803',
+      backgroundColor: 'var(--account-warning-bg)',
+      borderColor: 'var(--account-warning-border)',
+      textColor: 'var(--account-warning-text)',
       icon: AlertCircle
     },
     info: {
-      backgroundColor: 'rgba(79, 70, 229, 0.06)',
-      borderColor: '#4F46E5',
-      textColor: '#4338CA',
+      backgroundColor: 'var(--account-info-bg)',
+      borderColor: 'var(--account-info-border)',
+      textColor: 'var(--account-info-text)',
       icon: Info
     }
   };

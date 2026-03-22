@@ -19,15 +19,15 @@ export function OrderCard({ order, onClick }: OrderCardProps) {
   const getFulfillmentStatusColor = (status: CustomerOrder['fulfillmentStatus']) => {
     switch (status) {
       case 'FULFILLED':
-        return { bg: '#ECFDF3', border: '#12B76A', text: '#039855', label: 'Fulfilled' };
+        return { bg: 'var(--account-success-bg)', border: 'var(--account-success-border)', text: 'var(--account-success-text)', label: 'Fulfilled' };
       case 'UNFULFILLED':
-        return { bg: '#FFFAEB', border: '#F79009', text: '#DC6803', label: 'Unfulfilled' };
+        return { bg: 'var(--account-warning-bg)', border: 'var(--account-warning-border)', text: 'var(--account-warning-text)', label: 'Unfulfilled' };
       case 'PARTIALLY_FULFILLED':
-        return { bg: 'rgba(79, 70, 229, 0.06)', border: '#4F46E5', text: '#4338CA', label: 'Partially fulfilled' };
+        return { bg: 'var(--account-info-bg)', border: 'var(--account-info-border)', text: 'var(--account-info-text)', label: 'Partially fulfilled' };
       case 'CANCELLED':
-        return { bg: '#FEF3F2', border: '#F04438', text: '#D92D20', label: 'Cancelled' };
+        return { bg: 'var(--account-error-bg)', border: 'var(--account-error-border)', text: 'var(--account-error-text)', label: 'Cancelled' };
       default:
-        return { bg: '#F9FAFB', border: '#D0D5DD', text: '#667085', label: status };
+        return { bg: 'var(--account-nav-active-bg)', border: 'var(--account-input-border)', text: 'var(--account-subtext)', label: status };
     }
   };
 
@@ -38,22 +38,22 @@ export function OrderCard({ order, onClick }: OrderCardProps) {
       onClick={() => onClick(order.id)}
       style={{
         width: '100%',
-        backgroundColor: '#FFFFFF',
-        border: '1px solid #EAECF0',
+        backgroundColor: 'var(--account-card-bg)',
+        border: '1px solid var(--account-card-border)',
         borderRadius: '12px',
         padding: '20px',
         cursor: 'pointer',
         textAlign: 'left',
         transition: 'all 0.15s',
-        boxShadow: '0 1px 2px 0 rgba(16, 24, 40, 0.04), 0 1px 3px 0 rgba(16, 24, 40, 0.06)'
+        boxShadow: 'var(--account-card-shadow)'
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.boxShadow = '0 4px 10px -2px rgba(16, 24, 40, 0.04), 0 2px 6px -2px rgba(16, 24, 40, 0.08)';
-        e.currentTarget.style.borderColor = '#D0D5DD';
+        e.currentTarget.style.boxShadow = 'var(--account-card-shadow-hover)';
+        e.currentTarget.style.borderColor = 'var(--account-input-border)';
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.boxShadow = '0 1px 2px 0 rgba(16, 24, 40, 0.04), 0 1px 3px 0 rgba(16, 24, 40, 0.06)';
-        e.currentTarget.style.borderColor = '#EAECF0';
+        e.currentTarget.style.boxShadow = 'var(--account-card-shadow)';
+        e.currentTarget.style.borderColor = 'var(--account-card-border)';
       }}
     >
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
@@ -66,11 +66,11 @@ export function OrderCard({ order, onClick }: OrderCardProps) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: '#F9FAFB',
+            backgroundColor: 'var(--account-icon-bg)',
             borderRadius: '10px'
           }}
         >
-          <Package size={24} style={{ color: '#667085' }} />
+          <Package size={24} style={{ color: 'var(--account-subtext)' }} />
         </div>
 
         {/* Content */}
@@ -81,7 +81,7 @@ export function OrderCard({ order, onClick }: OrderCardProps) {
                 fontSize: '16px',
                 lineHeight: '24px',
                 fontWeight: '600',
-                color: '#101828',
+                color: 'var(--account-title)',
                 fontFamily: 'Inter, system-ui, sans-serif'
               }}
             >
@@ -117,7 +117,7 @@ export function OrderCard({ order, onClick }: OrderCardProps) {
               fontSize: '14px',
               lineHeight: '20px',
               fontWeight: '400',
-              color: '#667085',
+              color: 'var(--account-subtext)',
               fontFamily: 'Inter, system-ui, sans-serif',
               marginBottom: '12px'
             }}
@@ -132,7 +132,7 @@ export function OrderCard({ order, onClick }: OrderCardProps) {
               fontSize: '18px',
               lineHeight: '28px',
               fontWeight: '600',
-              color: '#101828',
+              color: 'var(--account-title)',
               fontFamily: 'Inter, system-ui, sans-serif'
             }}
           >
@@ -147,7 +147,7 @@ export function OrderCard({ order, onClick }: OrderCardProps) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: '#98A2B3'
+            color: 'var(--account-input-disabled-text)'
           }}
         >
           <ChevronRight size={20} />

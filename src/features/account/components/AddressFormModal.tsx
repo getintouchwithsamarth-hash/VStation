@@ -83,7 +83,7 @@ export function AddressFormModal({ address, onClose, onSave }: AddressFormModalP
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.40)',
+          backgroundColor: 'var(--account-overlay)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -96,13 +96,14 @@ export function AddressFormModal({ address, onClose, onSave }: AddressFormModalP
         {/* Modal */}
         <div
           style={{
-            backgroundColor: '#FFFFFF',
+            backgroundColor: 'var(--account-card-bg)',
             borderRadius: '16px',
             width: '100%',
             maxWidth: '600px',
             maxHeight: '90vh',
             overflow: 'auto',
-            boxShadow: '0 12px 24px -4px rgba(16, 24, 40, 0.06), 0 6px 12px -4px rgba(16, 24, 40, 0.08)'
+            border: '1px solid var(--account-card-border)',
+            boxShadow: 'var(--account-card-shadow-hover)'
           }}
           onClick={(e) => e.stopPropagation()}
         >
@@ -113,7 +114,7 @@ export function AddressFormModal({ address, onClose, onSave }: AddressFormModalP
               alignItems: 'center',
               justifyContent: 'space-between',
               padding: '24px',
-              borderBottom: '1px solid #EAECF0'
+              borderBottom: '1px solid var(--account-card-border)'
             }}
           >
             <h2
@@ -121,7 +122,7 @@ export function AddressFormModal({ address, onClose, onSave }: AddressFormModalP
                 fontSize: '18px',
                 lineHeight: '28px',
                 fontWeight: '600',
-                color: '#101828',
+                color: 'var(--account-title)',
                 fontFamily: 'Inter, system-ui, sans-serif'
               }}
             >
@@ -136,7 +137,7 @@ export function AddressFormModal({ address, onClose, onSave }: AddressFormModalP
                 border: 'none',
                 padding: '4px',
                 cursor: isLoading ? 'not-allowed' : 'pointer',
-                color: '#667085',
+                color: 'var(--account-subtext)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -258,7 +259,7 @@ export function AddressFormModal({ address, onClose, onSave }: AddressFormModalP
                 gap: '12px',
                 justifyContent: 'flex-end',
                 padding: '24px',
-                borderTop: '1px solid #EAECF0'
+                borderTop: '1px solid var(--account-card-border)'
               }}
             >
               <AccountButton

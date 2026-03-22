@@ -60,7 +60,7 @@ export function OverviewSection({ customer }: OverviewSectionProps) {
             fontSize: '22px',
             lineHeight: '30px',
             fontWeight: '600',
-            color: '#101828',
+            color: 'var(--account-title)',
             fontFamily: 'Inter, system-ui, sans-serif'
           }}
         >
@@ -71,7 +71,7 @@ export function OverviewSection({ customer }: OverviewSectionProps) {
             fontSize: '14px',
             lineHeight: '20px',
             fontWeight: '400',
-            color: '#667085',
+            color: 'var(--account-subtext)',
             fontFamily: 'Inter, system-ui, sans-serif',
             marginTop: '4px'
           }}
@@ -83,11 +83,11 @@ export function OverviewSection({ customer }: OverviewSectionProps) {
       {/* Profile Card */}
       <div
         style={{
-          backgroundColor: '#FFFFFF',
-          border: '1px solid #EAECF0',
+          backgroundColor: 'var(--account-card-bg)',
+          border: '1px solid var(--account-card-border)',
           borderRadius: '12px',
           padding: '24px',
-          boxShadow: '0 1px 2px 0 rgba(16, 24, 40, 0.04), 0 1px 3px 0 rgba(16, 24, 40, 0.06)'
+          boxShadow: 'var(--account-card-shadow)'
         }}
       >
         {successMessage && (
@@ -112,13 +112,13 @@ export function OverviewSection({ customer }: OverviewSectionProps) {
                     width: '56px',
                     height: '56px',
                     borderRadius: '12px',
-                    backgroundColor: '#F9FAFB',
+                    backgroundColor: 'var(--account-icon-bg)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center'
                   }}
                 >
-                  <User size={28} style={{ color: '#667085' }} />
+                  <User size={28} style={{ color: 'var(--account-subtext)' }} />
                 </div>
                 <div>
                   <h3
@@ -126,7 +126,7 @@ export function OverviewSection({ customer }: OverviewSectionProps) {
                       fontSize: '18px',
                       lineHeight: '28px',
                       fontWeight: '600',
-                      color: '#101828',
+                      color: 'var(--account-title)',
                       fontFamily: 'Inter, system-ui, sans-serif'
                     }}
                   >
@@ -137,7 +137,7 @@ export function OverviewSection({ customer }: OverviewSectionProps) {
                       fontSize: '14px',
                       lineHeight: '20px',
                       fontWeight: '400',
-                      color: '#667085',
+                      color: 'var(--account-subtext)',
                       fontFamily: 'Inter, system-ui, sans-serif'
                     }}
                   >
@@ -158,14 +158,14 @@ export function OverviewSection({ customer }: OverviewSectionProps) {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div style={{ display: 'flex', gap: '12px' }}>
-                <Mail size={20} style={{ color: '#667085', flexShrink: 0, marginTop: '2px' }} />
+                <Mail size={20} style={{ color: 'var(--account-subtext)', flexShrink: 0, marginTop: '2px' }} />
                 <div>
                   <div
                     style={{
                       fontSize: '12px',
                       lineHeight: '18px',
                       fontWeight: '500',
-                      color: '#667085',
+                      color: 'var(--account-subtext)',
                       fontFamily: 'Inter, system-ui, sans-serif',
                       textTransform: 'uppercase',
                       letterSpacing: '0.05em',
@@ -179,7 +179,7 @@ export function OverviewSection({ customer }: OverviewSectionProps) {
                       fontSize: '14px',
                       lineHeight: '20px',
                       fontWeight: '400',
-                      color: '#101828',
+                      color: 'var(--account-title)',
                       fontFamily: 'Inter, system-ui, sans-serif'
                     }}
                   >
@@ -190,14 +190,14 @@ export function OverviewSection({ customer }: OverviewSectionProps) {
 
               {customer.phone && (
                 <div style={{ display: 'flex', gap: '12px' }}>
-                  <Phone size={20} style={{ color: '#667085', flexShrink: 0, marginTop: '2px' }} />
+                  <Phone size={20} style={{ color: 'var(--account-subtext)', flexShrink: 0, marginTop: '2px' }} />
                   <div>
                     <div
                       style={{
                         fontSize: '12px',
                         lineHeight: '18px',
                         fontWeight: '500',
-                        color: '#667085',
+                        color: 'var(--account-subtext)',
                         fontFamily: 'Inter, system-ui, sans-serif',
                         textTransform: 'uppercase',
                         letterSpacing: '0.05em',
@@ -211,7 +211,7 @@ export function OverviewSection({ customer }: OverviewSectionProps) {
                         fontSize: '14px',
                         lineHeight: '20px',
                         fontWeight: '400',
-                        color: '#101828',
+                        color: 'var(--account-title)',
                         fontFamily: 'Inter, system-ui, sans-serif'
                       }}
                     >

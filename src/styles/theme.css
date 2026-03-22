@@ -85,6 +85,40 @@
   --success-foreground: oklch(0.25 0.05 157);
   --skeleton-base: oklch(0.945 0.005 247);
   --skeleton-highlight: oklch(0.9 0.008 247);
+  --account-page-bg: var(--surface-subtle);
+  --account-card-bg: var(--surface-elevated);
+  --account-card-border: var(--border-subtle);
+  --account-card-shadow: var(--shadow-1);
+  --account-card-shadow-hover: var(--shadow-2);
+  --account-panel-bg: var(--surface-elevated);
+  --account-panel-border: var(--border-subtle);
+  --account-icon-bg: var(--surface-muted);
+  --account-title: var(--text-primary);
+  --account-text: var(--text-secondary);
+  --account-subtext: var(--text-muted);
+  --account-link: var(--text-link);
+  --account-input-bg: var(--surface-elevated);
+  --account-input-disabled-bg: var(--surface-muted);
+  --account-input-text: var(--text-primary);
+  --account-input-disabled-text: var(--text-muted);
+  --account-input-border: var(--border-default);
+  --account-focus-ring: color-mix(in srgb, var(--accent-500) 14%, transparent);
+  --account-nav-active-bg: var(--surface-muted);
+  --account-nav-hover-bg: var(--surface-subtle);
+  --account-menu-bg: var(--surface-elevated);
+  --account-overlay: rgb(16 24 40 / 0.4);
+  --account-success-bg: var(--success-50);
+  --account-success-border: var(--success-500);
+  --account-success-text: var(--success-600);
+  --account-warning-bg: var(--warning-50);
+  --account-warning-border: var(--warning-500);
+  --account-warning-text: var(--warning-600);
+  --account-error-bg: var(--error-50);
+  --account-error-border: var(--error-500);
+  --account-error-text: var(--error-600);
+  --account-info-bg: color-mix(in srgb, var(--accent-500) 10%, transparent);
+  --account-info-border: var(--accent-500);
+  --account-info-text: var(--accent-600);
 }
 
 .dark {
@@ -149,6 +183,40 @@
   --error-600: oklch(0.78 0.13 24);
   --skeleton-base: oklch(0.26 0.01 247);
   --skeleton-highlight: oklch(0.32 0.01 247);
+  --account-page-bg: color-mix(in srgb, var(--surface-canvas) 82%, black);
+  --account-card-bg: color-mix(in srgb, var(--surface-elevated) 94%, black);
+  --account-card-border: var(--border-subtle);
+  --account-card-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.32), 0 1px 3px 0 rgb(0 0 0 / 0.42);
+  --account-card-shadow-hover: 0 10px 24px -10px rgb(0 0 0 / 0.55), 0 6px 16px -10px rgb(0 0 0 / 0.5);
+  --account-panel-bg: color-mix(in srgb, var(--surface-elevated) 96%, black);
+  --account-panel-border: var(--border-subtle);
+  --account-icon-bg: color-mix(in srgb, var(--surface-muted) 92%, white 8%);
+  --account-title: var(--text-primary);
+  --account-text: var(--text-secondary);
+  --account-subtext: var(--text-muted);
+  --account-link: var(--text-link);
+  --account-input-bg: color-mix(in srgb, var(--surface-muted) 76%, black);
+  --account-input-disabled-bg: color-mix(in srgb, var(--surface-muted) 90%, black);
+  --account-input-text: var(--text-primary);
+  --account-input-disabled-text: var(--text-muted);
+  --account-input-border: var(--border-default);
+  --account-focus-ring: color-mix(in srgb, var(--accent-500) 24%, transparent);
+  --account-nav-active-bg: color-mix(in srgb, var(--surface-muted) 84%, white 6%);
+  --account-nav-hover-bg: color-mix(in srgb, var(--surface-subtle) 92%, white 6%);
+  --account-menu-bg: color-mix(in srgb, var(--surface-elevated) 96%, black);
+  --account-overlay: rgb(0 0 0 / 0.58);
+  --account-success-bg: color-mix(in srgb, var(--success-50) 84%, black);
+  --account-success-border: var(--success-500);
+  --account-success-text: var(--success-600);
+  --account-warning-bg: color-mix(in srgb, var(--warning-50) 78%, black);
+  --account-warning-border: var(--warning-500);
+  --account-warning-text: var(--warning-500);
+  --account-error-bg: color-mix(in srgb, var(--error-50) 84%, black);
+  --account-error-border: var(--error-500);
+  --account-error-text: var(--error-600);
+  --account-info-bg: color-mix(in srgb, var(--accent-500) 18%, black);
+  --account-info-border: color-mix(in srgb, var(--accent-500) 92%, white 8%);
+  --account-info-text: oklch(0.88 0.13 277);
 }
 
 @theme inline {

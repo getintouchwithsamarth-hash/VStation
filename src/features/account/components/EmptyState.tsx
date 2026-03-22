@@ -27,8 +27,8 @@ export function EmptyState({ icon, title, description, action }: EmptyStateProps
           width: '56px',
           height: '56px',
           borderRadius: '12px',
-          backgroundColor: '#F9FAFB',
-          color: '#667085',
+          backgroundColor: 'var(--account-icon-bg)',
+          color: 'var(--account-subtext)',
           marginBottom: '16px'
         }}
       >
@@ -40,7 +40,7 @@ export function EmptyState({ icon, title, description, action }: EmptyStateProps
           fontSize: '18px',
           lineHeight: '28px',
           fontWeight: '600',
-          color: '#101828',
+          color: 'var(--account-title)',
           fontFamily: 'Inter, system-ui, sans-serif',
           marginBottom: '8px'
         }}
@@ -53,7 +53,7 @@ export function EmptyState({ icon, title, description, action }: EmptyStateProps
           fontSize: '14px',
           lineHeight: '20px',
           fontWeight: '400',
-          color: '#667085',
+          color: 'var(--account-subtext)',
           fontFamily: 'Inter, system-ui, sans-serif',
           marginBottom: action ? '24px' : '0',
           maxWidth: '400px'

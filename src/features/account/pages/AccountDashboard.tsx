@@ -33,15 +33,15 @@ export function AccountDashboard() {
 
   if (isLoading || !customer) {
     return (
-      <div style={{ minHeight: '100vh', backgroundColor: '#FCFCFD', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ minHeight: '100vh', backgroundColor: 'var(--account-page-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ textAlign: 'center' }}>
           <div
             style={{
               width: '48px',
               height: '48px',
               margin: '0 auto 16px',
-              border: '3px solid #F9FAFB',
-              borderTopColor: '#4338CA',
+              border: '3px solid var(--account-icon-bg)',
+              borderTopColor: 'var(--account-link)',
               borderRadius: '50%',
               animation: 'spin 0.8s linear infinite'
             }}
@@ -59,16 +59,16 @@ export function AccountDashboard() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#FCFCFD' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--account-page-bg)' }}>
       {/* Header */}
-      <div style={{ backgroundColor: '#FFFFFF', borderBottom: '1px solid #EAECF0' }}>
+      <div style={{ backgroundColor: 'var(--account-panel-bg)', borderBottom: '1px solid var(--account-panel-border)' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '24px 16px' : '32px 48px' }}>
           <h1
             style={{
               fontSize: isMobile ? '22px' : '28px',
               lineHeight: isMobile ? '30px' : '36px',
               fontWeight: '600',
-              color: '#101828',
+              color: 'var(--account-title)',
               fontFamily: 'Inter, system-ui, sans-serif',
               marginBottom: '4px'
             }}
@@ -80,7 +80,7 @@ export function AccountDashboard() {
               fontSize: '16px',
               lineHeight: '24px',
               fontWeight: '400',
-              color: '#667085',
+              color: 'var(--account-subtext)',
               fontFamily: 'Inter, system-ui, sans-serif'
             }}
           >

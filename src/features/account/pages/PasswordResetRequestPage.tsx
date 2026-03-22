@@ -45,7 +45,7 @@ export function PasswordResetRequestPage() {
 
   if (isSuccess) {
     return (
-      <div style={{ minHeight: '100vh', backgroundColor: '#FCFCFD', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+      <div style={{ minHeight: '100vh', backgroundColor: 'var(--account-page-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
         <div style={{ width: '100%', maxWidth: '440px' }}>
           {/* Success Header */}
           <div style={{ textAlign: 'center', marginBottom: '32px' }}>
@@ -56,12 +56,12 @@ export function PasswordResetRequestPage() {
                 justifyContent: 'center',
                 width: '64px',
                 height: '64px',
-                backgroundColor: '#ECFDF3',
+                backgroundColor: 'var(--account-success-bg)',
                 borderRadius: '16px',
                 marginBottom: '16px'
               }}
             >
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#12B76A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--account-success-border)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
                 <polyline points="22 4 12 14.01 9 11.01" />
               </svg>
@@ -72,7 +72,7 @@ export function PasswordResetRequestPage() {
                 fontSize: '28px',
                 lineHeight: '36px',
                 fontWeight: '600',
-                color: '#101828',
+                color: 'var(--account-title)',
                 fontFamily: 'Inter, system-ui, sans-serif',
                 marginBottom: '8px'
               }}
@@ -84,23 +84,23 @@ export function PasswordResetRequestPage() {
                 fontSize: '16px',
                 lineHeight: '24px',
                 fontWeight: '400',
-                color: '#667085',
+                color: 'var(--account-subtext)',
                 fontFamily: 'Inter, system-ui, sans-serif'
               }}
             >
               We've sent a password reset link to<br />
-              <strong style={{ color: '#344054' }}>{email}</strong>
+              <strong style={{ color: 'var(--account-text)' }}>{email}</strong>
             </p>
           </div>
 
           {/* Success Card */}
           <div
             style={{
-              backgroundColor: '#FFFFFF',
-              border: '1px solid #EAECF0',
+              backgroundColor: 'var(--account-card-bg)',
+              border: '1px solid var(--account-card-border)',
               borderRadius: '16px',
               padding: '32px',
-              boxShadow: '0 1px 2px 0 rgba(16, 24, 40, 0.04), 0 1px 3px 0 rgba(16, 24, 40, 0.06)',
+              boxShadow: 'var(--account-card-shadow)',
               marginBottom: '16px'
             }}
           >
@@ -109,7 +109,7 @@ export function PasswordResetRequestPage() {
                 fontSize: '14px',
                 lineHeight: '20px',
                 fontWeight: '400',
-                color: '#667085',
+                color: 'var(--account-subtext)',
                 fontFamily: 'Inter, system-ui, sans-serif',
                 marginBottom: '24px'
               }}
@@ -141,7 +141,7 @@ export function PasswordResetRequestPage() {
               fontSize: '14px',
               lineHeight: '20px',
               fontWeight: '600',
-              color: '#4338CA',
+              color: 'var(--account-link)',
               fontFamily: 'Inter, system-ui, sans-serif',
               cursor: 'pointer',
               textAlign: 'center'
@@ -157,7 +157,7 @@ export function PasswordResetRequestPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#FCFCFD', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--account-page-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
       <div style={{ width: '100%', maxWidth: '440px' }}>
         {/* Back Button */}
         <button
@@ -174,7 +174,7 @@ export function PasswordResetRequestPage() {
             fontSize: '14px',
             lineHeight: '20px',
             fontWeight: '600',
-            color: '#4338CA',
+            color: 'var(--account-link)',
             fontFamily: 'Inter, system-ui, sans-serif',
             cursor: isLoading ? 'not-allowed' : 'pointer',
             opacity: isLoading ? 0.4 : 1
@@ -193,7 +193,7 @@ export function PasswordResetRequestPage() {
               fontSize: '28px',
               lineHeight: '36px',
               fontWeight: '600',
-              color: '#101828',
+              color: 'var(--account-title)',
               fontFamily: 'Inter, system-ui, sans-serif',
               marginBottom: '8px'
             }}
@@ -205,7 +205,7 @@ export function PasswordResetRequestPage() {
               fontSize: '16px',
               lineHeight: '24px',
               fontWeight: '400',
-              color: '#667085',
+              color: 'var(--account-subtext)',
               fontFamily: 'Inter, system-ui, sans-serif'
             }}
           >
@@ -216,11 +216,11 @@ export function PasswordResetRequestPage() {
         {/* Form Card */}
         <div
           style={{
-            backgroundColor: '#FFFFFF',
-            border: '1px solid #EAECF0',
+            backgroundColor: 'var(--account-card-bg)',
+            border: '1px solid var(--account-card-border)',
             borderRadius: '16px',
             padding: '32px',
-            boxShadow: '0 1px 2px 0 rgba(16, 24, 40, 0.04), 0 1px 3px 0 rgba(16, 24, 40, 0.06)'
+            boxShadow: 'var(--account-card-shadow)'
           }}
         >
           {error && (

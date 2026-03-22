@@ -49,23 +49,23 @@ export function AccountButton({
   // Variant styles following Hard Rules
   const variantStyles = {
     primary: {
-      backgroundColor: '#4338CA',
-      color: '#FFFFFF',
+      backgroundColor: 'var(--account-link)',
+      color: 'var(--text-inverse)',
       border: 'none'
     },
     secondary: {
-      backgroundColor: '#FFFFFF',
-      color: '#101828',
-      border: '1px solid #D0D5DD'
+      backgroundColor: 'var(--account-card-bg)',
+      color: 'var(--account-title)',
+      border: '1px solid var(--account-input-border)'
     },
     ghost: {
       backgroundColor: 'transparent',
-      color: '#101828',
+      color: 'var(--account-title)',
       border: 'none'
     },
     destructive: {
-      backgroundColor: '#F04438',
-      color: '#FFFFFF',
+      backgroundColor: 'var(--account-error-border)',
+      color: 'var(--text-inverse)',
       border: 'none'
     }
   };

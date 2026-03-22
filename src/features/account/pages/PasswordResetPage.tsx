@@ -104,7 +104,7 @@ export function PasswordResetPage() {
     <div
       style={{
         minHeight: '100vh',
-        backgroundColor: '#FCFCFD',
+        backgroundColor: 'var(--account-page-bg)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -126,7 +126,7 @@ export function PasswordResetPage() {
             fontSize: '14px',
             lineHeight: '20px',
             fontWeight: '600',
-            color: '#4338CA',
+            color: 'var(--account-link)',
             fontFamily: 'Inter, system-ui, sans-serif',
             cursor: isLoading ? 'not-allowed' : 'pointer',
             opacity: isLoading ? 0.4 : 1
@@ -144,7 +144,7 @@ export function PasswordResetPage() {
               fontSize: '28px',
               lineHeight: '36px',
               fontWeight: '600',
-              color: '#101828',
+              color: 'var(--account-title)',
               fontFamily: 'Inter, system-ui, sans-serif',
               marginBottom: '8px'
             }}
@@ -156,7 +156,7 @@ export function PasswordResetPage() {
               fontSize: '16px',
               lineHeight: '24px',
               fontWeight: '400',
-              color: '#667085',
+              color: 'var(--account-subtext)',
               fontFamily: 'Inter, system-ui, sans-serif'
             }}
           >
@@ -166,11 +166,11 @@ export function PasswordResetPage() {
 
         <div
           style={{
-            backgroundColor: '#FFFFFF',
-            border: '1px solid #EAECF0',
+            backgroundColor: 'var(--account-card-bg)',
+            border: '1px solid var(--account-card-border)',
             borderRadius: '16px',
             padding: '32px',
-            boxShadow: '0 1px 2px 0 rgba(16, 24, 40, 0.04), 0 1px 3px 0 rgba(16, 24, 40, 0.06)'
+            boxShadow: 'var(--account-card-shadow)'
           }}
         >
           {errors.general && (
@@ -186,7 +186,7 @@ export function PasswordResetPage() {
                         background: 'none',
                         border: 'none',
                         padding: 0,
-                        color: '#D92D20',
+                        color: 'var(--account-error-text)',
                         font: 'inherit',
                         fontWeight: 600,
                         textDecoration: 'underline',
