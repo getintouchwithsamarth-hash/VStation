@@ -5,7 +5,8 @@ export { RegisterPage } from './pages/RegisterPage';
 export { PasswordResetRequestPage } from './pages/PasswordResetRequestPage';
 export { PasswordResetPage } from './pages/PasswordResetPage';
 export { AccountDashboard } from './pages/AccountDashboard';
-export { useCustomerAccount, useCustomerAddresses, useCustomerOrders } from './hooks';
+export { OrderDetailPage } from './pages/OrderDetailPage';
+export { useCustomerAccount, useCustomerAddresses, useCustomerOrder, useCustomerOrders } from './hooks';
 
 // Components
 export { FormInput } from './components/FormInput';
@@ -21,6 +22,7 @@ export type {
   Customer,
   CustomerAddress,
   CustomerOrder,
+  CustomerOrderDetail,
   AuthContextType,
   RegisterData,
   LoginFormData,

@@ -1,9 +1,10 @@
 import type {
   CustomerAddressInput as ShopifyCustomerAddressInput,
+  CustomerOrderDetail as ShopifyCustomerOrderDetail,
   CustomerOrderConnection as ShopifyCustomerOrderConnection,
   CustomerProfile as ShopifyCustomerProfile
 } from '../../../lib/shopify-customer';
-import type { Customer, CustomerAddress, CustomerOrder } from '../types';
+import type { Customer, CustomerAddress, CustomerOrder, CustomerOrderDetail } from '../types';
 
 const formatMoney = (amount?: string | null, currencyCode?: string | null): string => {
   const parsed = Number(amount);
@@ -76,6 +77,88 @@ export const mapCustomerOrders = (orders: ShopifyCustomerOrderConnection | null)
       price: ''
     }))
   }));
+};
+
+const mapAddress = (
+  address: ShopifyCustomerOrderDetail['shippingAddress'] | ShopifyCustomerOrderDetail['billingAddress']
+) => {
+  if (!address?.address1 || !address.city || !address.country) {
+    return undefined;
+  }
+
+  return {
+    name: address.name || undefined,
+    address1: address.address1,
+    address2: address.address2 || undefined,
+    city: address.city,
+    province: address.province || undefined,
+    zip: address.zip || undefined,
+    country: address.country,
+    phone: address.phone || undefined
+  };
+};
+
+export const mapCustomerOrderDetail = (order: ShopifyCustomerOrderDetail | null): CustomerOrderDetail | null => {
+  if (!order) {
+    return null;
+  }
+
+  return {
+    id: order.id,
+    name: order.name || `Order #${order.orderNumber}`,
+    orderNumber: String(order.orderNumber),
+    createdAt: order.processedAt,
+    financialStatus: order.financialStatus || undefined,
+    fulfillmentStatus: order.fulfillmentStatus || undefined,
+    subtotalPrice: formatMoney(order.subtotalPrice?.amount, order.subtotalPrice?.currencyCode),
+    shippingPrice: formatMoney(order.totalShippingPrice?.amount, order.totalShippingPrice?.currencyCode),
+    taxPrice: formatMoney(order.totalTax?.amount, order.totalTax?.currencyCode),
+    totalPrice: formatMoney(order.totalPrice?.amount, order.totalPrice?.currencyCode),
+    refundedPrice: formatMoney(order.totalRefunded?.amount, order.totalRefunded?.currencyCode),
+    shippingAddress: mapAddress(order.shippingAddress),
+    billingAddress: mapAddress(order.billingAddress),
+    discounts: order.discountApplications.nodes.map((discount) => ({
+      allocationMethod: discount.allocationMethod || undefined,
+      targetSelection: discount.targetSelection || undefined,
+      value:
+        discount.value && 'currencyCode' in discount.value
+          ? formatMoney(discount.value.amount, discount.value.currencyCode)
+          : discount.value && 'percentage' in discount.value
+            ? `${discount.value.percentage}%`
+            : ''
+    })),
+    fulfillments: order.successfulFulfillments.map((fulfillment) => ({
+      trackingCompany: fulfillment.trackingCompany || undefined,
+      tracking: fulfillment.trackingInfo.map((tracking) => ({
+        number: tracking.number || undefined,
+        url: tracking.url || undefined
+      })),
+      items: fulfillment.fulfillmentLineItems.nodes.map((item) => ({
+        title: item.lineItem?.title || 'Line item',
+        quantity: item.quantity,
+        sku: item.lineItem?.variant?.sku || undefined
+      }))
+    })),
+    lineItems: order.lineItems.nodes.map((lineItem, index) => ({
+      id: `${order.id}-${index}`,
+      title: lineItem.title,
+      quantity: lineItem.quantity,
+      unitPrice: formatMoney(lineItem.variant?.price?.amount, lineItem.variant?.price?.currencyCode),
+      discountedTotalPrice: formatMoney(
+        lineItem.discountedTotalPrice?.amount,
+        lineItem.discountedTotalPrice?.currencyCode
+      ),
+      originalTotalPrice: formatMoney(lineItem.originalTotalPrice?.amount, lineItem.originalTotalPrice?.currencyCode),
+      variantTitle: lineItem.variant?.title || undefined,
+      sku: lineItem.variant?.sku || undefined,
+      imageUrl: lineItem.variant?.image?.url || undefined,
+      imageAlt: lineItem.variant?.image?.altText || undefined,
+      productHandle: lineItem.variant?.product?.handle || undefined,
+      selectedOptions: lineItem.variant?.selectedOptions || []
+    })),
+    statusUrl: order.statusUrl || undefined,
+    customerUrl: order.customerUrl || undefined
+  };
 };
 
 export const mapAddressFormToShopifyInput = (

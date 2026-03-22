@@ -1,4 +1,4 @@
-import { Money, StorefrontAPIError, storefrontFetch } from './shopify-storefront';
+import { Image, Money, StorefrontAPIError, storefrontFetch } from './shopify-storefront';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
 const CUSTOMER_AUTH_BRIDGE_PATH = import.meta.env.VITE_SHOPIFY_AUTH_BRIDGE_PATH || '/pages/auth-bridge';
@@ -54,6 +54,7 @@ export interface CustomerOrderLineItem {
 
 export interface CustomerOrder {
   id: string;
+  name?: string | null;
   orderNumber: number;
   totalPriceV2: Money;
   processedAt: string;
@@ -63,6 +64,106 @@ export interface CustomerOrder {
       node: CustomerOrderLineItem;
     }>;
   };
+}
+
+export interface CustomerOrderDetailSelectedOption {
+  name: string;
+  value: string;
+}
+
+export interface CustomerOrderDetailVariant {
+  id: string;
+  title: string;
+  sku: string | null;
+  price: Money | null;
+  compareAtPrice: Money | null;
+  image: Image | null;
+  product: {
+    id: string;
+    title: string;
+    handle: string;
+  } | null;
+  selectedOptions: CustomerOrderDetailSelectedOption[];
+}
+
+export interface CustomerOrderDetailLineItem {
+  title: string;
+  quantity: number;
+  discountedTotalPrice: Money | null;
+  originalTotalPrice: Money | null;
+  variant: CustomerOrderDetailVariant | null;
+}
+
+export interface CustomerOrderDetailAddress {
+  name: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
+  address1: string | null;
+  address2?: string | null;
+  city: string | null;
+  province?: string | null;
+  zip?: string | null;
+  country: string | null;
+  phone?: string | null;
+}
+
+export interface CustomerOrderDetailDiscountApplication {
+  allocationMethod: string | null;
+  targetSelection: string | null;
+  value:
+    | Money
+    | {
+        percentage: number;
+      }
+    | null;
+}
+
+export interface CustomerOrderDetailTrackingInfo {
+  number: string | null;
+  url: string | null;
+}
+
+export interface CustomerOrderDetailFulfillmentLineItem {
+  quantity: number;
+  lineItem: {
+    title: string;
+    variant: {
+      sku: string | null;
+    } | null;
+  } | null;
+}
+
+export interface CustomerOrderDetailFulfillment {
+  trackingCompany: string | null;
+  trackingInfo: CustomerOrderDetailTrackingInfo[];
+  fulfillmentLineItems: {
+    nodes: CustomerOrderDetailFulfillmentLineItem[];
+  };
+}
+
+export interface CustomerOrderDetail {
+  id: string;
+  name: string | null;
+  orderNumber: number;
+  processedAt: string;
+  financialStatus: string | null;
+  fulfillmentStatus: string | null;
+  lineItems: {
+    nodes: CustomerOrderDetailLineItem[];
+  };
+  subtotalPrice: Money | null;
+  totalShippingPrice: Money | null;
+  totalTax: Money | null;
+  totalPrice: Money | null;
+  totalRefunded: Money | null;
+  shippingAddress: CustomerOrderDetailAddress | null;
+  billingAddress: CustomerOrderDetailAddress | null;
+  discountApplications: {
+    nodes: CustomerOrderDetailDiscountApplication[];
+  };
+  successfulFulfillments: CustomerOrderDetailFulfillment[];
+  statusUrl: string | null;
+  customerUrl: string | null;
 }
 
 export interface CustomerOrdersPageInfo {
@@ -77,6 +178,14 @@ export interface CustomerOrderConnection {
   edges: Array<{
     cursor: string;
     node: CustomerOrder;
+  }>;
+}
+
+export interface CustomerOrderDetailConnection {
+  pageInfo: CustomerOrdersPageInfo;
+  edges: Array<{
+    cursor: string;
+    node: CustomerOrderDetail;
   }>;
 }
 
@@ -201,6 +310,7 @@ const CUSTOMER_PROFILE_FIELDS = `
 
 const CUSTOMER_ORDER_FIELDS = `
   id
+  name
   orderNumber
   totalPriceV2 {
     amount
@@ -216,6 +326,131 @@ const CUSTOMER_ORDER_FIELDS = `
       }
     }
   }
+`;
+
+const CUSTOMER_ORDER_DETAIL_FIELDS = `
+  id
+  name
+  orderNumber
+  processedAt
+  financialStatus
+  fulfillmentStatus
+  lineItems(first: 50) {
+    nodes {
+      title
+      quantity
+      discountedTotalPrice {
+        amount
+        currencyCode
+      }
+      originalTotalPrice {
+        amount
+        currencyCode
+      }
+      variant {
+        id
+        title
+        sku
+        price {
+          amount
+          currencyCode
+        }
+        compareAtPrice {
+          amount
+          currencyCode
+        }
+        image {
+          url
+          altText
+        }
+        product {
+          id
+          title
+          handle
+        }
+        selectedOptions {
+          name
+          value
+        }
+      }
+    }
+  }
+  subtotalPrice {
+    amount
+    currencyCode
+  }
+  totalShippingPrice {
+    amount
+    currencyCode
+  }
+  totalTax {
+    amount
+    currencyCode
+  }
+  totalPrice {
+    amount
+    currencyCode
+  }
+  totalRefunded {
+    amount
+    currencyCode
+  }
+  shippingAddress {
+    name
+    firstName
+    lastName
+    address1
+    address2
+    city
+    province
+    zip
+    country
+    phone
+  }
+  billingAddress {
+    name
+    address1
+    address2
+    city
+    province
+    zip
+    country
+  }
+  discountApplications(first: 10) {
+    nodes {
+      allocationMethod
+      targetSelection
+      value {
+        ... on MoneyV2 {
+          amount
+          currencyCode
+        }
+        ... on PricingPercentageValue {
+          percentage
+        }
+      }
+    }
+  }
+  successfulFulfillments(first: 5) {
+    trackingCompany
+    trackingInfo(first: 5) {
+      number
+      url
+    }
+    fulfillmentLineItems(first: 50) {
+      nodes {
+        quantity
+        lineItem {
+          title
+          variant {
+            sku
+          }
+        }
+      }
+    }
+  }
+  statusUrl
+  customerUrl
 `;
 
 const buildAbsoluteUrl = (path: string): string => {
@@ -316,7 +551,7 @@ const toCustomerOperationError = (
         : error.code === 'HTTP_ERROR'
           ? 'Shopify could not be reached. Please try again.'
           : error.code === 'GRAPHQL_ERROR'
-            ? 'Shopify returned an unexpected error. Please try again.'
+            ? error.message || fallbackMessage
             : error.message || fallbackMessage;
 
     return {
@@ -559,6 +794,37 @@ export const customerOrdersQuery = `
           cursor
           node {
             ${CUSTOMER_ORDER_FIELDS}
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const customerOrderDetailQuery = `
+  query getOrderDetail($customerAccessToken: String!, $orderId: ID!) {
+    customer(customerAccessToken: $customerAccessToken) {
+      order(id: $orderId) {
+        ${CUSTOMER_ORDER_DETAIL_FIELDS}
+      }
+    }
+  }
+`;
+
+export const customerOrdersDetailQuery = `
+  query getCustomerOrdersDetail($customerAccessToken: String!, $first: Int!, $after: String) {
+    customer(customerAccessToken: $customerAccessToken) {
+      orders(first: $first, after: $after) {
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          startCursor
+          endCursor
+        }
+        edges {
+          cursor
+          node {
+            ${CUSTOMER_ORDER_DETAIL_FIELDS}
           }
         }
       }
@@ -828,6 +1094,64 @@ export async function getCustomerOrders(
 
     return data.customer?.orders || null;
   }, 'CUSTOMER_ORDERS_FETCH_ERROR', 'Unable to load customer orders.');
+}
+
+/**
+ * Returns a single customer order by Shopify order ID.
+ */
+export async function getCustomerOrder(
+  customerAccessToken: string,
+  orderId: string
+): Promise<CustomerResult<CustomerOrderDetail | null>> {
+  return executeCustomerOperation(async () => {
+    try {
+      const data = await storefrontFetch<{
+        customer: {
+          order: CustomerOrderDetail | null;
+        } | null;
+      }>(customerOrderDetailQuery, {
+        customerAccessToken,
+        orderId
+      });
+
+      if (data.customer?.order) {
+        return data.customer.order;
+      }
+    } catch (error) {
+      if (!(error instanceof StorefrontAPIError) || error.code !== 'GRAPHQL_ERROR') {
+        throw error;
+      }
+    }
+
+    let after: string | undefined;
+
+    for (let page = 0; page < 5; page += 1) {
+      const data = await storefrontFetch<{
+        customer: {
+          orders: CustomerOrderDetailConnection;
+        } | null;
+      }>(customerOrdersDetailQuery, {
+        customerAccessToken,
+        first: 50,
+        after: after || null
+      });
+
+      const orders = data.customer?.orders;
+      const matchedOrder = orders?.edges.find((edge) => edge.node.id === orderId)?.node || null;
+
+      if (matchedOrder) {
+        return matchedOrder;
+      }
+
+      if (!orders?.pageInfo.hasNextPage || !orders.pageInfo.endCursor) {
+        break;
+      }
+
+      after = orders.pageInfo.endCursor;
+    }
+
+    return null;
+  }, 'CUSTOMER_ORDER_FETCH_ERROR', 'Unable to load the order.');
 }
 
 /**

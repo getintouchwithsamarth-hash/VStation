@@ -29,6 +29,77 @@ export interface CustomerOrder {
   }[];
 }
 
+export interface CustomerOrderDetailLineItem {
+  id: string;
+  title: string;
+  quantity: number;
+  unitPrice: string;
+  discountedTotalPrice: string;
+  originalTotalPrice: string;
+  variantTitle?: string;
+  sku?: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  productHandle?: string;
+  selectedOptions: Array<{
+    name: string;
+    value: string;
+  }>;
+}
+
+export interface CustomerOrderDetailAddress {
+  name?: string;
+  address1: string;
+  address2?: string;
+  city: string;
+  province?: string;
+  zip?: string;
+  country: string;
+  phone?: string;
+}
+
+export interface CustomerOrderDetailDiscount {
+  allocationMethod?: string;
+  targetSelection?: string;
+  value: string;
+}
+
+export interface CustomerOrderDetailTracking {
+  number?: string;
+  url?: string;
+}
+
+export interface CustomerOrderDetailFulfillment {
+  trackingCompany?: string;
+  tracking: CustomerOrderDetailTracking[];
+  items: Array<{
+    title: string;
+    quantity: number;
+    sku?: string;
+  }>;
+}
+
+export interface CustomerOrderDetail {
+  id: string;
+  name: string;
+  orderNumber: string;
+  createdAt: string;
+  financialStatus?: string;
+  fulfillmentStatus?: string;
+  subtotalPrice: string;
+  shippingPrice: string;
+  taxPrice: string;
+  totalPrice: string;
+  refundedPrice: string;
+  shippingAddress?: CustomerOrderDetailAddress;
+  billingAddress?: CustomerOrderDetailAddress;
+  discounts: CustomerOrderDetailDiscount[];
+  fulfillments: CustomerOrderDetailFulfillment[];
+  lineItems: CustomerOrderDetailLineItem[];
+  statusUrl?: string;
+  customerUrl?: string;
+}
+
 export interface CustomerOrdersPageInfo {
   hasNextPage: boolean;
   hasPreviousPage: boolean;

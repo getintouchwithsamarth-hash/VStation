@@ -4,13 +4,13 @@ import { EmptyState } from '../components/EmptyState';
 import { AccountButton } from '../components/AccountButton';
 import { FormAlert } from '../components/FormAlert';
 import { useCustomerOrders } from '../hooks';
+import { navigateTo } from '../navigation';
 
 export function OrdersSection() {
   const { orders, hasMore, isLoading, isLoadingMore, error, loadMore } = useCustomerOrders();
 
   const handleOrderClick = (orderId: string) => {
-    console.log('View order:', orderId);
-    // In real app: navigate to order detail page
+    navigateTo(`/account/orders/${encodeURIComponent(orderId)}`);
   };
 
   return (

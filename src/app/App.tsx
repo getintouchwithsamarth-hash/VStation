@@ -16,6 +16,7 @@ import { useCart } from '../features/cart/CartContext';
 import {
   AccountDashboard,
   LoginPage,
+  OrderDetailPage,
   PasswordResetPage,
   PasswordResetRequestPage,
   RegisterPage
@@ -30,6 +31,10 @@ function resolveRoute() {
 
   if (/^\/account\/reset\/[^/]+\/[^/]+$/.test(path)) {
     return <PasswordResetPage />;
+  }
+
+  if (/^\/account\/orders\/[^/]+$/.test(path)) {
+    return <OrderDetailPage />;
   }
 
   switch (path) {
