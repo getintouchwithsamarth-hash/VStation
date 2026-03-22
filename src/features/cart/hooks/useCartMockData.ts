@@ -1,18 +1,9 @@
-import { useEffect, useState } from 'react';
-import { getProducts, resolveProductThumbnail } from '../../../lib/shopify-storefront';
-
-export type CartAddOn = {
-  id: string;
-  name: string;
-  price: number;
-  imageUrl?: string;
-  imageAlt?: string;
-};
-
 const CART_COPY = {
   title: 'Cart',
   yourCartTitle: 'Your cart',
-  addOnsTitle: 'Add-ons you may like',
+  relatedProductsTitle: 'Related products',
+  relatedProductsSubtitle: 'Picked from the same product categories already in your cart.',
+  relatedProductsEmptyState: 'No related products are available right now.',
   summaryTitle: 'Order summary',
   subtotalLabel: 'Subtotal',
   shippingLabel: 'Shipping',
@@ -29,70 +20,9 @@ const CART_COPY = {
   addButtonLabel: 'Add'
 };
 
-let cartAddOnCache: CartAddOn[] = [];
-let cartDataResolved = false;
-let cartDataPromise: Promise<void> | null = null;
-
-const loadCartAddOns = async () => {
-  if (cartDataPromise) {
-    return cartDataPromise;
-  }
-
-  cartDataPromise = (async () => {
-    try {
-      const products = await getProducts({ first: 2 });
-      cartAddOnCache = products.edges.map((edge) => {
-        const thumbnail = resolveProductThumbnail(edge.node);
-        return {
-          id: edge.node.handle,
-          name: edge.node.title,
-          price: Number.parseFloat(edge.node.priceRange.minVariantPrice.amount),
-          imageUrl: thumbnail?.url,
-          imageAlt: thumbnail?.altText || edge.node.title
-        };
-      });
-    } catch (error) {
-      console.error('Failed to load cart add-ons from Shopify', error);
-      cartAddOnCache = [];
-    } finally {
-      cartDataResolved = true;
-      cartDataPromise = null;
-    }
-  })();
-
-  return cartDataPromise;
-};
-
 export function useCartMockData() {
-  const [addOns, setAddOns] = useState<CartAddOn[]>(cartAddOnCache);
-  const [isLoading, setIsLoading] = useState(!cartDataResolved);
-
-  useEffect(() => {
-    let cancelled = false;
-    if (cartDataResolved) {
-      setAddOns(cartAddOnCache);
-      setIsLoading(false);
-      return () => {
-        cancelled = true;
-      };
-    }
-
-    void loadCartAddOns().then(() => {
-      if (cancelled) {
-        return;
-      }
-      setAddOns(cartAddOnCache);
-      setIsLoading(false);
-    });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
   return {
-    addOns,
     copy: CART_COPY,
-    isLoading
+    isLoading: false
   };
 }
