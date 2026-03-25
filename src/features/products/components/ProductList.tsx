@@ -211,7 +211,7 @@ function ProductCard({
           flex: 1,
         }}
       >
-        <h4
+        <h2
           style={{
             fontFamily: "Inter, system-ui, sans-serif",
             fontSize: "22px",
@@ -222,7 +222,7 @@ function ProductCard({
           }}
         >
           {product.name}
-        </h4>
+        </h2>
 
         <p
           style={{

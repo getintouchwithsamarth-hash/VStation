@@ -146,8 +146,8 @@ export function ProductFilters({
                   : "1px solid var(--border)",
               color:
                 activeFilter === filter.id
-                  ? "var(--primary)"
-                  : "var(--muted-foreground)",
+                  ? "var(--foreground)"
+                  : "var(--foreground)",
             }}
             onMouseEnter={(e) => {
               if (activeFilter !== filter.id) {
@@ -174,7 +174,7 @@ export function ProductFilters({
             style={{
               backgroundColor: "transparent",
               border: "1px solid var(--border)",
-              color: "var(--muted-foreground)",
+              color: "var(--foreground)",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = "var(--muted)";
@@ -182,7 +182,7 @@ export function ProductFilters({
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = "transparent";
-              e.currentTarget.style.color = "var(--muted-foreground)";
+              e.currentTarget.style.color = "var(--foreground)";
             }}
           >
             {showAll ? "Show less" : `+${remainingCount} more`}
@@ -197,11 +197,14 @@ export function ProductFilters({
           <button
             onClick={() => onFilterChange(filters[0]?.id ?? "all")}
             className="filter-reset-button"
+            style={{
+              color: "var(--foreground)",
+            }}
             onMouseEnter={(e) => {
               e.currentTarget.style.color = "var(--foreground)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.color = "var(--muted-foreground)";
+              e.currentTarget.style.color = "var(--foreground)";
             }}
           >
             <X size={14} strokeWidth={2.5} />
