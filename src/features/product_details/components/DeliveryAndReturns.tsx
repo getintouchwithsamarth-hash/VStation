@@ -55,7 +55,7 @@ export function DeliveryAndReturns() {
           font-size: 14px;
           line-height: 20px;
           font-weight: 400;
-          color: var(--muted-foreground);
+          color: var(--text-secondary);
         }
 
         .delivery-card-footer {
@@ -63,7 +63,7 @@ export function DeliveryAndReturns() {
           font-size: 12px;
           line-height: 18px;
           font-weight: 400;
-          color: var(--muted-foreground);
+          color: var(--text-secondary);
           padding-top: 8px;
           border-top: 1px solid var(--border);
         }

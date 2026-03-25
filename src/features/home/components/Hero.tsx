@@ -146,7 +146,7 @@ export function Hero() {
                     fontSize: '18px',
                     lineHeight: '28px',
                     fontWeight: '400',
-                    color: "var(--muted-foreground)",
+                    color: 'var(--text-secondary)',
                     maxWidth: '540px',
                     margin: 0
                   }}

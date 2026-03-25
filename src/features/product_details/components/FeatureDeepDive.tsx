@@ -109,7 +109,7 @@ export function FeatureDeepDive() {
           font-size: 14px;
           line-height: 22px;
           font-weight: 400;
-          color: var(--muted-foreground);
+          color: var(--text-secondary);
         }
 
         .quick-info-title {
@@ -125,7 +125,7 @@ export function FeatureDeepDive() {
           font-size: 11px;
           line-height: 16px;
           font-weight: 600;
-          color: var(--muted-foreground);
+          color: var(--text-secondary);
           text-transform: uppercase;
           letter-spacing: 0.05em;
         }

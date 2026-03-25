@@ -155,7 +155,7 @@ export function SpecsAndInBox() {
           font-size: 13px;
           line-height: 18px;
           font-weight: 400;
-          color: var(--muted-foreground);
+          color: var(--text-secondary);
         }
 
         .details-list {
@@ -169,7 +169,7 @@ export function SpecsAndInBox() {
           font-size: 12px;
           line-height: 18px;
           font-weight: 600;
-          color: var(--muted-foreground);
+          color: var(--text-secondary);
         }
 
         .details-item-value {

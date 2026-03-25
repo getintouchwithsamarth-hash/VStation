@@ -171,7 +171,7 @@
 }
 
 .product-main__stock--in-stock {
-  color: var(--success-600);
+  color: var(--success-foreground);
 }
 
 .product-main__stock--out-of-stock {
