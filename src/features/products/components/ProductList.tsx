@@ -20,6 +20,26 @@ export function ProductList({ products }: { products: Product[] }) {
           gap: 16px;
         }
 
+        .product-card {
+          background-color: var(--card);
+          border: 1px solid var(--border);
+          border-radius: 16px;
+          width: 100%;
+          min-height: 460px;
+          max-height: 520px;
+          box-shadow: 0 1px 2px 0 #1018280a, 0 1px 3px 0 #1018280f;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .product-card__title {
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+
         .no-products-message {
           grid-column: 1 / -1;
           border: 1px solid var(--border);
@@ -42,6 +62,28 @@ export function ProductList({ products }: { products: Product[] }) {
           .product-grid {
             grid-template-columns: 1fr;
             gap: 16px;
+          }
+
+          .product-card {
+            min-height: 0;
+            max-height: none;
+          }
+
+          .product-card__media {
+            height: 200px !important;
+          }
+
+          .product-card__body {
+            padding: 14px !important;
+          }
+
+          .product-card__title {
+            font-size: 20px !important;
+            line-height: 28px !important;
+          }
+
+          .product-card__descriptor {
+            -webkit-line-clamp: 3 !important;
           }
 
           .no-products-message {
@@ -79,6 +121,7 @@ function ProductCard({
 
   return (
     <div
+      className="product-card"
       data-testid="collection-product-card"
       role={isHoverPreview ? undefined : "link"}
       tabIndex={isHoverPreview ? undefined : 0}
@@ -105,24 +148,14 @@ function ProductCard({
             }
       }
       style={{
-        backgroundColor: "var(--card)",
-        border: isHoverPreview
-          ? "1px solid var(--border)"
-          : "1px solid var(--border)",
-        borderRadius: "16px",
-        width: "100%",
-        minHeight: "460px",
-        maxHeight: "520px",
         boxShadow: isHoverPreview
           ? "0 4px 6px -2px #1018280D, 0 12px 16px -4px #10182814"
-          : "0 1px 2px 0 #1018280A, 0 1px 3px 0 #1018280F",
-        overflow: "hidden",
-        display: "flex",
-        flexDirection: "column",
+          : undefined,
         cursor: isHoverPreview ? "default" : "pointer",
       }}
     >
       <div
+        className="product-card__media"
         style={{
           position: "relative",
           height: "220px",
@@ -203,6 +236,7 @@ function ProductCard({
       </div>
 
       <div
+        className="product-card__body"
         style={{
           padding: "16px",
           display: "flex",
@@ -212,6 +246,7 @@ function ProductCard({
         }}
       >
         <h2
+          className="product-card__title"
           style={{
             fontFamily: "Inter, system-ui, sans-serif",
             fontSize: "22px",
@@ -225,6 +260,7 @@ function ProductCard({
         </h2>
 
         <p
+          className="product-card__descriptor"
           style={{
             fontFamily: "Inter, system-ui, sans-serif",
             fontSize: "14px",

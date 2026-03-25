@@ -315,13 +315,13 @@ function ThemeToggleSlot({
 function PrimaryNavSlot() {
   return (
     <nav className="header-nav">
-      <a href="/products" className="header-nav-link">
+      <a href="/products" className="header-nav-link" data-testid="header-products-link">
         Products
       </a>
-      <a href="/philosophy" className="header-nav-link">
+      <a href="/philosophy" className="header-nav-link" data-testid="header-philosophy-link">
         Philosophy
       </a>
-      <a href="/community" className="header-nav-link">
+      <a href="/community" className="header-nav-link" data-testid="header-community-link">
         Community
       </a>
     </nav>
@@ -332,6 +332,7 @@ function AccountSlot({ href, label }: { href: string; label: string }) {
   return (
     <a
       href={href}
+      data-testid="header-account-link"
       className="header-account-btn"
       style={{
         height: "36px",

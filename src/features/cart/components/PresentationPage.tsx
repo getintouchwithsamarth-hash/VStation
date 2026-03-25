@@ -6,15 +6,21 @@ import { SummaryColumn } from './SummaryColumn';
 export function PresentationPage() {
   return (
     <Section paddingTop="80px" paddingBottom="80px" background="var(--muted)">
+      <style>{`
+        .cart-page__layout {
+          display: flex;
+          gap: 24px;
+          align-items: flex-start;
+        }
+
+        @media (max-width: 960px) {
+          .cart-page__layout {
+            flex-direction: column;
+          }
+        }
+      `}</style>
       <Container>
-        {/* 2-column layout */}
-        <div
-          style={{
-            display: 'flex',
-            gap: '24px',
-            alignItems: 'flex-start'
-          }}
-        >
+        <div className="cart-page__layout">
           {/* Left column ~65% */}
           <CartItemsColumn />
           

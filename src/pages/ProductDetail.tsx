@@ -66,6 +66,26 @@ export function ProductDetail() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
+      <style>{`
+        .product-detail__stack {
+          display: flex;
+          flex-direction: column;
+          gap: 32px;
+        }
+
+        .product-detail__info-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 32px;
+        }
+
+        @media (max-width: 768px) {
+          .product-detail__info-grid {
+            grid-template-columns: minmax(0, 1fr);
+            gap: 24px;
+          }
+        }
+      `}</style>
       {/* Hero Section - Title + Product Main combined */}
       <section
         style={{
@@ -75,9 +95,7 @@ export function ProductDetail() {
         }}
       >
         <Container>
-          <div
-            style={{ display: "flex", flexDirection: "column", gap: "32px" }}
-          >
+          <div className="product-detail__stack">
             <BreadcrumbRow />
             <ProductTitleBlock />
             <ProductMain />
@@ -94,13 +112,7 @@ export function ProductDetail() {
         }}
       >
         <Container>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "32px",
-            }}
-          >
+          <div className="product-detail__info-grid">
             <DeliveryAndReturns />
             <SpecsAndInBox />
           </div>

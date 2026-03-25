@@ -10,16 +10,30 @@ export function CartItemsColumn() {
   const { copy } = useCartMockData();
 
   return (
-    <div
-      style={{
-        flex: '0 0 65%',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '32px'
-      }}
-    >
+    <div className="cart-items-column" style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+      <style>{`
+        .cart-items-column {
+          flex: 0 0 65%;
+          min-width: 0;
+        }
+
+        @media (max-width: 960px) {
+          .cart-items-column {
+            flex: 1 1 auto;
+            width: 100%;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .cart-items-column__title {
+            font-size: 28px !important;
+            line-height: 34px !important;
+          }
+        }
+      `}</style>
       {/* Title */}
-      <h2
+      <h1
+        className="cart-items-column__title"
         style={{
           margin: 0,
           fontSize: '30px',
@@ -30,7 +44,7 @@ export function CartItemsColumn() {
         }}
       >
         {copy.yourCartTitle}
-      </h2>
+      </h1>
 
       {cartError ? (
         <div onClick={clearCartError}>

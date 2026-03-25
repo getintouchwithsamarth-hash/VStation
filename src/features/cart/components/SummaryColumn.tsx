@@ -12,15 +12,31 @@ export function SummaryColumn() {
 
   return (
     <div
+      className="cart-summary-column"
       style={{
-        flex: '0 0 35%',
         display: 'flex',
         flexDirection: 'column',
-        gap: '16px',
-        position: 'sticky',
-        top: '24px'
+        gap: '16px'
       }}
-      >
+    >
+      <style>{`
+        .cart-summary-column {
+          flex: 0 0 35%;
+          min-width: 280px;
+          position: sticky;
+          top: 24px;
+        }
+
+        @media (max-width: 960px) {
+          .cart-summary-column {
+            flex: 1 1 auto;
+            width: 100%;
+            min-width: 0;
+            position: static;
+            top: auto;
+          }
+        }
+      `}</style>
       {/* Order Summary */}
       <OrderSummaryCard subtotal={subtotal} total={total} />
 
@@ -49,7 +65,7 @@ export function SummaryColumn() {
           fontSize: '12px',
           lineHeight: '18px',
           fontWeight: '400',
-          color: "var(--muted-foreground)",
+          color: "var(--foreground)",
           fontFamily: 'Inter, system-ui, sans-serif',
           textAlign: 'center'
         }}

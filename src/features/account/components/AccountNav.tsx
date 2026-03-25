@@ -57,6 +57,29 @@ export function AccountNav({ activeSection, onSectionChange, onLogout, isMobile 
             </button>
           );
         })}
+
+        <button
+          onClick={onLogout}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '8px 16px',
+            backgroundColor: 'transparent',
+            border: '1px solid transparent',
+            borderRadius: '10px',
+            fontSize: '14px',
+            lineHeight: '20px',
+            fontWeight: '600',
+            color: 'var(--account-error-border)',
+            fontFamily: 'Inter, system-ui, sans-serif',
+            cursor: 'pointer',
+            whiteSpace: 'nowrap'
+          }}
+        >
+          <LogOut size={16} />
+          Sign out
+        </button>
       </div>
     );
   }

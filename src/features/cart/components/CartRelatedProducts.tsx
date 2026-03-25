@@ -53,13 +53,34 @@ export function CartRelatedProducts() {
   }, [items, products]);
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '20px'
-      }}
-    >
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      <style>{`
+        .cart-related-products__loading-grid,
+        .cart-related-products__grid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 16px;
+        }
+
+        @media (max-width: 960px) {
+          .cart-related-products__loading-grid,
+          .cart-related-products__grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+
+        @media (max-width: 640px) {
+          .cart-related-products__loading-grid,
+          .cart-related-products__grid {
+            grid-template-columns: minmax(0, 1fr);
+          }
+
+          .cart-related-products__title {
+            font-size: 18px !important;
+            line-height: 26px !important;
+          }
+        }
+      `}</style>
       <div
         style={{
           display: 'flex',
@@ -67,7 +88,8 @@ export function CartRelatedProducts() {
           gap: '6px'
         }}
       >
-        <h4
+        <h2
+          className="cart-related-products__title"
           style={{
             margin: 0,
             fontSize: '20px',
@@ -78,14 +100,14 @@ export function CartRelatedProducts() {
           }}
         >
           {copy.relatedProductsTitle}
-        </h4>
+        </h2>
         <p
           style={{
             margin: 0,
             fontSize: '14px',
             lineHeight: '20px',
             fontWeight: '400',
-            color: 'var(--muted-foreground)',
+            color: 'var(--foreground)',
             fontFamily: 'Inter, system-ui, sans-serif'
           }}
         >
@@ -94,13 +116,7 @@ export function CartRelatedProducts() {
       </div>
 
       {isLoading ? (
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
-            gap: '16px'
-          }}
-        >
+        <div className="cart-related-products__loading-grid">
           {Array.from({ length: MAX_RELATED_PRODUCTS }).map((_, index) => (
             <div
               key={index}
@@ -114,13 +130,7 @@ export function CartRelatedProducts() {
           ))}
         </div>
       ) : relatedProducts.length ? (
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
-            gap: '16px'
-          }}
-        >
+        <div className="cart-related-products__grid">
           {relatedProducts.map((product) => (
             <CardInstance
               key={product.id}
@@ -180,7 +190,7 @@ export function CartRelatedProducts() {
                   height: '100%'
                 }}
               >
-                <h5
+                <h3
                   style={{
                     margin: 0,
                     fontSize: '18px',
@@ -191,14 +201,14 @@ export function CartRelatedProducts() {
                   }}
                 >
                   {product.name}
-                </h5>
+                </h3>
                 <p
                   style={{
                     margin: 0,
                     fontSize: '13px',
                     lineHeight: '18px',
                     fontWeight: '400',
-                    color: 'var(--muted-foreground)',
+                    color: 'var(--foreground)',
                     fontFamily: 'Inter, system-ui, sans-serif',
                     display: '-webkit-box',
                     WebkitLineClamp: 3,
@@ -213,7 +223,7 @@ export function CartRelatedProducts() {
                     fontSize: '12px',
                     lineHeight: '18px',
                     fontWeight: '500',
-                    color: 'var(--muted-foreground)',
+                    color: 'var(--foreground)',
                     fontFamily: 'Inter, system-ui, sans-serif'
                   }}
                 >
@@ -242,7 +252,7 @@ export function CartRelatedProducts() {
               fontSize: '14px',
               lineHeight: '20px',
               fontWeight: '400',
-              color: 'var(--muted-foreground)',
+              color: 'var(--foreground)',
               fontFamily: 'Inter, system-ui, sans-serif'
             }}
           >

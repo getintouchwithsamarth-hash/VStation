@@ -9,20 +9,50 @@ export function RelatedProducts() {
   const { relatedProducts } = useProductDetailMockData();
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '32px'
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center'
-        }}
-      >
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+      <style>{`
+        .related-products__header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 16px;
+        }
+
+        .related-products__grid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 24px;
+        }
+
+        .related-products__card-copy {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        @media (max-width: 960px) {
+          .related-products__grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+
+        @media (max-width: 640px) {
+          .related-products__header {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+
+          .related-products__grid {
+            grid-template-columns: minmax(0, 1fr);
+            gap: 16px;
+          }
+
+          .related-products__media {
+            height: 200px !important;
+          }
+        }
+      `}</style>
+      <div className="related-products__header">
         <h3
           style={{
             fontFamily: 'Inter, system-ui, sans-serif',
@@ -35,19 +65,13 @@ export function RelatedProducts() {
         <ButtonInstance variant="secondary" size="sm" label={relatedProducts.viewAllLabel} />
       </div>
 
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: '24px'
-        }}
-      >
+      <div className="related-products__grid">
         {relatedProducts.items.map((item) => (
           <CardInstance
             key={item.id}
             variant="elevated"
             mediaSlot={
-              <div style={{ position: 'relative', width: '100%', height: '220px' }}>
+              <div className="related-products__media" style={{ position: 'relative', width: '100%', height: '220px' }}>
                 {item.imageUrl ? (
                   <img
                     src={item.imageUrl}
@@ -88,13 +112,7 @@ export function RelatedProducts() {
               />
             }
           >
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '10px'
-              }}
-            >
+            <div className="related-products__card-copy">
               <h4
                 style={{
                   fontFamily: 'Inter, system-ui, sans-serif',

@@ -11,6 +11,48 @@ export function SocialProof() {
 
   return (
     <Section paddingTop="56px" paddingBottom="56px" background="var(--card)">
+      <style>{`
+        .social-proof__chips {
+          display: flex;
+          gap: 12px;
+          margin-bottom: 32px;
+          flex-wrap: wrap;
+        }
+
+        .social-proof__grid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 16px;
+          margin-bottom: 32px;
+        }
+
+        @media (max-width: 960px) {
+          .social-proof__grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+
+        @media (max-width: 640px) {
+          .social-proof__title {
+            font-size: 30px !important;
+            line-height: 36px !important;
+          }
+
+          .social-proof__supporting {
+            font-size: 16px !important;
+            line-height: 24px !important;
+          }
+
+          .social-proof__grid {
+            grid-template-columns: minmax(0, 1fr);
+          }
+
+          .social-proof__card {
+            min-height: 0 !important;
+            padding: 18px !important;
+          }
+        }
+      `}</style>
       <Container>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '24px' }}>
           <div
@@ -26,6 +68,7 @@ export function SocialProof() {
           </div>
 
           <h2
+            className="social-proof__title"
             style={{
               fontFamily: 'Inter, system-ui, sans-serif',
               fontSize: '36px',
@@ -39,6 +82,7 @@ export function SocialProof() {
           </h2>
 
           <p
+            className="social-proof__supporting"
             style={{
               fontFamily: 'Inter, system-ui, sans-serif',
               fontSize: '18px',
@@ -52,22 +96,16 @@ export function SocialProof() {
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '12px', marginBottom: '32px' }}>
+        <div className="social-proof__chips">
           {socialProof.chips.map((chip) => (
             <BadgeInstance key={chip} label={chip} variant="neutral" size="md" />
           ))}
         </div>
 
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '16px',
-            marginBottom: '32px'
-          }}
-        >
+        <div className="social-proof__grid">
           {socialProof.testimonials.map((testimonial) => (
             <div
+              className="social-proof__card"
               key={testimonial.id}
               style={{
                 backgroundColor: "var(--card)",
