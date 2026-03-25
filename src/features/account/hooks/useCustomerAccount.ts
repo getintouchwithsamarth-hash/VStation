@@ -13,11 +13,89 @@ import {
 import type { Customer, RegisterData } from '../types';
 import { mapCustomerProfileToAccountCustomer } from './mappers';
 
+const TEST_ENV = import.meta.env.ENV === 'TEST';
+const TEST_CUSTOMER_STORAGE_KEY = 'account:test-customer';
+const TEST_ACCESS_TOKEN_PREFIX = 'test-customer-token';
+const TEST_SESSION_DURATION_MS = 1000 * 60 * 60 * 24 * 30;
+
+interface TestCustomerSession {
+  accessToken: string;
+  expiresAt: string;
+  customer: Customer;
+}
+
 function buildOperationError(message: string, code?: string): Error & { code?: string } {
   const error = new Error(message) as Error & { code?: string };
   error.code = code;
   return error;
 }
+
+const isBrowser = (): boolean => typeof window !== 'undefined';
+
+const isValidEmail = (email: string): boolean => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+const buildTestCustomerProfile = (email: string): Customer => {
+  const localPart = email.split('@')[0] || 'test';
+  const [firstSegment, ...restSegments] = localPart
+    .split(/[._-]+/)
+    .map((segment) => segment.trim())
+    .filter(Boolean);
+  const toName = (value: string): string => value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+  const firstName = firstSegment ? toName(firstSegment) : 'Test';
+  const lastName = restSegments.length > 0 ? restSegments.map(toName).join(' ') : 'User';
+
+  return {
+    id: `test-${email.toLowerCase()}`,
+    email,
+    firstName,
+    lastName,
+    phone: undefined,
+    acceptsMarketing: false,
+    createdAt: new Date().toISOString()
+  };
+};
+
+const saveTestCustomerSession = (session: TestCustomerSession): void => {
+  if (!isBrowser()) {
+    return;
+  }
+
+  window.localStorage.setItem(TEST_CUSTOMER_STORAGE_KEY, JSON.stringify(session));
+};
+
+const loadTestCustomerSession = (): TestCustomerSession | null => {
+  if (!isBrowser()) {
+    return null;
+  }
+
+  const rawValue = window.localStorage.getItem(TEST_CUSTOMER_STORAGE_KEY);
+  if (!rawValue) {
+    return null;
+  }
+
+  try {
+    const session = JSON.parse(rawValue) as TestCustomerSession;
+    const expiresAt = Date.parse(session.expiresAt);
+
+    if (!session.accessToken || !session.customer || !session.expiresAt || Number.isNaN(expiresAt) || expiresAt <= Date.now()) {
+      window.localStorage.removeItem(TEST_CUSTOMER_STORAGE_KEY);
+      return null;
+    }
+
+    return session;
+  } catch {
+    window.localStorage.removeItem(TEST_CUSTOMER_STORAGE_KEY);
+    return null;
+  }
+};
+
+const clearTestCustomerSession = (): void => {
+  if (!isBrowser()) {
+    return;
+  }
+
+  window.localStorage.removeItem(TEST_CUSTOMER_STORAGE_KEY);
+};
 
 export function useCustomerAccount() {
   const [customer, setCustomer] = useState<Customer | null>(null);
@@ -25,6 +103,20 @@ export function useCustomerAccount() {
   const [isLoading, setIsLoading] = useState(true);
 
   const refreshCustomerData = async () => {
+    if (TEST_ENV) {
+      const session = loadTestCustomerSession();
+
+      if (!session) {
+        setCustomer(null);
+        setAccessToken(null);
+        return;
+      }
+
+      setCustomer(session.customer);
+      setAccessToken(session.accessToken);
+      return;
+    }
+
     const session = getCustomerAccessTokenExpiry();
     if (!session.accessToken) {
       setCustomer(null);
@@ -54,6 +146,16 @@ export function useCustomerAccount() {
 
     const initialize = async () => {
       try {
+        if (TEST_ENV) {
+          const session = loadTestCustomerSession();
+
+          if (!cancelled) {
+            setCustomer(session?.customer || null);
+            setAccessToken(session?.accessToken || null);
+          }
+          return;
+        }
+
         const session = getCustomerAccessTokenExpiry();
         if (!session.accessToken) {
           if (!cancelled) {
@@ -106,6 +208,26 @@ export function useCustomerAccount() {
   const login = async (email: string, password: string) => {
     setIsLoading(true);
     try {
+      if (TEST_ENV) {
+        const normalizedEmail = email.trim();
+        const normalizedPassword = password.trim();
+
+        if (!isValidEmail(normalizedEmail) || normalizedPassword.length === 0) {
+          throw buildOperationError('Enter a valid email address and password.', 'TEST_LOGIN_VALIDATION_ERROR');
+        }
+
+        const session: TestCustomerSession = {
+          accessToken: `${TEST_ACCESS_TOKEN_PREFIX}-${Date.now()}`,
+          expiresAt: new Date(Date.now() + TEST_SESSION_DURATION_MS).toISOString(),
+          customer: buildTestCustomerProfile(normalizedEmail)
+        };
+
+        saveTestCustomerSession(session);
+        setCustomer(session.customer);
+        setAccessToken(session.accessToken);
+        return;
+      }
+
       const loginResult = await loginCustomer(email, password);
       if (!loginResult.ok) {
         throw buildOperationError(loginResult.error.message || 'Unable to sign in.', loginResult.error.code);
@@ -161,6 +283,10 @@ export function useCustomerAccount() {
   };
 
   const logout = () => {
+    if (TEST_ENV) {
+      clearTestCustomerSession();
+    }
+
     logoutCustomer();
     setCustomer(null);
     setAccessToken(null);
@@ -173,6 +299,28 @@ export function useCustomerAccount() {
     phone?: string;
     password?: string;
   }): Promise<void> => {
+    if (TEST_ENV) {
+      const session = loadTestCustomerSession();
+      if (!session) {
+        throw new Error('No active customer session was found.');
+      }
+
+      const updatedCustomer: Customer = {
+        ...session.customer,
+        email: data.email ?? session.customer.email,
+        firstName: data.firstName ?? session.customer.firstName,
+        lastName: data.lastName ?? session.customer.lastName,
+        phone: data.phone ?? session.customer.phone
+      };
+
+      saveTestCustomerSession({
+        ...session,
+        customer: updatedCustomer
+      });
+      setCustomer(updatedCustomer);
+      return;
+    }
+
     const token = accessToken || getCustomerAccessTokenExpiry().accessToken;
     if (!token) {
       throw new Error('No active customer session was found.');

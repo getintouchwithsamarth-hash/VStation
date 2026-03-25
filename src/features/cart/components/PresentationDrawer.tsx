@@ -167,6 +167,7 @@ export function PresentationDrawer() {
           <ButtonInstance
             variant="primary"
             size="lg"
+            data-testid="checkout-button"
             label={copy.drawerCheckoutLabel}
             onClick={() => {
               closeCartDrawer();

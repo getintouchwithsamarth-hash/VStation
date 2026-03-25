@@ -1,3 +1,5 @@
+import type { ButtonHTMLAttributes } from "react";
+
 export function Button() {
   return (
     <div className="space-y-12 p-8">
@@ -470,21 +472,24 @@ function Examples() {
 }
 
 // Reusable Button component instance
-export function ButtonInstance({ 
-  label, 
-  variant = 'primary', 
-  size = 'md',
+type ButtonInstanceProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children"> & {
+  label: string;
+  variant?: "primary" | "secondary" | "ghost";
+  size?: "sm" | "md" | "lg";
+  fullWidth?: boolean;
+};
+
+export function ButtonInstance({
+  label,
+  variant = "primary",
+  size = "md",
   onClick,
   disabled = false,
-  fullWidth = false
-}: { 
-  label: string; 
-  variant?: 'primary' | 'secondary' | 'ghost';
-  size?: 'sm' | 'md' | 'lg';
-  onClick?: () => void;
-  disabled?: boolean;
-  fullWidth?: boolean;
-}) {
+  fullWidth = false,
+  type = "button",
+  style,
+  ...props
+}: ButtonInstanceProps) {
   const sizeStyles = {
     sm: {
       height: '36px',
@@ -535,6 +540,8 @@ export function ButtonInstance({
 
   return (
     <button
+      {...props}
+      type={type}
       onClick={onClick}
       disabled={disabled}
       style={{
@@ -556,7 +563,8 @@ export function ButtonInstance({
         width: fullWidth ? '100%' : 'auto',
         cursor: disabled ? 'not-allowed' : 'pointer',
         fontFamily: 'Inter, system-ui, sans-serif',
-        opacity: disabled ? 0.65 : 1
+        opacity: disabled ? 0.65 : 1,
+        ...style
       }}
     >
       {label}

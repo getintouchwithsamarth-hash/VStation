@@ -96,7 +96,9 @@ export function ProductTitleBlock() {
           <span className="product-title-vendor">{productHeader.vendor}</span>
         </div>
 
-        <h1 className="product-title-h1">{productHeader.title}</h1>
+        <h1 className="product-title-h1" data-testid="product-title">
+          {productHeader.title}
+        </h1>
 
         <div className="product-title-meta">
           <span>SKU: {productHeader.sku}</span>

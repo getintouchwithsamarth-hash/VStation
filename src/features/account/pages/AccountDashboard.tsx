@@ -64,6 +64,7 @@ export function AccountDashboard() {
       <div style={{ backgroundColor: 'var(--account-panel-bg)', borderBottom: '1px solid var(--account-panel-border)' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', padding: isMobile ? '24px 16px' : '32px 48px' }}>
           <h1
+            data-testid="account-page-heading"
             style={{
               fontSize: isMobile ? '22px' : '28px',
               lineHeight: isMobile ? '30px' : '36px',

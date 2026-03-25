@@ -174,6 +174,7 @@ function BuyBox() {
               variant="primary"
               size="lg"
               label={productMain.buyBox.primaryCta}
+              data-testid="add-to-cart"
               disabled={!isInStock || !productMain.buyBox.variantId}
               onClick={() => {
                 if (!productMain.buyBox.variantId) {

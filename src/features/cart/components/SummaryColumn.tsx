@@ -28,6 +28,7 @@ export function SummaryColumn() {
       <ButtonInstance
         variant="primary"
         size="lg"
+        data-testid="checkout-button"
         label={copy.summaryCheckoutLabel}
         onClick={() => setShowCheckoutHandoff(true)}
       />

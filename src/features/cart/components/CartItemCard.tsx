@@ -31,6 +31,7 @@ export function CartItemCard({
   return (
     <CardInstance variant="subtle" padding="md">
       <div
+        data-testid="cart-line-item"
         style={{
           display: 'flex',
           gap: '12px',

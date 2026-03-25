@@ -5,6 +5,9 @@ import { AccountButton } from '../components/AccountButton';
 import { FormAlert } from '../components/FormAlert';
 import { navigateTo } from '../navigation';
 
+const TEST_ENV = import.meta.env.ENV === 'TEST';
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export function LoginPage() {
   const { login } = useAuth();
   const [email, setEmail] = useState('');
@@ -14,14 +17,16 @@ export function LoginPage() {
 
   const validateForm = () => {
     const newErrors: typeof errors = {};
+    const normalizedEmail = email.trim();
+    const normalizedPassword = password.trim();
 
-    if (!email) {
+    if (!normalizedEmail) {
       newErrors.email = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    } else if (!EMAIL_PATTERN.test(normalizedEmail)) {
       newErrors.email = 'Please enter a valid email address';
     }
 
-    if (!password) {
+    if (!normalizedPassword) {
       newErrors.password = 'Password is required';
     }
 
@@ -55,6 +60,7 @@ export function LoginPage() {
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <h1
+            data-testid="login-page-heading"
             style={{
               fontSize: '28px',
               lineHeight: '36px',
@@ -152,6 +158,7 @@ export function LoginPage() {
               type="submit"
               variant="primary"
               size="lg"
+              data-testid="login-submit"
               isLoading={isLoading}
               style={{ width: '100%', marginBottom: '16px' }}
             >
@@ -215,7 +222,7 @@ export function LoginPage() {
               margin: 0
             }}
           >
-            Demo: Use any email and password to sign in
+            {TEST_ENV ? 'Test mode: any valid email and password format can sign in' : 'Use your account email and password to sign in'}
           </p>
         </div>
       </div>

@@ -372,6 +372,7 @@ function CartSlot() {
         label="Cart"
         variant="ghost"
         size="sm"
+        data-testid="cart-link"
         onClick={handleCartClick}
       />
       <div

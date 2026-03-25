@@ -104,6 +104,7 @@ export function ProductSearch({
             type="text"
             placeholder="Search curated gear…"
             value={query}
+            data-testid="search-input"
             onChange={(event) => onQueryChange(event.target.value)}
             className="product-search-input"
             aria-label="Search products"
@@ -124,6 +125,8 @@ export function ProductSearch({
           <ButtonInstance
             variant="primary"
             size="md"
+            type="submit"
+            data-testid="search-submit"
             label={isSearching ? "Searching..." : "Search"}
             disabled={isSearching}
             fullWidth

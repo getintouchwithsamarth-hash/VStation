@@ -79,6 +79,7 @@ function ProductCard({
 
   return (
     <div
+      data-testid="collection-product-card"
       role={isHoverPreview ? undefined : "link"}
       tabIndex={isHoverPreview ? undefined : 0}
       onClick={
