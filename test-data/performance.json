@@ -1,0 +1,79 @@
+[
+  {
+    "name": "home",
+    "path": "/",
+    "enabled": true,
+    "thresholds": {
+      "firstContentfulPaintMs": 2200,
+      "largestContentfulPaintMs": 3200,
+      "domContentLoadedMs": 1800,
+      "loadMs": 4500
+    }
+  },
+  {
+    "name": "products-listing",
+    "path": "/products",
+    "enabled": true,
+    "thresholds": {
+      "firstContentfulPaintMs": 2400,
+      "largestContentfulPaintMs": 3400,
+      "domContentLoadedMs": 2200,
+      "loadMs": 5000
+    }
+  },
+  {
+    "name": "cart",
+    "path": "/cart",
+    "enabled": true,
+    "thresholds": {
+      "firstContentfulPaintMs": 2200,
+      "largestContentfulPaintMs": 3200,
+      "domContentLoadedMs": 1800,
+      "loadMs": 4500
+    }
+  },
+  {
+    "name": "login",
+    "path": "/account/login",
+    "enabled": true,
+    "thresholds": {
+      "firstContentfulPaintMs": 2000,
+      "largestContentfulPaintMs": 2800,
+      "domContentLoadedMs": 1600,
+      "loadMs": 4000
+    }
+  },
+  {
+    "name": "community",
+    "path": "/community",
+    "enabled": true,
+    "thresholds": {
+      "firstContentfulPaintMs": 1800,
+      "largestContentfulPaintMs": 2600,
+      "domContentLoadedMs": 1400,
+      "loadMs": 3500
+    }
+  },
+  {
+    "name": "philosophy",
+    "path": "/philosophy",
+    "enabled": true,
+    "thresholds": {
+      "firstContentfulPaintMs": 1800,
+      "largestContentfulPaintMs": 2600,
+      "domContentLoadedMs": 1400,
+      "loadMs": 3500
+    }
+  },
+  {
+    "name": "product-detail-placeholder",
+    "path": "/products/sample-product",
+    "enabled": false,
+    "thresholds": {
+      "firstContentfulPaintMs": 2600,
+      "largestContentfulPaintMs": 3600,
+      "domContentLoadedMs": 2200,
+      "loadMs": 5200
+    }
+  }
+]

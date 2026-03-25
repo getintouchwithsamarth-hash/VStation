@@ -1,0 +1,18 @@
+[
+  { "name": "home", "path": "/", "fullPage": true, "enabled": true },
+  { "name": "products-listing", "path": "/products", "fullPage": true, "enabled": true },
+  { "name": "cart", "path": "/cart", "fullPage": true, "enabled": true },
+  { "name": "login", "path": "/account/login", "fullPage": true, "enabled": true },
+  { "name": "register", "path": "/account/register", "fullPage": true, "enabled": true },
+  { "name": "password-reset-request", "path": "/account/password-reset", "fullPage": true, "enabled": true },
+  { "name": "community", "path": "/community", "fullPage": true, "enabled": true },
+  { "name": "philosophy", "path": "/philosophy", "fullPage": true, "enabled": true },
+  { "name": "privacy", "path": "/privacy", "fullPage": true, "enabled": true },
+  { "name": "terms", "path": "/terms", "fullPage": true, "enabled": true },
+  { "name": "shipping-policy", "path": "/shipping-policy", "fullPage": true, "enabled": true },
+  { "name": "returns-refunds", "path": "/returns-refunds", "fullPage": true, "enabled": true },
+  { "name": "cookie-policy", "path": "/cookie-policy", "fullPage": true, "enabled": true },
+  { "name": "product-detail-placeholder", "path": "/products/sample-product", "fullPage": true, "enabled": false },
+  { "name": "account-dashboard", "path": "/account", "fullPage": true, "enabled": false },
+  { "name": "password-reset-completion-placeholder", "path": "/account/reset/sample-id/sample-token", "fullPage": true, "enabled": false }
+]

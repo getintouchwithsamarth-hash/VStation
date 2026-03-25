@@ -229,7 +229,7 @@ export function PasswordResetRequestPage() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} noValidate>
             <div style={{ marginBottom: '24px' }}>
               <FormInput
                 id="email"

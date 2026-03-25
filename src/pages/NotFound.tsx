@@ -32,7 +32,29 @@ function PageBody() {
 }
 
 function ErrorTitleBlock() {
-  return null;
+  return (
+    <header>
+      <h1
+        style={{
+          margin: 0,
+          fontSize: 'clamp(2rem, 4vw, 3rem)',
+          lineHeight: 1.1,
+          color: 'var(--text-primary)'
+        }}
+      >
+        Page not found
+      </h1>
+      <p
+        style={{
+          margin: '12px 0 0',
+          maxWidth: '52ch',
+          color: 'var(--text-secondary)'
+        }}
+      >
+        The page you requested is not available in the current storefront route set.
+      </p>
+    </header>
+  );
 }
 
 function HelpfulLinks() {

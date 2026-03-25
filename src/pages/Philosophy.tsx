@@ -38,7 +38,29 @@ function PageBody() {
 }
 
 function ManifestoHero() {
-  return null;
+  return (
+    <header>
+      <h1
+        style={{
+          margin: 0,
+          fontSize: 'clamp(2rem, 4vw, 3rem)',
+          lineHeight: 1.1,
+          color: 'var(--text-primary)'
+        }}
+      >
+        Philosophy
+      </h1>
+      <p
+        style={{
+          margin: '12px 0 0',
+          maxWidth: '56ch',
+          color: 'var(--text-secondary)'
+        }}
+      >
+        The product research, quality standards, and sourcing principles behind Vibe Station will be documented here.
+      </p>
+    </header>
+  );
 }
 
 function PrinciplesIntro() {

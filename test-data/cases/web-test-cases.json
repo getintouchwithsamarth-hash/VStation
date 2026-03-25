@@ -1,0 +1,596 @@
+[
+  {
+    "id": "HOME-001",
+    "name": "Home page loads",
+    "enabled": true,
+    "tags": ["smoke", "critical", "guest", "home"],
+    "description": "Verifies the storefront home page shell renders.",
+    "steps": [
+      { "action": "goto", "value": "/" },
+      { "action": "expectURLContains", "value": "/" },
+      { "action": "expectVisible", "locator": "[data-testid='cart-link']" },
+      { "action": "expectVisible", "locator": "body" }
+    ]
+  },
+  {
+    "id": "HOME-002",
+    "name": "Home header account entry renders",
+    "enabled": true,
+    "tags": ["regression", "guest", "home", "navigation"],
+    "description": "Checks that the primary anonymous account entry is rendered on the homepage.",
+    "steps": [
+      { "action": "goto", "value": "/" },
+      { "action": "expectVisible", "locator": "[data-testid='header-account-link']" },
+      { "action": "expectContainsText", "locator": "body", "value": "VIBE STATION" }
+    ]
+  },
+  {
+    "id": "HOME-003",
+    "name": "Home mobile shell renders",
+    "enabled": true,
+    "tags": ["regression", "mobile", "guest", "home"],
+    "viewport": { "width": 390, "height": 844 },
+    "description": "Checks the homepage shell in mobile metadata mode.",
+    "steps": [
+      { "action": "goto", "value": "/" },
+      { "action": "expectVisible", "locator": "[data-testid='cart-link']" },
+      { "action": "expectVisible", "locator": "button[aria-label='Toggle mobile menu']" }
+    ]
+  },
+  {
+    "id": "NAV-001",
+    "name": "Products navigation works",
+    "enabled": true,
+    "tags": ["smoke", "critical", "guest", "navigation"],
+    "description": "Verifies shoppers can navigate from the header to the products listing.",
+    "steps": [
+      { "action": "goto", "value": "/" },
+      { "action": "click", "locator": "[data-testid='header-products-link']" },
+      { "action": "expectURLContains", "value": "/products" },
+      { "action": "expectVisible", "locator": "[data-testid='search-input']" }
+    ]
+  },
+  {
+    "id": "NAV-002",
+    "name": "Philosophy navigation works",
+    "enabled": true,
+    "tags": ["smoke", "guest", "navigation", "brand"],
+    "description": "Verifies the philosophy route is reachable from the header.",
+    "steps": [
+      { "action": "goto", "value": "/" },
+      { "action": "click", "locator": "[data-testid='header-philosophy-link']" },
+      { "action": "expectURLContains", "value": "/philosophy" },
+      { "action": "expectVisible", "locator": "body" }
+    ]
+  },
+  {
+    "id": "NAV-003",
+    "name": "Community navigation works",
+    "enabled": true,
+    "tags": ["smoke", "guest", "navigation", "brand"],
+    "description": "Verifies the community route is reachable from the header.",
+    "steps": [
+      { "action": "goto", "value": "/" },
+      { "action": "click", "locator": "[data-testid='header-community-link']" },
+      { "action": "expectURLContains", "value": "/community" },
+      { "action": "expectVisible", "locator": "body" }
+    ]
+  },
+  {
+    "id": "NAV-004",
+    "name": "Anonymous account navigation routes to login",
+    "enabled": true,
+    "tags": ["regression", "guest", "navigation", "auth"],
+    "description": "Verifies the primary anonymous account entry routes to login.",
+    "steps": [
+      { "action": "goto", "value": "/" },
+      { "action": "click", "locator": "[data-testid='header-account-link']" },
+      { "action": "expectURLContains", "value": "/account/login" },
+      { "action": "expectVisible", "locator": "[data-testid='login-page-heading']" }
+    ]
+  },
+  {
+    "id": "NAV-005",
+    "name": "Cart trigger is available from the header",
+    "enabled": true,
+    "tags": ["regression", "guest", "navigation", "cart"],
+    "description": "Checks the cart entry point is present in shared navigation.",
+    "steps": [
+      { "action": "goto", "value": "/" },
+      { "action": "expectVisible", "locator": "[data-testid='cart-link']" }
+    ]
+  },
+  {
+    "id": "LIST-001",
+    "name": "Products listing page loads",
+    "enabled": true,
+    "tags": ["smoke", "critical", "guest", "products-listing"],
+    "description": "Verifies the primary products listing route renders.",
+    "steps": [
+      { "action": "goto", "value": "/products" },
+      { "action": "expectURLContains", "value": "/products" },
+      { "action": "expectVisible", "locator": "[data-testid='search-input']" },
+      { "action": "expectVisible", "locator": "[data-testid='collection-product-card']" }
+    ]
+  },
+  {
+    "id": "LIST-002",
+    "name": "Products listing shows search and filters",
+    "enabled": true,
+    "tags": ["regression", "guest", "products-listing", "search"],
+    "description": "Checks that listing search and filter affordances are rendered.",
+    "steps": [
+      { "action": "goto", "value": "/products" },
+      { "action": "expectVisible", "locator": "[data-testid='search-submit']" },
+      { "action": "expectVisible", "locator": "button:has-text('All')" },
+      { "action": "expectContainsText", "locator": "body", "value": "Showing" }
+    ]
+  },
+  {
+    "id": "LIST-003",
+    "name": "Products listing cards render",
+    "enabled": true,
+    "tags": ["regression", "guest", "products-listing"],
+    "description": "Checks that the listing has at least one product card.",
+    "steps": [
+      { "action": "goto", "value": "/products" },
+      { "action": "expectCount", "locator": "[data-testid='collection-product-card']", "value": "14" }
+    ]
+  },
+  {
+    "id": "LIST-004",
+    "name": "Add to cart from listing opens cart UI",
+    "enabled": true,
+    "tags": ["regression", "guest", "products-listing", "cart"],
+    "description": "Verifies listing-card add to cart populates the cart UI.",
+    "steps": [
+      { "action": "goto", "value": "/products" },
+      { "action": "click", "locator": ":nth-match(button:has-text('Add to cart'), 1)" },
+      { "action": "expectVisible", "locator": "[data-testid='cart-line-item']" }
+    ]
+  },
+  {
+    "id": "SEARCH-001",
+    "name": "Search input accepts text",
+    "enabled": true,
+    "tags": ["smoke", "guest", "search"],
+    "description": "Checks the explicit search UI accepts queries.",
+    "steps": [
+      { "action": "goto", "value": "/products" },
+      { "action": "fill", "locator": "[data-testid='search-input']", "value": "guitar" },
+      { "action": "expectValue", "locator": "[data-testid='search-input']", "value": "guitar" }
+    ]
+  },
+  {
+    "id": "SEARCH-002",
+    "name": "Empty search state is handled",
+    "enabled": true,
+    "tags": ["regression", "guest", "search", "empty-states"],
+    "description": "Checks that an unmatched query shows an empty-result state instead of crashing.",
+    "steps": [
+      { "action": "goto", "value": "/products" },
+      { "action": "fill", "locator": "[data-testid='search-input']", "value": "zzzz-no-match-query" },
+      { "action": "click", "locator": "[data-testid='search-submit']" },
+      { "action": "expectContainsText", "locator": "body", "value": "0" }
+    ]
+  },
+  {
+    "id": "SEARCH-003",
+    "name": "Predictive search suggestions are available",
+    "enabled": false,
+    "tags": ["regression", "guest", "search"],
+    "description": "Placeholder for predictive search suggestion coverage once a deterministic seeded term is confirmed.",
+    "steps": [
+      { "action": "goto", "value": "/products" },
+      { "action": "fill", "locator": "[data-testid='search-input']", "value": "sample-seeded-term" },
+      { "action": "expectContainsText", "locator": "body", "value": "sample-seeded-term" }
+    ]
+  },
+  {
+    "id": "PDP-001",
+    "name": "Product detail page loads for a real product",
+    "enabled": false,
+    "tags": ["smoke", "critical", "guest", "product-detail"],
+    "description": "Placeholder PDP route until a stable product handle is confirmed for this environment.",
+    "steps": [
+      { "action": "goto", "value": "/products/sample-product" },
+      { "action": "expectVisible", "locator": "[data-testid='product-title']" },
+      { "action": "expectVisible", "locator": "[data-testid='add-to-cart']" }
+    ]
+  },
+  {
+    "id": "PDP-002",
+    "name": "Product detail route handles missing product",
+    "enabled": true,
+    "tags": ["regression", "guest", "product-detail", "error-states"],
+    "description": "Checks that a missing product route does not hard-crash the storefront.",
+    "steps": [
+      { "action": "goto", "value": "/products/sample-product" },
+      { "action": "expectURLContains", "value": "/products/sample-product" },
+      { "action": "expectVisible", "locator": "[data-testid='cart-link']" },
+      { "action": "expectVisible", "locator": "body" }
+    ]
+  },
+  {
+    "id": "PDP-003",
+    "name": "PDP add to cart works with a real product",
+    "enabled": false,
+    "tags": ["regression", "guest", "product-detail", "cart"],
+    "description": "Placeholder PDP add-to-cart coverage pending a stable product handle.",
+    "steps": [
+      { "action": "goto", "value": "/products/sample-product" },
+      { "action": "click", "locator": "[data-testid='add-to-cart']" },
+      { "action": "expectVisible", "locator": "[data-testid='cart-line-item']" }
+    ]
+  },
+  {
+    "id": "PDP-004",
+    "name": "PDP variant-aware selection is available",
+    "enabled": false,
+    "tags": ["regression", "guest", "product-detail", "variants"],
+    "description": "Placeholder for variant-selection coverage once a stable variant control selector is confirmed.",
+    "steps": [
+      { "action": "goto", "value": "/products/sample-product" },
+      { "action": "expectVisible", "locator": "[data-testid='product-title']" }
+    ]
+  },
+  {
+    "id": "CART-001",
+    "name": "Cart page loads",
+    "enabled": true,
+    "tags": ["smoke", "critical", "guest", "cart-page"],
+    "description": "Verifies the dedicated cart route renders.",
+    "steps": [
+      { "action": "goto", "value": "/cart" },
+      { "action": "expectURLContains", "value": "/cart" },
+      { "action": "expectContainsText", "locator": "body", "value": "Your cart" },
+      { "action": "expectVisible", "locator": "[data-testid='checkout-button']" }
+    ]
+  },
+  {
+    "id": "CART-002",
+    "name": "Fresh cart shows zero line items",
+    "enabled": true,
+    "tags": ["regression", "guest", "cart-page", "empty-states"],
+    "description": "Checks a fresh cart session has no visible line items.",
+    "steps": [
+      { "action": "goto", "value": "/cart" },
+      { "action": "expectCount", "locator": "[data-testid='cart-line-item']", "value": "0" },
+      { "action": "expectContainsText", "locator": "body", "value": "₹0" }
+    ]
+  },
+  {
+    "id": "CART-003",
+    "name": "Cart drawer opens after listing add to cart",
+    "enabled": true,
+    "tags": ["regression", "guest", "cart-drawer", "products-listing"],
+    "description": "Checks the add-to-cart flow from listing opens cart UI with a visible line item.",
+    "steps": [
+      { "action": "goto", "value": "/products" },
+      { "action": "click", "locator": ":nth-match(button:has-text('Add to cart'), 1)" },
+      { "action": "expectVisible", "locator": "[data-testid='cart-line-item']" },
+      { "action": "expectVisible", "locator": "[data-testid='checkout-button']" }
+    ]
+  },
+  {
+    "id": "CART-004",
+    "name": "Cart page shows recommendations when empty",
+    "enabled": true,
+    "tags": ["regression", "guest", "cart-page"],
+    "description": "Checks the cart page still renders related product recommendations on an empty cart.",
+    "steps": [
+      { "action": "goto", "value": "/cart" },
+      { "action": "expectContainsText", "locator": "body", "value": "Related products" }
+    ]
+  },
+  {
+    "id": "CART-005",
+    "name": "Cart quantity update requires seeded cart data",
+    "enabled": false,
+    "tags": ["regression", "guest", "cart-page"],
+    "description": "Placeholder for quantity increment/decrement coverage once a deterministic seeded cart item exists.",
+    "steps": [
+      { "action": "goto", "value": "/cart" },
+      { "action": "expectVisible", "locator": "[data-testid='cart-line-item']" }
+    ]
+  },
+  {
+    "id": "CART-006",
+    "name": "Cart remove item requires seeded cart data",
+    "enabled": false,
+    "tags": ["regression", "guest", "cart-page"],
+    "description": "Placeholder for line-item removal coverage once a deterministic seeded cart item exists.",
+    "steps": [
+      { "action": "goto", "value": "/cart" },
+      { "action": "expectVisible", "locator": "[data-testid='cart-line-item']" }
+    ]
+  },
+  {
+    "id": "CHECKOUT-001",
+    "name": "Checkout handoff requires a seeded cart",
+    "enabled": false,
+    "tags": ["regression", "critical", "guest", "checkout-handoff"],
+    "description": "Placeholder for hosted checkout redirect coverage once a deterministic non-empty cart flow is seeded.",
+    "steps": [
+      { "action": "goto", "value": "/cart" },
+      { "action": "click", "locator": "[data-testid='checkout-button']" },
+      { "action": "expectURLContains", "value": "checkout" }
+    ]
+  },
+  {
+    "id": "AUTH-001",
+    "name": "Login page loads",
+    "enabled": true,
+    "tags": ["smoke", "critical", "guest", "auth"],
+    "description": "Verifies the login route renders.",
+    "steps": [
+      { "action": "goto", "value": "/account/login" },
+      { "action": "expectVisible", "locator": "[data-testid='login-page-heading']" },
+      { "action": "expectVisible", "locator": "[data-testid='login-submit']" }
+    ]
+  },
+  {
+    "id": "AUTH-002",
+    "name": "Register page loads",
+    "enabled": true,
+    "tags": ["smoke", "guest", "auth"],
+    "description": "Verifies the register route renders.",
+    "steps": [
+      { "action": "goto", "value": "/account/register" },
+      { "action": "expectContainsText", "locator": "body", "value": "Create your account" },
+      { "action": "expectContainsText", "locator": "body", "value": "Create account" }
+    ]
+  },
+  {
+    "id": "AUTH-003",
+    "name": "Password reset request page loads",
+    "enabled": true,
+    "tags": ["smoke", "guest", "auth"],
+    "description": "Verifies the password reset request route renders.",
+    "steps": [
+      { "action": "goto", "value": "/account/password-reset" },
+      { "action": "expectContainsText", "locator": "body", "value": "Reset your password" }
+    ]
+  },
+  {
+    "id": "AUTH-004",
+    "name": "Forgot password alias loads",
+    "enabled": true,
+    "tags": ["regression", "guest", "auth"],
+    "description": "Verifies the forgot-password alias routes to the same password reset request flow.",
+    "steps": [
+      { "action": "goto", "value": "/account/forgot-password" },
+      { "action": "expectURLContains", "value": "/account/forgot-password" },
+      { "action": "expectContainsText", "locator": "body", "value": "Reset your password" }
+    ]
+  },
+  {
+    "id": "AUTH-005",
+    "name": "Login rejects invalid email format",
+    "enabled": true,
+    "tags": ["regression", "guest", "auth", "error-states"],
+    "description": "Checks login validation shows the invalid email error.",
+    "steps": [
+      { "action": "goto", "value": "/account/login" },
+      { "action": "fill", "locator": "#email", "value": "invalid-email" },
+      { "action": "fill", "locator": "#password", "value": "not-empty" },
+      { "action": "click", "locator": "[data-testid='login-submit']" },
+      { "action": "expectContainsText", "locator": "body", "value": "Please enter a valid email address" }
+    ]
+  },
+  {
+    "id": "AUTH-006",
+    "name": "Password reset request rejects invalid email format",
+    "enabled": true,
+    "tags": ["regression", "guest", "auth", "error-states"],
+    "description": "Checks the reset request form validates email format.",
+    "steps": [
+      { "action": "goto", "value": "/account/password-reset" },
+      { "action": "fill", "locator": "#email", "value": "invalid-email" },
+      { "action": "click", "locator": "button:has-text('Send reset link')" },
+      { "action": "expectContainsText", "locator": "body", "value": "Please enter a valid email address" }
+    ]
+  },
+  {
+    "id": "AUTH-007",
+    "name": "Successful test-mode login reaches account",
+    "enabled": false,
+    "tags": ["regression", "authenticated", "auth", "account"],
+    "description": "Enable when the storefront runs with ENV=TEST or known valid credentials are available.",
+    "steps": [
+      { "action": "goto", "value": "/account/login" },
+      { "action": "fill", "locator": "#email", "value": "test@example.com" },
+      { "action": "fill", "locator": "#password", "value": "password-123" },
+      { "action": "click", "locator": "[data-testid='login-submit']" },
+      { "action": "expectVisible", "locator": "[data-testid='account-page-heading']" }
+    ]
+  },
+  {
+    "id": "AUTH-008",
+    "name": "Password reset completion requires a real token",
+    "enabled": false,
+    "tags": ["regression", "guest", "auth"],
+    "description": "Placeholder for tokenized password reset completion coverage.",
+    "steps": [
+      { "action": "goto", "value": "/account/reset/sample-id/sample-token" },
+      { "action": "expectContainsText", "locator": "body", "value": "Set new password" }
+    ]
+  },
+  {
+    "id": "ACCOUNT-001",
+    "name": "Guest access to account redirects to login",
+    "enabled": true,
+    "tags": ["regression", "guest", "account"],
+    "description": "Checks unauthenticated account access redirects to the login route.",
+    "steps": [
+      { "action": "goto", "value": "/account" },
+      { "action": "expectURLContains", "value": "/account/login" },
+      { "action": "expectVisible", "locator": "[data-testid='login-page-heading']" }
+    ]
+  },
+  {
+    "id": "ACCOUNT-002",
+    "name": "Authenticated account dashboard requires test session",
+    "enabled": false,
+    "tags": ["regression", "authenticated", "account"],
+    "description": "Enable when ENV=TEST or a known authenticated session is available.",
+    "steps": [
+      { "action": "goto", "value": "/account" },
+      { "action": "expectVisible", "locator": "[data-testid='account-page-heading']" }
+    ]
+  },
+  {
+    "id": "ACCOUNT-003",
+    "name": "Account order detail requires seeded order data",
+    "enabled": false,
+    "tags": ["regression", "authenticated", "account", "orders"],
+    "description": "Placeholder for order detail coverage once a deterministic order ID is available.",
+    "steps": [
+      { "action": "goto", "value": "/account/orders/sample-order" },
+      { "action": "expectContainsText", "locator": "body", "value": "Order" }
+    ]
+  },
+  {
+    "id": "LEGAL-001",
+    "name": "Terms page loads",
+    "enabled": true,
+    "tags": ["smoke", "guest", "legal"],
+    "description": "Verifies the terms route renders.",
+    "steps": [
+      { "action": "goto", "value": "/terms" },
+      { "action": "expectContainsText", "locator": "body", "value": "Terms" }
+    ]
+  },
+  {
+    "id": "LEGAL-002",
+    "name": "Privacy page loads",
+    "enabled": true,
+    "tags": ["smoke", "guest", "legal"],
+    "description": "Verifies the privacy route renders.",
+    "steps": [
+      { "action": "goto", "value": "/privacy" },
+      { "action": "expectContainsText", "locator": "body", "value": "Privacy Policy" }
+    ]
+  },
+  {
+    "id": "LEGAL-003",
+    "name": "Shipping policy page loads",
+    "enabled": true,
+    "tags": ["regression", "guest", "legal"],
+    "description": "Verifies the shipping policy route renders.",
+    "steps": [
+      { "action": "goto", "value": "/shipping-policy" },
+      { "action": "expectContainsText", "locator": "body", "value": "Shipping" }
+    ]
+  },
+  {
+    "id": "LEGAL-004",
+    "name": "Returns and refunds page loads",
+    "enabled": true,
+    "tags": ["regression", "guest", "legal"],
+    "description": "Verifies the returns/refunds route renders.",
+    "steps": [
+      { "action": "goto", "value": "/returns-refunds" },
+      { "action": "expectContainsText", "locator": "body", "value": "Return" }
+    ]
+  },
+  {
+    "id": "LEGAL-005",
+    "name": "Cookie policy page loads",
+    "enabled": true,
+    "tags": ["regression", "guest", "legal"],
+    "description": "Verifies the cookie policy route renders.",
+    "steps": [
+      { "action": "goto", "value": "/cookie-policy" },
+      { "action": "expectContainsText", "locator": "body", "value": "Cookie" }
+    ]
+  },
+  {
+    "id": "BRAND-001",
+    "name": "Community page route loads",
+    "enabled": true,
+    "tags": ["smoke", "guest", "brand"],
+    "description": "Verifies the community route resolves without a hard crash.",
+    "steps": [
+      { "action": "goto", "value": "/community" },
+      { "action": "expectURLContains", "value": "/community" },
+      { "action": "expectVisible", "locator": "body" }
+    ]
+  },
+  {
+    "id": "BRAND-002",
+    "name": "Philosophy page route loads",
+    "enabled": true,
+    "tags": ["smoke", "guest", "brand"],
+    "description": "Verifies the philosophy route resolves without a hard crash.",
+    "steps": [
+      { "action": "goto", "value": "/philosophy" },
+      { "action": "expectURLContains", "value": "/philosophy" },
+      { "action": "expectVisible", "locator": "body" }
+    ]
+  },
+  {
+    "id": "ERROR-001",
+    "name": "Unknown route keeps storefront shell visible",
+    "enabled": true,
+    "tags": ["regression", "guest", "error-states"],
+    "description": "Checks an unknown route still renders shared storefront chrome instead of a hard crash.",
+    "steps": [
+      { "action": "goto", "value": "/this-route-should-404" },
+      { "action": "expectURLContains", "value": "/this-route-should-404" },
+      { "action": "expectVisible", "locator": "[data-testid='cart-link']" },
+      { "action": "expectVisible", "locator": "body" }
+    ]
+  },
+  {
+    "id": "ERROR-002",
+    "name": "Unwired order confirmation route is not active",
+    "enabled": true,
+    "tags": ["regression", "guest", "error-states", "order"],
+    "description": "Checks that the unwired order confirmation route does not activate a dedicated route unexpectedly.",
+    "steps": [
+      { "action": "goto", "value": "/order-confirmation" },
+      { "action": "expectURLContains", "value": "/order-confirmation" },
+      { "action": "expectVisible", "locator": "body" }
+    ]
+  },
+  {
+    "id": "RESP-001",
+    "name": "Products listing mobile shell renders",
+    "enabled": true,
+    "tags": ["regression", "mobile", "guest", "products-listing"],
+    "viewport": { "width": 390, "height": 844 },
+    "description": "Checks the products route in mobile metadata mode.",
+    "steps": [
+      { "action": "goto", "value": "/products" },
+      { "action": "expectVisible", "locator": "[data-testid='search-input']" },
+      { "action": "expectVisible", "locator": "[data-testid='collection-product-card']" }
+    ]
+  },
+  {
+    "id": "RESP-002",
+    "name": "Cart page mobile shell renders",
+    "enabled": true,
+    "tags": ["regression", "mobile", "guest", "cart-page"],
+    "viewport": { "width": 390, "height": 844 },
+    "description": "Checks the cart route in mobile metadata mode.",
+    "steps": [
+      { "action": "goto", "value": "/cart" },
+      { "action": "expectContainsText", "locator": "body", "value": "Your cart" },
+      { "action": "expectVisible", "locator": "[data-testid='checkout-button']" }
+    ]
+  },
+  {
+    "id": "RESP-003",
+    "name": "Login page mobile shell renders",
+    "enabled": true,
+    "tags": ["regression", "mobile", "guest", "auth"],
+    "viewport": { "width": 390, "height": 844 },
+    "description": "Checks the login route in mobile metadata mode.",
+    "steps": [
+      { "action": "goto", "value": "/account/login" },
+      { "action": "expectVisible", "locator": "[data-testid='login-page-heading']" },
+      { "action": "expectVisible", "locator": "[data-testid='login-submit']" }
+    ]
+  }
+]

@@ -35,7 +35,29 @@ function PageBody() {
 }
 
 function CommunityHero() {
-  return null;
+  return (
+    <header>
+      <h1
+        style={{
+          margin: 0,
+          fontSize: 'clamp(2rem, 4vw, 3rem)',
+          lineHeight: 1.1,
+          color: 'var(--text-primary)'
+        }}
+      >
+        Community
+      </h1>
+      <p
+        style={{
+          margin: '12px 0 0',
+          maxWidth: '56ch',
+          color: 'var(--text-secondary)'
+        }}
+      >
+        Stories, events, and creator-led moments will surface here as the community experience is built out.
+      </p>
+    </header>
+  );
 }
 
 function CommunityMetaSlot() {
